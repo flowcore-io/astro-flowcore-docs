@@ -3,34 +3,30 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-
-  // Added Configuration for 
-  // Deployment to GitHub Pages
-  site: 'https://30DaysOf.github.io',
-  base: '/astro-starlight-ghpages/',
-
-  integrations: [
-    starlight({
-      title: 'My Docs',
-      social: {
-        github: 'https://github.com/30DaysOf/astro-starlight-ghpages',
-      },
-      sidebar: [
-        {
-          label: 'Guides',
-          items: [
-            // Each item here is one entry in the navigation menu.
-            { label: 'Example Guide', link: '/guides/example/' },
-          ],
-        },
-        {
-          label: 'Reference',
-          autogenerate: { directory: 'reference' },
-        },
-      ],
-    }),
-  ],
-
-  // Process images with sharp: https://docs.astro.build/en/guides/assets/#using-sharp
-  image: { service: { entrypoint: 'astro/assets/services/sharp' } },
+	site: 'https://flowcoreio.github.io',
+	base: "/astro-flowcore-docs",
+	integrations: [
+		starlight({
+			title: 'Flowcore Platform Documentation',
+			social: {
+				linkedin: 'https://www.linkedin.com/company/flowcore',
+			},
+			editLink: {
+				baseUrl: 'https://github.com/flowcore-io/astro-flowcore-docs/tree/main/website',
+			},
+			sidebar: [
+				{
+					label: 'Guides',
+					items: [
+						// Each item here is one entry in the navigation menu.
+						{ label: 'Example Guide', link: '/guides/example/' },
+					],
+				},
+				{
+					label: 'Reference',
+					autogenerate: { directory: 'reference' },
+				},
+			],
+		}),
+	],
 });
