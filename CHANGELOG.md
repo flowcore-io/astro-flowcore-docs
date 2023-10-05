@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.1.0...v1.1.1) (2023-10-05)
+
+
+### Bug Fixes
+
+* docs.flowcore.io ([592d2c9](https://github.com/flowcore-io/astro-flowcore-docs/commit/592d2c92c32b331394c0b696f9d656a78660b45d))
+
 ## [1.1.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.0.0...v1.1.0) (2023-10-05)
 
 
