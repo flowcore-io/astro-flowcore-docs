@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  push:
+    branches-ignore: [ "main" ]
+
+env:
+  NODE_VERSION: ">=18.18.0"
+  SKIP_ENV_VALIDATION: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v3
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.5.1
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+          cache: npm
+        working-directory: ./website
+      - name: Install Dependencies
+        run: |
+          npm install --frozen-lockfile
+        working-directory: ./website
+      - name: Validate Build
+        run: npm run build
+        working-directory: ./website

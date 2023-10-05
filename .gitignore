@@ -2,3 +2,4 @@
 ./website/node_modules
 ./website/.vscode
 ./website/.astro
+./website/dist
