@@ -12,20 +12,7 @@ export default defineConfig({
 			},
 			editLink: {
 				baseUrl: 'https://github.com/flowcore-io/astro-flowcore-docs/tree/main/website',
-			},
-			sidebar: [
-				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', link: '/guides/example/' },
-					],
-				},
-				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
-				},
-			],
+			}
 		}),
 	],
 });
