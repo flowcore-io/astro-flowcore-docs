@@ -1,5 +1,5 @@
 ---
-title: Getting Started
+title: Getting Started with Flowcore
 description: A guide on how to use the Flowcore platform
 ---
 import { YouTube } from '@astro-community/astro-embed-youtube';
@@ -33,15 +33,29 @@ Log in using your GitHub account credentials.
 
 If you are logging in for the first time, you may encounter a setup page - just leave it do its thing, and press continue once it is done; it is simply there to configure your new account.
 
-Once logged in, you can manage your organization by:
+<div style="display:flex; justify-content:center">
+![Flowcore account set up](../../../assets/getting-started-assets/First-time-set-up-Flowcore-io.png) 
+</div>
+
+Once logged in, you can navigate to your organizations on the panel on the lefthand side of the page.
+
+<div style="display:flex; justify-content:center">
+![Organization button highlighted](../../../assets/getting-started-assets/Organizations-button-Flowcore-io.png) 
+</div>
+
+You can manage your organization by:
 - Setting the display name of your organization. 
 - Provide a brief description of its purpose. 
-- Add link to a website. 
+- Add a link to a website. 
 
-Flowcore offers different tiers with varying features and pricing. These plans include:
+<div style="display:flex; justify-content:center">
+![Example of organization customizations](../../../assets/getting-started-assets/organization-customization_flowcore-io.png) 
+</div>
 
-- **Free Tier:** Suitable for solo developers or researchers who want to explore and share public data.
-- **Pro Tier:** Geared towards companies, providing private data cores for exclusive data access.
+Flowcore offers different tiers of service, with varying features and pricing. These plans include:
+
+- **Free Tier:** Suitable for solo users or researchers, who want to explore and share public data.
+- **Pro Tier:** Geared towards solo users or companies, providing private data cores for exclusive data access.
 - **Team Tier:** Ideal for collaborative teams, allowing multiple contributors to participate.
 - **Custom Tier:** Tailored for large organizations, offering dedicated support and resources.
 
@@ -49,35 +63,179 @@ Flowcore offers different tiers with varying features and pricing. These plans i
 ![Flowcore plan prices](../../../assets/getting-started-assets/Flowcoreio-planprices.png) 
 </div>
 
-Plans can be billed on a **yearly or monthly** basis, depending on your preference. 
+Plans can be billed on a **yearly** or **monthly** basis, depending on your preference. 
+
+You can always change your plan by clicking the **Upgrade** button on the bottom right of your organization's page.
+
+<div style="display:flex; justify-content:center">
+![Upgrade button](../../../assets/getting-started-assets/upgrade-button_flowcore-io.png) 
+</div>
+
+By default, when you first log into the Flowcore platform, your organization will be assigned the **Free Tier**. You can choose to upgrade at any point.
+
+### Creating Additional Organizations
 
 It is important to understand the relationship between users and organizations on Flowcore. When you log in, a personal organization is created that matches your username. Your personal organization typically utilises the free or pro tier, for your own personal projects and/or test use cases.
 If you want to establish a separate organization for a specific project or team, you can easily create one - when you create a second organization, you are automatically added to that organization as a collaborator, with the role of *Owner*.
 
-## Creating a data core
+<div style="display:flex; justify-content:center">
+![New organization button](../../../assets/getting-started-assets/new-organization-button_flowcore-io.png) 
+</div>
+
+To create a new organization, simply navigate to the top right corner of the **Organizations** tab and press the **New Organization** button.
+
+## Creating a Data Core
+
+<YouTube id="https://www.youtube.com/watch?v=IdPruN6Zyic" />
+
+Here we will provide a detailed overview of data cores, explaining how they function and guiding you through the process of creating them. Additionally, we'll explore how to load data into these data cores using webhooks.
+
+A data core in Flowcore is essentially a container for unstructured data. You have the flexibility to send in any dataset you desire, and it doesn't need to be predefined. This approach is incredibly useful for scenarios where you have vast amounts of data, and you're uncertain about what specific pieces you'll need. You can load it all into the data core and decide later which data is relevant to your needs.
+
+<div style="display:flex; justify-content:center">
+![Create data core](../../../assets/getting-started-assets/create-data-core_flowcore-io.png) 
+</div>
+
+To create a data core, navigate to your organization and press the **Create Datacore** button, located on the righthand side. Give your data core a name, relevant to the data you will be assigning to it, and give a brief description of what it is. 
+
+<div style="display:flex; justify-content:center">
+![Data core window](../../../assets/getting-started-assets/create-data-core-window_flowcore-io.png) 
+</div>
+
+Public data cores are ideal for:
+
+- Data that you don't mind being public; such as some irrelevant test data.
+- Data that you would like to be accessible to the world to utilise; such as:
+  - Weather data.
+  - Traffic data.
+  - High-scores.
+  - e.t.c.
+
+Private data cores are ideal for:
+
+- Internal Company data; such as user, or financial information
+- Personal data; such as financial data, or my acne status
+
+:::note
+If you are using the **Free Tier** you will only be able to create public data cores. To create private data cores, you have to upgrade to **Pro** or higher
+:::
+
+Within the data core, you can organize your data further by creating groups and subgroups. This is done by creating **Flowtypes** from within the data core. To simplify the understandings flowtypes, you can imagine that the aggrigator is a drawer and the event types are little storage boxes within the drawer. This gives you the ability to roughly organize your data without having to be too thorough. 
+
+<div style="display:flex; justify-content:center">
+![Create flowtype](../../../assets/getting-started-assets/create-flowtype_flowcore-io.png) 
+</div>
+
+To create a flowtype, click the **Create Flowtype** button within your data core’s page. Here you will be able to define the aggregator, write a description and list your event types.
+
+
+### Connecting to a Data Core
+
+Next, we explore how to send data into a data core through ingestion channels. This can be found in the panel on the lefthand side. 
+
+<div style="display:flex; justify-content:center">
+![Ingestion channels](../../../assets/getting-started-assets/ingestion-channels-highlighted_flowcore-io.png) 
+</div>
+
+Currently, Flowcore supports webhooks, with plans to introduce MQTT and "bring your own" custom options in the future. For this guide, we will be using webhooks, so go ahead and click **Integrate** in the Webhook panel.
+
+<div style="display:flex; justify-content:center">
+![Webhook window](../../../assets/getting-started-assets/webhooks_flowcore-io.png) 
+</div>
+
+Here you can choose which organization, data core, flowtype and event type to use. This will generate a webhook, which is a URL you can call, for you. However, to complete the webhook, you will need to generate an API key for authentication.
+
+<div style="display:flex; justify-content:center">
+![Webhook ingestion](../../../assets/getting-started-assets/Webhook-ingestion_flowcore-io.png) 
+</div>
+
+To generate an API key, click on your user in the top right corner and select **settings**. At the bottom of your user settings’s page, is a field called **API Keys**. Simply click the **Create API Key** to generate a key.
+
+<div style="display:flex; justify-content:center">
+![Create API key button](../../../assets/getting-started-assets/create-API-key-button_flowcore-io.png) 
+</div>
+
+Give the key a name, which makes sense to you and your project, and it will generate a key for you. You can copy this to your clipboard and paste it into the webhook, to complete it. 
+
+<div style="display:flex; justify-content:center">
+![Generate API key](../../../assets/getting-started-assets/create-api-key_flowcore-io.png) 
+</div>
+
+The benefit to using these API keys is the ease to delete them at will, in case you should choose to revoke access to your data core. 
+
+
+### Sending Data to a Data Core 
+
+Once the API key is generated and added to the webhook URL, it is time to send data to the data core. For sending the data, you can use different tools; we will be using **Insomnia**. 
+
+Open Insomnia and create a new HTTP request and set it to POST. There you can paste the webhook you generated. We will be sticking with JSON, as that is what the webhooks support. This is where the actual data is used. The data can now be sent into your data core. You can see this in your data core on **[Flowcore](https://flowcore.io/)**. 
+
+<div style="display:flex; justify-content:center">
+![Insomnia](../../../assets/getting-started-assets/insomnia-data.png) 
+</div>
+
+The whole structure of the data is defined by the data you send in, so it is completely schema-less. 
+
+To send data to a different event type, you can either generate a new webhook, using the same API key, or you can manually change it in the webhook URL. 
+
+## Creating a Read Model (with PlanetScale)
+
+<YouTube id="https://www.youtube.com/watch?v=xB4l5pvIkTs" />
+
+Here we will explore the concept of read models in Flowcore and learn how to connect them to external sources. Read models are vital for retrieving data from Flowcore and transferring it to your own systems, such as databases or storage solutions. This guide provides an introduction to read models and walks you through connecting a read model to an external source, specifically using PlanetScale to set up a database.
+
+:::note
+You will need an account on **[PlanetScale](https://planetscale.com/)** to create a database there.
+:::
+
+A read model in Flowcore serves as the gateway, to extract data from Flowcore and into your preferred external sources. The primary objective is to facilitate data transfer and integration with your own systems. We will demonstrate connecting a read model to a PlanetScale database, but Flowcore offers multiple options for various external sources.
+
+To get started, we need an actual database to connect to. Creating a database in PlanetScale, is as easy as clicking **Create a new database** on their website.
+
+<div style="display:flex; justify-content:center">
+![Create database](../../../assets/getting-started-assets/create-new-database_planetscale.png) 
+</div>
+
+You have to name your database, choose a plan that suits your project and then create the database. PlanetScale uses MySQL, so you won’t have to select a language or framework. Once the database is done connecting, it will be ready to use.
+
+With the external database ready, we proceed to Flowcore to set up a read model. By navigating to the lefthand side panel, select **Read Models** and then click **Create Read Model** on the righthand side.
+
+<div style="display:flex; justify-content:center">
+![Create Read model button](../../../assets/getting-started-assets/create-read-model-button_flowcore-io.png) 
+</div>
+
+Give your read model an appropriate name and optionally write a description for it. 
+
+<div style="display:flex; justify-content:center">
+![Create Read model](../../../assets/getting-started-assets/create-read-model_flowcore-io.png) 
+</div>
+
+### Connecting a Read Model to an External Database 
+
+Flowcore supports various endpoints for external sources. For this instance, we choose the **External MySQL Read Model**. 
+
+<div style="display:flex; justify-content:center">
+![Read model types](../../../assets/getting-started-assets/read-model-types_flowcore-io.png) 
+</div>
+
+To establish the connection to the external database, we must provide the necessary configuration details. To connect to the PlanetScale database, enter the database name, username, password, and host information. 
+
+<div style="display:flex; justify-content:center">
+![Connect read model to database](../../../assets/getting-started-assets/create-external-mysql-read-model_flowcore-io.png) 
+</div>
+
+All of this information can be found by **Connecting** to the PlanetScale database on their website. 
+
+<div style="display:flex; justify-content:center">
+![Planetscale password](../../../assets/getting-started-assets/generate-password_planetscale.png) 
+</div>
+
+In this case, the database uses SSL for secure connections. Once these details are entered, the read model is created and ready for data transfer.
+
+## Transferring Data from a Data Core to a Read Model
 
 
 
-### Connecting to a data core
-
-
-
-### Sending data to a data core 
-
-
-
-## Creating a read model
-
-
-
-### Connecting a read model to an external database 
-
-
-
-## Transferring data from a data core to a read model
-
-
-
-## Transforming the data before reaching the read model
+## Transforming the Data Before Reaching the Read Model
 
 
