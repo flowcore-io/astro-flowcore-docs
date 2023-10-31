@@ -4,6 +4,9 @@ description: A guide on how to use the Flowcore platform
 ---
 import { YouTube } from '@astro-community/astro-embed-youtube';
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import {Image} from "astro:assets";
+
+import GitHubCopyingLinkToRelease from "../../../assets/getting-started-assets/github-copying-link-to-release.apng";
 
 This guide is your starting point for using the Flowcore platform. Whether you're a beginner or an experienced user, it provides insights and tips to help you navigate Flowcore with confidence and make the most of its versatile features.
 
@@ -388,17 +391,14 @@ For this example we're using **typescript**, so go ahead and select that. The co
 
 Unlike when you only have to transfer data, we will need to pay attention to the **Artifact URL** field, when transforming data. This is a URL to a package which has been generated within GitHub. We have to make a URL like this, to feed the transformation code into our adapter. 
 
-<div style="display:flex; justify-content:center">
-![GitHub search](../../../assets/getting-started-assets/github-search-bar.png) 
-</div>
-
-To do so, go to GitHub and search for **Flowcore.io**.
+### Creating your own transformation code
+Firstly, we need to go to [Flowcore's GitHub page](https://github.com/flowcore-io).
 
 <div style="display:flex; justify-content:center">
 ![GitHub repository examples](../../../assets/getting-started-assets/example-repositories.png) 
 </div>
 
-There you can search for templates (for typescript and python), which you can use to get started. You can of course also make and use your own, but we will be using the examples we made, for this guide. So go ahead and click the typescript template. 
+From there you can search for the available templates (such as `nodejs-typescript-transformer-example`), which you can use to get started. You can of course also make and use your own custom solution, but we will be using the examples we made for simplicity, for this guide. So go ahead and click the typescript template.
 
 <div style="display:flex; justify-content:center">
 ![Template for typescript transformer](../../../assets/getting-started-assets/typescript-transformer-example.png) 
@@ -416,22 +416,140 @@ To create your own repository, you can follow this [README file](https://github.
 ![Own repository](../../../assets/getting-started-assets/repository-weather.png) 
 </div>
 
-Once you've made your own repository, following the [README file](https://github.com/flowcore-io/nodejs-typescript-transformer-example/blob/main/README.md), open it and press **.** on your keyboard to open the live editor in GitHub. 
 
-( The example provided here demonstrates calculating the difference between the temperature data from the data core and the optimal heating temperature within a building. The transformed data will include this calculated value. This example is just a starting point, and you can modify it to fit your specific needs.
+### Adjusting the transformation code
+Once you've created your own repository based on the template we provided. Make sure to navigate to your repository and press the `.` key on your keyboard to open the live editor in GitHub.
+Then proceed to navigate to the file `src/functions/transformer.entrypoint.ts`.
 
-Set up a constant for the optimal heating temperature, e.g., 22 degrees.
-Extract the temperature from the input data, convert it to a number, and calculate the difference.
-Assign the calculated value to a field within the transformed data.
+For the purpose of this guide, we will demonstrate calculating the difference between the temperature data from the data core and the optimal heating temperature within a building. The transformed data will include this calculated value.
 
-To manage the transformation code, we use GitHub, where you create your repository for full control over your transformation and endpoints. The process is documented in detail within the [README file](https://github.com/flowcore-io/nodejs-typescript-transformer-example/blob/main/README.md) for setting up your own project.
+So the final code in the `transformer.entrypoint.ts` file looks like this:
 
-After creating and configuring your GitHub repository, you'll generate a release (e.g., Version 1.0.0) that includes your transformation code. This release serves as the point of integration with the Flowcore platform.
 
-Copy the link to the release zip file from GitHub.
-In Flowcore, set up an adapter and provide the link to the zip file.
-Configure the transformation execution environment, specifying the language (TypeScript, in this case).
-Complete the adapter settings and connect it to the desired read model.
+```typescript
+// -----------------------------------------------------------------------------
+// Purpose: Transform entrypoint
+// this is the entrypoint that will be called when the transformer is invoked
+// to transform an event, the return value of this function will be passed to
+// the read model adapter.
+// -----------------------------------------------------------------------------
+interface Input<T = any> {
+  eventId: string;
+  validTime: string;
+  payload: T;
+}
+
+type Payload = {
+  temp_c :string;
+  wind_speed_mps: string;
+  wind_dir: string;
+}
+
+const OPTIMAL_HEATING_IN_TEMP = 22.0;
+
+export default async function (input: Input<Payload>) {
+
+  const tempInNumber = parseFloat(input.payload.temp_c);
+  const distanceBetweenTemps = OPTIMAL_HEATING_IN_TEMP - tempInNumber;
+
+  return {
+    eventid: input.eventId,
+    validtime: input.validTime,
+    ...input.payload,
+    distance_from_optimal_heating: distanceBetweenTemps
+  };
+}
+```
+
+What you need to take away from this code is:
+- that `input` parameter passed into the function is the unstructured data from the data core
+- the `return` value of the function is the data that is sent to the read model
+
+Everything else in between there is just the transformation code.
+
+### Verifying your transformation code
+The template has built in unit tests, so that you can verify that your code does what you expect before releasing it.
+
+Navigate to `test/expected.json`. This file allows you to create a quick and simple test to verify that the expected input returns the expected output.
+So in our case, the `expected.json` file looks like this:
+```json
+[
+  {
+    "input": {
+      "temp_c": "-19",
+      "wind_speed_mps": "10",
+      "wind_dir": "west"
+    },
+    "output": {
+      "eventid": ":uuid:",
+      "validtime": ":date:",
+      "temp_c": "-19",
+      "wind_speed_mps": "10",
+      "wind_dir": "west",
+      "distance_from_optimal_heating": 41
+    }
+  },
+  {
+    "input": {
+      "temp_c": "2",
+      "wind_speed_mps": "10",
+      "wind_dir": "east"
+    },
+    "output": {
+      "eventid": ":uuid:",
+      "validtime": ":date:",
+      "temp_c": "2",
+      "wind_speed_mps": "10",
+      "wind_dir": "east",
+      "distance_from_optimal_heating": 20
+    }
+  }
+]
+```
+
+### Generating a release
+As stated in the [README file](https://github.com/flowcore-io/nodejs-typescript-transformer-example/blob/main/README.md), the template will automatically generate a pull request. Once that has been merged in, the template will start generating your release.
+
+<div style="display:flex; justify-content:center">
+    ![GitHub Pull Requests](../../../assets/getting-started-assets/github-pull-request.png)
+</div>
+
+Once you've approved every automated build under **Pull requests** tab, you can go to the **Releases** on the right hand side of your github page.
+
+<div style="display:flex; justify-content:center">
+    ![GitHub Releases](../../../assets/getting-started-assets/github-releases.png)
+</div>
+
+Navigate to your desired release, locate the `.zip` file, and copy the link to the file. This release serves as the point of integration with the Flowcore platform.
+
+<div style="display:flex; justify-content:center">
+    <Image src={GitHubCopyingLinkToRelease} width={"2000em"} height={"100%"} alt={"GitHub Copying Link of Release"}/>
+</div>
+
+### Connecting Adapter to GitHub Release
+In Flowcore, set up an adapter by configuring the transformation execution environment, specifying the language (TypeScript, in this case).
+And finally provide the **Artifact URL**, which is the link to the `.zip` file you copied from GitHub.
+
+Complete the adapter settings.
+
+### Adjusting the Read Model Table Definition
+When connecting to a read model, it is important to note that you may need to adjust the **Table Definition** to accommodate the new data structure. In this example, we added a new field to the data, so we need to update the table definition to include this new field.
+In our case the read model table definition looks like this in the end:
+
+<div style="display:flex; justify-content:center">
+    ![Custom Table Definition in Read Model](../../../assets/getting-started-assets/read-model-custom-table-definition.png)
+</div>
+
+> Note that the available types are the following:
+> | Type | Description |
+> | --- | --- |
+> | `string` | A short text, or an ID |
+> | `text` | A longer text |
+> | `integer` | A whole number (1,2,3,4) |
+> | `decimal` | A decimal number (1.2, 123.32, 0.0122) |
+> | `boolean` | A `true` or a `false` |
+
+<br/>
 
 The transformation code is now integrated into Flowcore, and as data flows from the data core through the adapter, it undergoes the defined transformation process. The transformed data is pushed into the read model, which, in this example, is a database on PlanetScale.
 
