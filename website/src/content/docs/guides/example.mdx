@@ -3,12 +3,16 @@ title: Getting Started with Flowcore
 description: A guide on how to use the Flowcore platform
 ---
 import { YouTube } from '@astro-community/astro-embed-youtube';
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card } from '@astrojs/starlight/components';
 import {Image} from "astro:assets";
 
 import GitHubCopyingLinkToRelease from "../../../assets/getting-started-assets/github-copying-link-to-release.apng";
 
 This guide is your starting point for using the Flowcore platform. Whether you're a beginner or an experienced user, it provides insights and tips to help you navigate Flowcore with confidence and make the most of its versatile features.
+
+<div style="display:flex; justify-content:center">
+    ![Sign in button](../../../assets/getting-started-assets/dashboard.png)
+</div>
 
 ## Creating an Organization
 
@@ -20,9 +24,15 @@ Here we will explore how organizations function within the Flowcore platform and
 		**Flowcore is an evolving platform, so keep in mind that certain features may change in the future.** 
 :::
 
-Organizations on Flowcore are publicly accessible, and users can browse existing organizations to learn more about them, including their descriptions, websites, contributors, and any publicly available data they offer. To get started, you need to log in to Flowcore.
+**Organizations on Flowcore are publicly accessible**, and users can browse existing organizations to learn more about them, including their:
+- Descriptions
+- Websites
+- Contributors
+- and any publicly available data they offer. To get started, you need to log in to Flowcore.
 
-To log in, go to **www.flowcore.io** and navigate to the top right corner.  
+### Login / Creating an account
+
+To log in, go to **www.flowcore.io** and navigate to the top right corner.
 
 <div style="display:flex; justify-content:center">
     ![Sign in button](../../../assets/getting-started-assets/sign-in-button_flowcoreiso.png) 
@@ -40,20 +50,40 @@ If you are logging in for the first time, you may encounter a setup page - just 
 ![Flowcore account set up](../../../assets/getting-started-assets/First-time-set-up-Flowcore-io.png) 
 </div>
 
-Once logged in, you can navigate to your organizations on the panel on the lefthand side of the page.
+After you've logged in, you should see the flowcore dashboard:
+
+<div style="display:flex; justify-content:center">
+    ![Flowcore account set up](../../../assets/getting-started-assets/dashboard-logged-in.png)
+</div>
+
+### Updating your organization
+
+Once logged in, you can navigate to your organizations on the panel on the left-hand side of the page.
 
 <div style="display:flex; justify-content:center">
 ![Organization button highlighted](../../../assets/getting-started-assets/Organizations-button-Flowcore-io.png) 
 </div>
 
-You can manage your organization by:
-- Setting the display name of your organization. 
+Here you will be shown a collection of your organizations, as well as other organizations on the platform. Select your organization:
+
+<div style="display:flex; justify-content:center">
+    ![Organization button highlighted](../../../assets/getting-started-assets/organization-list-page.png)
+</div>
+
+<div style="display:flex; justify-content:center">
+    ![Organization button highlighted](../../../assets/getting-started-assets/organization-page.png)
+</div>
+
+From here you can customize your organization, by pressing the **Settings** button, allowing you to:
+- Set the display name of your organization.
 - Provide a brief description of its purpose. 
 - Add a link to a website. 
 
 <div style="display:flex; justify-content:center">
 ![Example of organization customizations](../../../assets/getting-started-assets/organization-customization_flowcore-io.png) 
 </div>
+
+### Pricing
 
 Flowcore offers different tiers of service, with varying features and pricing. These plans include:
 
@@ -79,27 +109,35 @@ By default, when you first log into the Flowcore platform, your organization wil
 ### Creating Additional Organizations
 
 It is important to understand the relationship between users and organizations on Flowcore. When you log in, a personal organization is created that matches your username. Your personal organization typically utilises the free or pro tier, for your own personal projects and/or test use cases.
-If you want to establish a separate organization for a specific project or team, you can easily create one - when you create a second organization, you are automatically added to that organization as a collaborator, with the role of *Owner*.
+
+If you want to establish a separate organization for a specific project or team, you can easily create one - **when you create a second organization, you are automatically added to that organization as a collaborator, with the role of *Owner*.**
+
+To create a new organization, simply navigate back to the list of organizations and press the **New Organization** button in the top right corner.
 
 <div style="display:flex; justify-content:center">
 ![New organization button](../../../assets/getting-started-assets/new-organization-button_flowcore-io.png) 
 </div>
 
-To create a new organization, simply navigate to the top right corner of the **Organizations** tab and press the **New Organization** button.
-
 ## Creating a Data Core
 
 <YouTube id="https://www.youtube.com/watch?v=IdPruN6Zyic" />
 
-Here we will provide a detailed overview of data cores, explaining how they function and guiding you through the process of creating them. Additionally, we'll explore how to load data into these data cores using webhooks.
+Here we will provide an overview of data cores, explaining how they function and guiding you through the process of creating them. Additionally, we'll explore how to load data into these data cores using webhooks.
 
 A data core in Flowcore is essentially a container for unstructured data. You have the flexibility to send in any dataset you desire, and it doesn't need to be predefined. This approach is incredibly useful for scenarios where you have vast amounts of data, and you're uncertain about what specific pieces you'll need. You can load it all into the data core and decide later which data is relevant to your needs.
 
+To create a data core, navigate to your organization and press the **Create Datacore** button, located on the right-hand side.
+
 <div style="display:flex; justify-content:center">
-![Create data core](../../../assets/getting-started-assets/create-data-core_flowcore-io.png) 
+    ![Organization button highlighted](../../../assets/getting-started-assets/organization-page.png)
 </div>
 
-To create a data core, navigate to your organization and press the **Create Datacore** button, located on the righthand side. Give your data core a name, relevant to the data you will be assigning to it, and give a brief description of what it is. 
+<div style="display:flex; justify-content:center">
+    ![Create data core](../../../assets/getting-started-assets/create-data-core_flowcore-io.png)
+</div>
+
+Give your data core a name, relevant to the data you will be assigning to it, and give a brief description of what it is.
+
 
 <div style="display:flex; justify-content:center">
 ![Data core window](../../../assets/getting-started-assets/create-data-core-window_flowcore-io.png) 
@@ -123,18 +161,31 @@ Private data cores are ideal for:
 If you are using the **Free Tier** you will only be able to create public data cores. To create private data cores, you have to upgrade to **Pro** or higher
 :::
 
-Within the data core, you can organize your data further by creating groups and subgroups. This is done by creating **Flowtypes** from within the data core. To simplify the understandings flowtypes, you can imagine that the aggrigator is a drawer and the event types are little storage boxes within the drawer. This gives you the ability to roughly organize your data without having to be too thorough. 
-
 <div style="display:flex; justify-content:center">
-![Create flowtype](../../../assets/getting-started-assets/create-flowtype_flowcore-io.png) 
+    ![Create flowtype](../../../assets/getting-started-assets/data-core-page.png)
 </div>
 
+Within the data core, you can organize your data further by creating groups and subgroups. This is done by creating **Flowtypes** from within the data core.
+
+To simplify the concept of flowtypes, you can imagine that the aggregator is a drawer and the event types are little storage boxes within the drawer. This gives you the ability to roughly organize your data without having to be too thorough.
+Allowing you to group up multiple related data sets into one data core.
+
 To create a flowtype, click the **Create Flowtype** button within your data core’s page. Here you will be able to define the aggregator, write a description and list your event types.
+
+<div style="display:flex; justify-content:center">
+    ![Create flowtype](../../../assets/getting-started-assets/create-flowtype_flowcore-io.png)
+</div>
+
+Generating the following outcome:
+
+<div style="display:flex; justify-content:center">
+    ![Create flowtype](../../../assets/getting-started-assets/data-core-page-flow-types.png)
+</div>
 
 
 ### Connecting to a Data Core
 
-Next, we explore how to send data into a data core through ingestion channels. This can be found in the panel on the lefthand side. 
+Next, we explore how to send data into a data core through ingestion channels. This can be found in the panel on the left-hand side.
 
 <div style="display:flex; justify-content:center">
 ![Ingestion channels](../../../assets/getting-started-assets/ingestion-channels-highlighted_flowcore-io.png) 
@@ -146,7 +197,7 @@ Currently, Flowcore supports webhooks, with plans to introduce MQTT and "bring y
 ![Webhook window](../../../assets/getting-started-assets/webhooks_flowcore-io.png) 
 </div>
 
-Here you can choose which organization, data core, flowtype and event type to use. This will generate a webhook, which is a URL you can call, for you. However, to complete the webhook, you will need to generate an API key for authentication.
+Here you can choose which organization, data core, flowtype and event type to use. This will generate a webhook, which is a URL you can call. However, to complete the webhook, you will need to generate an API key for authentication.
 
 <div style="display:flex; justify-content:center">
 ![Webhook ingestion](../../../assets/getting-started-assets/Webhook-ingestion_flowcore-io.png) 
@@ -164,40 +215,66 @@ Give the key a name, which makes sense to you and your project, and it will gene
 ![Generate API key](../../../assets/getting-started-assets/create-api-key_flowcore-io.png) 
 </div>
 
-The benefit to using these API keys is the ease to delete them at will, in case you should choose to revoke access to your data core. 
+The benefit to using these API keys is the ease to delete them at will, in case you should choose to revoke access to your data core. And there is less authenticative management on your part
 
-
-### Sending Data to a Data Core 
-
-Once the API key is generated and added to the webhook URL, it is time to send data to the data core. For sending the data, you can use different tools; we will be using **Insomnia**. 
-
-Open Insomnia and create a new HTTP request and set it to POST. There you can paste the webhook you generated. We will be sticking with JSON, as that is what the webhooks support. This is where the actual data is used. The data can now be sent into your data core. You can see this in your data core on **[Flowcore](https://flowcore.io/)**. 
+Now return to the ingestion channel and paste the API key into the webhook URL, so it ultimately looks like this:
 
 <div style="display:flex; justify-content:center">
-![Insomnia](../../../assets/getting-started-assets/insomnia-data.png) 
+    ![Generate API key](../../../assets/getting-started-assets/ingestion-with-key.png)
 </div>
 
-The whole structure of the data is defined by the data you send in, so it is completely schema-less. 
+### Sending Data to a Data Core
 
-To send data to a different event type, you can either generate a new webhook, using the same API key, or you can manually change it in the webhook URL. 
+Once the API key is generated and added to the webhook URL, it is time to send data to the data core. For sending the data, you can use different tools; we will be using [**Insomnia**](https://insomnia.rest/).
+
+1. Open Insomnia
+2. Create a new HTTP request and set it to `POST`
+3. Paste the generated webhook into the URL field
+4. *Set the body to `JSON`
+5. Populate the body with the data you want to send
+6. Press Send
+
+> Note: The webhook ingestion currently only support `JSON` data, hence why we set the body to `JSON`.
+
+<video width={"100%"} autoPlay controls loop>
+    <source src="../../../../public/videos/getting-started/insomnia-data-animated.mp4" type="video/mp4"/>
+    You don't have a browser that is compatible with this video.
+</video>
+
+The whole structure of the data is defined by the data you send in, so it is completely schema-less.
+
+To send data to a different event type, you can either generate a new webhook as you did before, or you can manually simply the name in the webhook URL.
+> **Note**: that you can reuse the api key as much as you want, but for security and flexibility we recommend generate new ones accordingly.
+> Having multiple keys, gives you the option for cutting off access to specific keys, without having to revoke access to all of them.
 
 ## Creating a Read Model (with PlanetScale)
 
 <YouTube id="https://www.youtube.com/watch?v=xB4l5pvIkTs" />
 
-Here we will explore the concept of read models in Flowcore and learn how to connect them to external sources. Read models are vital for retrieving data from Flowcore and transferring it to your own systems, such as databases or storage solutions. This guide provides an introduction to read models and walks you through connecting a read model to an external source, specifically using PlanetScale to set up a database.
+Here we will explore the concept of read models in Flowcore and learn how to connect them to external sources. Read models are vital for retrieving data from Flowcore and transferring it to your own systems, such as databases or other storage solutions.
+
+This guide provides an introduction to read models and walks you through connecting a read model to an external source, specifically using PlanetScale to set up a database.
 
 :::note
-You will need an account on **[PlanetScale](https://planetscale.com/)** to create a database there.
+You wish to fully follow along this guide, then you will need an account on **[PlanetScale](https://planetscale.com/)** to create a database. Alternatively, you can consider everything in the guide related to Flowcore and utilise your own online storage of choice
 :::
 
 A read model in Flowcore serves as the gateway, to extract data from Flowcore and into your preferred external sources. The primary objective is to facilitate data transfer and integration with your own systems. We will demonstrate connecting a read model to a PlanetScale database, but Flowcore offers multiple options for various external sources.
 
+### Creating a PlanetScale database
 To get started, we need an actual database to connect to. Creating a database in PlanetScale, is as easy as clicking **Create a new database** on their website.
 
-<div style="display:flex; justify-content:center">
-![Create database](../../../assets/getting-started-assets/create-new-database_planetscale.png) 
-</div>
+<video width={"100%"} autoPlay controls loop>
+    <source src="../../../../public/videos/getting-started/create-a-planet-scale-database.mp4" type="video/mp4"/>
+    Create a new database on PlanetScale
+</video>
+
+
+Where you have to do the following:
+- name your database
+- choose a plan that suits your project
+- create the database
+- create a connection
 
 You have to name your database, choose a plan that suits your project and then create the database. PlanetScale uses MySQL, so you won’t have to select a language or framework. Once the database is done connecting, it will be ready to use.
 
@@ -221,7 +298,13 @@ Flowcore supports various endpoints for external sources. For this instance, we 
 ![Read model types](../../../assets/getting-started-assets/read-model-types_flowcore-io.png) 
 </div>
 
-To establish the connection to the external database, we must provide the necessary configuration details. To connect to the PlanetScale database, enter the database name, username, password, and host information. 
+To establish the connection to the external database, we must provide the necessary configuration details. To connect to the PlanetScale database, enter the
+- database name,
+- username,
+- password
+- leave the port as is
+- host information
+- select "Use SSL", and leave the CA certificate blank (specific to PlanetScale).
 
 <div style="display:flex; justify-content:center">
 ![Connect read model to database](../../../assets/getting-started-assets/create-external-mysql-read-model_flowcore-io.png) 
@@ -230,10 +313,9 @@ To establish the connection to the external database, we must provide the necess
 All of this information can be found by **Connecting** to the PlanetScale database on their website. 
 
 <div style="display:flex; justify-content:center">
-![Planetscale password](../../../assets/getting-started-assets/generate-password_planetscale.png) 
+![Planetscale password](../../../assets/getting-started-assets/generate-password_planetscale.png)
 </div>
-
-In this case, the database uses SSL for secure connections. Once these details are entered, the read model is created and ready for data transfer.
+Once these details are entered, the read model is created and ready for data transfer.
 
 ## Transferring Data from a Data Core to a Read Model
 
@@ -242,126 +324,126 @@ In this case, the database uses SSL for secure connections. Once these details a
 We'll delve into the process of transferring data from a data core to a read model within the context of Flowcore. Flowcore simplifies the data transformation process, allowing you to seamlessly transfer data from a data core into an external database, such as PlanetScale.
 
 <div style="display:flex; justify-content:center">
-![TablePlus](../../../assets/getting-started-assets/tableplus.png) 
+![TablePlus](../../../assets/getting-started-assets/tableplus.png)
 </div>
 
-To begin, you need to establish a connection to the external database, in this case, PlanetScale. You can use any database client, like TablePlus, to set up this connection. 
+To begin, you need to establish a connection to the external database, in this case, PlanetScale. You can use any database client, like TablePlus, to set up this connection.
 
 <div style="display:flex; justify-content:center">
-![Connect button](../../../assets/getting-started-assets/connect-to-planetscale.png) 
+![Connect button](../../../assets/getting-started-assets/connect-to-planetscale.png)
 </div>
 
-In your selected database, click the **Connect** button on the top right side. 
+In your selected database, click the **Connect** button on the top right side.
 
 <div style="display:flex; justify-content:center">
-![Connect to PlanetScale](../../../assets/getting-started-assets/new-password-general.png) 
+![Connect to PlanetScale](../../../assets/getting-started-assets/new-password-general.png)
 </div>
 
 Then you create a **New password**. Ensure you select **General** to access the required database properties.
 
 <div style="display:flex; justify-content:center">
-![TablePlus MySQL](../../../assets/getting-started-assets/tableplus-mysql.png) 
+![TablePlus MySQL](../../../assets/getting-started-assets/tableplus-mysql.png)
 </div>
 
 Open TablePlus and create a new MySQL connection.
 
 <div style="display:flex; justify-content:center">
-![MySQL Connection](../../../assets/getting-started-assets/mysql-connection.png) 
+![MySQL Connection](../../../assets/getting-started-assets/mysql-connection.png)
 </div>
 
 Then copy over the information from PlanetScale.
 
 <div style="display:flex; justify-content:center">
-![Scenario tab in side menu](../../../assets/getting-started-assets/scenario-button.png) 
+![Scenario tab in side menu](../../../assets/getting-started-assets/scenario-button.png)
 </div>
 
 In Flowcore, the next step is to create a scenario. You can find the **Scenario** tab on the left hand side menu.
 
 <div style="display:flex; justify-content:center">
-![Creating a scenario](../../../assets/getting-started-assets/select-organization.png) 
+![Creating a scenario](../../../assets/getting-started-assets/select-organization.png)
 </div>
 
-You specify the organization and data core you want to use for this scenario. The data cores you use can be part of your organization, or you can subscribe to public data cores from other organizations. 
+You specify the organization and data core you want to use for this scenario. The data cores you use can be part of your organization, or you can subscribe to public data cores from other organizations.
 
 <div style="display:flex; justify-content:center">
-![Scenario node](../../../assets/getting-started-assets/data-core-node.png) 
+![Scenario node](../../../assets/getting-started-assets/data-core-node.png)
 </div>
 
 When you have chosen a data core, it will show up in your **Scenario**. On the right side of the data core node, is a small purple nub. This is the **Node Connection**. Clicking that will drag out a line to create a new node. This is how you create an adapter.
 
 <div style="display:flex; justify-content:center">
-![Create Adapter](../../../assets/getting-started-assets/creating-adapter.png) 
+![Create Adapter](../../../assets/getting-started-assets/creating-adapter.png)
 </div>
 
-Adapters play a crucial role in data transformation. They allow you to modify the data as it flows from the data core to your external database. 
+Adapters play a crucial role in data transformation. They allow you to modify the data as it flows from the data core to your external database.
 
 <div style="display:flex; justify-content:center">
-![Select a Data Source](../../../assets/getting-started-assets/selecting-data-source.png) 
+![Select a Data Source](../../../assets/getting-started-assets/selecting-data-source.png)
 </div>
 
-You can choose the event type, language (Flowcore supports various languages like TypeScript and Python, with more to come in the future), and even create custom transformations as needed. More information regarding transforming data can be found in the next section of this guide. 
+You can choose the event type, language (Flowcore supports various languages like TypeScript and Python, with more to come in the future), and even create custom transformations as needed. More information regarding transforming data can be found in the next section of this guide.
 
-If you leave all the settings as they are, it will just allow the data to flow, untransformed, from the datacore to your read model. 
+If you leave all the settings as they are, it will just allow the data to flow, untransformed, from the datacore to your read model.
 
 <div style="display:flex; justify-content:center">
-![Scenario nodes](../../../assets/getting-started-assets/data-core-and-adapter-nodes.png) 
+![Scenario nodes](../../../assets/getting-started-assets/data-core-and-adapter-nodes.png)
 </div>
 
 You can now create a new node from the adapter to pipe the data into another data core or a read model. Simply create a new **Node Connection** from your adapter node.
 
 <div style="display:flex; justify-content:center">
-![Piping options](../../../assets/getting-started-assets/pipe-options.png) 
+![Piping options](../../../assets/getting-started-assets/pipe-options.png)
 </div>
 
 With Flowcore, you have the flexibility to transfer data to a read model or another data core. This is particularly useful if you need to correct or version data before moving it to the final destination. In our demonstration, we focus on the read model option, where data is pushed directly into an external database.
 
 <div style="display:flex; justify-content:center">
-![Selecting a read model](../../../assets/getting-started-assets/select-read-model.png) 
+![Selecting a read model](../../../assets/getting-started-assets/select-read-model.png)
 </div>
 
-Choose the read model you would like to use for this scenario. You can change the **Table Name** and the **Table Definition** if you wish, but in this instance it isn't required. 
+Choose the read model you would like to use for this scenario. You can change the **Table Name** and the **Table Definition** if you wish, but in this instance it isn't required.
 
 <div style="display:flex; justify-content:center">
-![Complete button](../../../assets/getting-started-assets/previous-complete-buttons.png) 
+![Complete button](../../../assets/getting-started-assets/previous-complete-buttons.png)
 </div>
 
 Press **Complete** and your scenario will be updated.
 
 <div style="display:flex; justify-content:center">
-![Organizing nodes](../../../assets/getting-started-assets/node-organizing.png) 
+![Organizing nodes](../../../assets/getting-started-assets/node-organizing.png)
 </div>
 
 You can organize your nodes however you want or just use the alignment tool at the bottom left corner of the window. This will put all your nodes in a tidy straight line.
 
 <div style="display:flex; justify-content:center">
-![Save and Deploy](../../../assets/getting-started-assets/deploy-and-save-buttons.png) 
+![Save and Deploy](../../../assets/getting-started-assets/deploy-and-save-buttons.png)
 </div>
 
-Once you've set up the scenario, defined the adapters, and configured the read model, save your work. This action is necessary before deployment to ensure changes are preserved. Deploying your configuration initiates the data transfer process. You might also want to name your scenario before deploying. 
+Once you've set up the scenario, defined the adapters, and configured the read model, save your work. This action is necessary before deployment to ensure changes are preserved. Deploying your configuration initiates the data transfer process. You might also want to name your scenario before deploying.
 
 <div style="display:flex; justify-content:center">
-![Deployment status](../../../assets/getting-started-assets/status-of-deploy.png) 
+![Deployment status](../../../assets/getting-started-assets/status-of-deploy.png)
 </div>
 
-You can see the status of deployment my hovering over the little cloud icon on the bottom left corner of your adapter node. This can take a minute. 
+You can see the status of deployment my hovering over the little cloud icon on the bottom left corner of your adapter node. This can take a minute.
 
 <div style="display:flex; justify-content:center">
-![Check database](../../../assets/getting-started-assets/tableplus-check-for-tables.png) 
+![Check database](../../../assets/getting-started-assets/tableplus-check-for-tables.png)
 </div>
 
 After deployment, your data will be transformed and transferred to the specified external database. You can check the database to verify that the data has been successfully transferred. Flowcore handles the entire process for you, allowing you to maintain control and flexibility.
 
 <div style="display:flex; justify-content:center">
-![Additional adapters](../../../assets/getting-started-assets/creating-more-adapters.png) 
+![Additional adapters](../../../assets/getting-started-assets/creating-more-adapters.png)
 </div>
 
-If you want to transfer data from other event types within your data core into the same read model, you can do so easily by just repeating the same process. Create a new adapter, select the other event type and then pipe it into the same read model, but under a different table name. Save and deploy. 
+If you want to transfer data from other event types within your data core into the same read model, you can do so easily by just repeating the same process. Create a new adapter, select the other event type and then pipe it into the same read model, but under a different table name. Save and deploy.
 
 <div style="display:flex; justify-content:center">
-![Deleting adapters](../../../assets/getting-started-assets/deleting-adapters.png) 
+![Deleting adapters](../../../assets/getting-started-assets/deleting-adapters.png)
 </div>
 
-Lastly, you can also delete adapters whenever you want, in case you don't need the data from the event type anymore. Simply select them, delete, save and deploy. You can even recreate them later if you change your mind again. 
+Lastly, you can also delete adapters whenever you want, in case you don't need the data from the event type anymore. Simply select them, delete, save and deploy. You can even recreate them later if you change your mind again.
 
 ## Transforming Data it Before Reaches the Read Model
 
@@ -371,49 +453,49 @@ The objective of this section is getting data from a data core, put into the ada
 
 To begin, let's recap the previous stage, where we transferred data from a data core into an adapter without any modifications. This time, we will follow a different approach. We'll take data from the data core and pass it through an adapter, where we'll transform the data by adding additional properties to the data before exporting it into the database.
 
-The main difference between transfering and transforming data is the steps taken within the adapter node. The data core and read model nodes are handled in the exact same way. 
+The main difference between transfering and transforming data is the steps taken within the adapter node. The data core and read model nodes are handled in the exact same way.
 
 <div style="display:flex; justify-content:center">
-![New adapter node](../../../assets/getting-started-assets/creating-a-new-adapter-node.png) 
+![New adapter node](../../../assets/getting-started-assets/creating-a-new-adapter-node.png)
 </div>
 
-First, we need to create a new adapter node and select the relevant event type. 
+First, we need to create a new adapter node and select the relevant event type.
 
 <div style="display:flex; justify-content:center">
-![Adapter type](../../../assets/getting-started-assets/typescript-adapter-type.png) 
+![Adapter type](../../../assets/getting-started-assets/typescript-adapter-type.png)
 </div>
 
 For this example we're using **typescript**, so go ahead and select that. The code will be responsible for modifying the incoming data. The structure of this code will be based on what you want to achieve, and you have full control over it.
 
 <div style="display:flex; justify-content:center">
-![Artifact URL](../../../assets/getting-started-assets/artifact-url-for-adapter.png) 
+![Artifact URL](../../../assets/getting-started-assets/artifact-url-for-adapter.png)
 </div>
 
-Unlike when you only have to transfer data, we will need to pay attention to the **Artifact URL** field, when transforming data. This is a URL to a package which has been generated within GitHub. We have to make a URL like this, to feed the transformation code into our adapter. 
+Unlike when you only have to transfer data, we will need to pay attention to the **Artifact URL** field, when transforming data. This is a URL to a package which has been generated within GitHub. We have to make a URL like this, to feed the transformation code into our adapter.
 
 ### Creating your own transformation code
 Firstly, we need to go to [Flowcore's GitHub page](https://github.com/flowcore-io).
 
 <div style="display:flex; justify-content:center">
-![GitHub repository examples](../../../assets/getting-started-assets/example-repositories.png) 
+![GitHub repository examples](../../../assets/getting-started-assets/example-repositories.png)
 </div>
 
 From there you can search for the available templates (such as `nodejs-typescript-transformer-example`), which you can use to get started. You can of course also make and use your own custom solution, but we will be using the examples we made for simplicity, for this guide. So go ahead and click the typescript template.
 
 <div style="display:flex; justify-content:center">
-![Template for typescript transformer](../../../assets/getting-started-assets/typescript-transformer-example.png) 
+![Template for typescript transformer](../../../assets/getting-started-assets/typescript-transformer-example.png)
 </div>
 
-This is all boilerplate code, which we can adjust to our needs. When using this template you create your own repository. This means that all code you use will belong to you and not Flowcore. This puts you in full control of your data, trainsformations and end points. 
+This is all boilerplate code, which we can adjust to our needs. When using this template you create your own repository. This means that all code you use will belong to you and not Flowcore. This puts you in full control of your data, trainsformations and end points.
 
 <div style="display:flex; justify-content:center">
-![README file to create own repository](../../../assets/getting-started-assets/the-readme-file.png) 
+![README file to create own repository](../../../assets/getting-started-assets/the-readme-file.png)
 </div>
 
 To create your own repository, you can follow this [README file](https://github.com/flowcore-io/nodejs-typescript-transformer-example/blob/main/README.md), which also has a YouTube tutorial included.
 
 <div style="display:flex; justify-content:center">
-![Own repository](../../../assets/getting-started-assets/repository-weather.png) 
+![Own repository](../../../assets/getting-started-assets/repository-weather.png)
 </div>
 
 
@@ -555,4 +637,4 @@ The transformation code is now integrated into Flowcore, and as data flows from 
 
 The flexibility of this approach allows you to iterate through the process, making changes to your transformation code or data mapping as needed to achieve the desired outcome. You can add or remove fields, adjust calculations, or even incorporate external data sources into the transformation process.
 
-By following these steps, you can effectively transform data within Flowcore before it reaches the read model, ensuring that it's structured and enriched according to your specific requirements. ) 
+By following these steps, you can effectively transform data within Flowcore before it reaches the read model, ensuring that it's structured and enriched according to your specific requirements. )
