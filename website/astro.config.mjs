@@ -6,7 +6,7 @@ export default defineConfig({
 	site: 'https://docs.flowcore.io/',
 	integrations: [
 		starlight({
-			title: 'Flowcore Platform Documentation',
+			title: 'Flowcore Wiki',
 			social: {
 				linkedin: 'https://www.linkedin.com/company/flowcore',
 			},
