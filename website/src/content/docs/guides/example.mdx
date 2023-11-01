@@ -333,7 +333,7 @@ To begin, you need to establish a connection to the external database, in this c
 ![Connect button](../../../assets/getting-started-assets/connect-to-planetscale.png)
 </div>
 
-In your selected database, click the **Connect** button on the top right side.
+In your selected PlanetScale database, click the **Connect** button on the top right side. 
 
 <div style="display:flex; justify-content:center">
 ![Connect to PlanetScale](../../../assets/getting-started-assets/new-password-general.png)
@@ -353,6 +353,8 @@ Open TablePlus and create a new MySQL connection.
 
 Then copy over the information from PlanetScale.
 
+## Transferring the data in Flowcore
+
 <div style="display:flex; justify-content:center">
 ![Scenario tab in side menu](../../../assets/getting-started-assets/scenario-button.png)
 </div>
@@ -363,7 +365,11 @@ In Flowcore, the next step is to create a scenario. You can find the **Scenario*
 ![Creating a scenario](../../../assets/getting-started-assets/select-organization.png)
 </div>
 
-You specify the organization and data core you want to use for this scenario. The data cores you use can be part of your organization, or you can subscribe to public data cores from other organizations.
+When creating a new scenario, you are asked to select an organization. This will reflect which data cores and read models you are able to access within your scenario. However, if you have subscribed to a public data core, then you are also able to select those data cores. 
+
+:::tip[Subscribing to public data cores]
+You can subscribe to a public data core by going to **Organizations**, choosing the organization which has the data core you want to subscribe to, selecting a data core in the **Data cores** list and simply click the **+Subscribe** button at the top of the page. 
+:::
 
 <div style="display:flex; justify-content:center">
 ![Scenario node](../../../assets/getting-started-assets/data-core-node.png)
@@ -425,7 +431,7 @@ Once you've set up the scenario, defined the adapters, and configured the read m
 ![Deployment status](../../../assets/getting-started-assets/status-of-deploy.png)
 </div>
 
-You can see the status of deployment my hovering over the little cloud icon on the bottom left corner of your adapter node. This can take a minute.
+You can see the status of deployment by hovering over the little cloud icon on the bottom left corner of your adapter node. This can take a minute.
 
 <div style="display:flex; justify-content:center">
 ![Check database](../../../assets/getting-started-assets/tableplus-check-for-tables.png)
@@ -487,6 +493,12 @@ From there you can search for the available templates (such as `nodejs-typescrip
 </div>
 
 This is all boilerplate code, which we can adjust to our needs. When using this template you create your own repository. This means that all code you use will belong to you and not Flowcore. This puts you in full control of your data, trainsformations and end points.
+
+<div style="display:flex; justify-content:center">
+![Template for typescript transformer](../../../assets/getting-started-assets/typescript-transformer-example.png) 
+</div>
+
+This is all boilerplate code, which we can adjust to our needs. When using this template you create your own repository. This means that all code you use will belong to you and not Flowcore. This puts you in full control of your data, transformations and endpoints. 
 
 <div style="display:flex; justify-content:center">
 ![README file to create own repository](../../../assets/getting-started-assets/the-readme-file.png)
