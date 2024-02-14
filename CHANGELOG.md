@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.3.0...v1.4.0) (2024-02-14)
+
+
+### Features
+
+* finished creating data cores, and added additional navigational guides ([f88ce37](https://github.com/flowcore-io/astro-flowcore-docs/commit/f88ce3766efc7f8548c6f3495a20701060210df2))
+
 ## [1.3.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.2.0...v1.3.0) (2024-02-13)
 
 
