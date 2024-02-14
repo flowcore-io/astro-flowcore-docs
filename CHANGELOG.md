@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.2.0...v1.3.0) (2024-02-13)
+
+
+### Features
+
+* added docs for organization, account and data core ([da80e37](https://github.com/flowcore-io/astro-flowcore-docs/commit/da80e370a10a1542f05062ff509c58e39e02251f))
+
 ## [1.2.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.1.2...v1.2.0) (2023-11-01)
 
 
