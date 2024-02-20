@@ -1,0 +1,34 @@
+---
+title: Login
+description: Login with your Flowcore account
+---
+import {Card} from '@astrojs/starlight/components';
+import {Image} from "astro:assets";
+
+import NotLoggedInImage from "../../../../assets/guides/account/create-a-flowcore-account/not-logged-in.png";
+import SetupFlowcoreAccountImage
+    from "../../../../assets/guides/account/create-a-flowcore-account/setup-flowcore-account.png";
+import LoggedInImage from "../../../../assets/guides/account/create-a-flowcore-account/logged-in.png";
+
+The Flowcore CLI uses your Flowcore account to authenticate and authorize you to perform various actions. This guide will
+show you how to login with your Flowcore account.
+
+## Login with the Flowcore CLI
+
+You can login with the Flowcore CLI using the following command.
+
+```bash
+flowcore login
+```
+
+This will open a browser window and prompt you to login with your Flowcore account. Once you have logged in, you can close
+the browser window and return to the terminal.
+
+<Card title="Port" icon="information">
+    If you are hosting something on the port that the Flowcore CLI wants to use, you can specify a different port using
+    the configuration command. Running the following command will prompt you to enter a new port number.
+
+    ```bash
+    flowcore config set --port
+    ```
+</Card>

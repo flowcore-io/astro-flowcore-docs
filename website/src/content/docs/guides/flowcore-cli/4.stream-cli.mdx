@@ -1,0 +1,38 @@
+---
+title: Stream
+description: Stream data from Flowcore to your local machine.
+---
+import {Card} from '@astrojs/starlight/components';
+import {Image} from "astro:assets";
+
+import StreamDialog from "../../../../assets/guides/flowcore-cli/stream-cli/stream-dialog.png";
+import StreamCommand from "../../../../assets/guides/flowcore-cli/stream-cli/stream-command.png";
+
+The Flowcore CLI allows you to stream data from Flowcore to your local machine. This is useful for debugging, development
+and local exploration of your data.
+
+## Pick data to stream
+
+1. Navigate to the Data Core, Flow Type and Event Type you want to stream. Click on the `menu` icon and select
+`flowcore-cli stream command`.
+<Image src={StreamCommand} alt="Stream dialog" />
+
+2. This will open a dialog with the command you need to run to start streaming data to your local machine.
+<Image src={StreamDialog} alt="Stream dialog" />
+
+3. Copy the command and run it in your terminal.
+
+## Configuration
+
+The default command will log out the data to the terminal. If you want to send data to a different location, you can omit
+the `-o` flag and specify a `-d` flag to specify the http endpoint to send the data to.
+
+To specify how many hours, days, weeks, months or years of data you want to stream, you can use the `-s` flag to sepecify
+the start time to fetch events. The `-s` flag accepts a string in the format `1h`, `1d`, `1w`, `1m` or `1y`.
+
+<Card title="JSON" icon="document">
+    You can also pipe the output to a file or another command by using the `>` operator.
+    ```sh
+    flowcore-cli stream <stream url> -o log -s 1h --json > output.json
+    ```
+</Card>
