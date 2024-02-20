@@ -1,0 +1,98 @@
+---
+title: Create Resources
+description: Create resources in Flowcore using a manifest file
+---
+import {Card} from '@astrojs/starlight/components';
+
+The Flowcore CLI allows you to create resources in Flowcore using a manifest file. This is useful for creating multiple
+resources at once, or for creating resources in a CI/CD pipeline.
+
+## Data Cores
+
+To create a data core, you can use the `apply` command with a manifest file. The manifest file should be in YAML format.
+
+```yaml
+tenant: example-tenant
+dataCore:
+  name: example-data-core
+  description: "An example data core"
+  flowTypes:
+    - name: example
+      description: "An example flow type"
+      eventTypes:
+        - name: example.event.0
+          description: "An example event"
+```
+
+then run the following command:
+
+```sh
+flowcore-cli data-core apply -f data-core.yaml
+```
+
+this will create a plan to create the data core, and then apply the plan to create the data core.
+
+## Scenarios
+
+To create a scenario, you can use the `apply` command with a manifest file. The manifest file should be in YAML format.
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  description: "An example scenario"
+  transformers:
+    - name: example-transformer
+      description: "An example transformer"
+      dataCore: example-data-core
+      flowType: example
+      events:
+        - example.event.0
+      parameters:
+        - name: PROXY_ENDPOINT
+          type: manual
+          value: "https://example.com"
+      blueprint:
+        artifactUrl: "https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.1.0.zip"
+```
+
+then run the following command:
+
+```sh
+flowcore-cli scenario apply -f scenario.yaml
+```
+
+this will create a plan to create the scenario, and then apply the plan to create the scenario.
+
+<Card title="Parameters" icon="information">
+    <p>
+        Parameters can be configured with a type of `manual`, `secret` or `variable`. The `manual` type is used for
+        parameters that are manually set by the user. The `secret` type is used for parameters that are sensitive and
+        are stored on the organization level. The `variable` type is used for parameters that are set on the organization level and
+        are shared across all scenarios in the organization.
+    </p>
+</Card>
+
+## Apply all resources
+
+You can also apply all resources in a manifest file at once by using the root `apply` command:
+
+```sh
+flowcore-cli apply -f manifest.yaml
+```
+
+<Card title="Delete Protection" icon="close">
+    <p>
+        By default, data cores are created without delete protection enabled. You can enable delete protection by setting
+        `deleteProtection` to `true` for each resource in the manifest file.
+
+```yaml
+tenant: example-tenant
+dataCore:
+  name: example-data-core
+  deleteProtection: true
+```
+        Keep in mind that if delete protection is enabled on a resource all nested resources will also have delete
+        protection enabled. To delete a resource with delete protection enabled, you must first disable delete protection.
+    </p>
+</Card>
