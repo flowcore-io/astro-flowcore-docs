@@ -33,6 +33,22 @@ the start time to fetch events. The `-s` flag accepts a string in the format `1h
 <Card title="JSON" icon="document">
     You can also pipe the output to a file or another command by using the `>` operator.
     ```sh
-    flowcore-cli stream <stream url> -o log -s 1h --json > output.json
+    flowcore-cli stream "stream url" -o log -s 1h --json > output.json
     ```
+</Card>
+
+## Local development
+
+If you have a scenario defined in the flowcore manifest, you can use the `local` command to start a stream thread for
+each of the transformers in the scenario. This is useful for local development and debugging.
+
+```sh
+flowcore scenario local -f flowcore.yaml -e http://localhost:3000/api/transform
+```
+
+This will start a stream thread for each of the transformers specified Flow Type and Event Types in the scenario and send the data to the specified endpoint.
+
+<Card title="info" icon="information">
+    The `local` command is only available in the `flowcore-cli` version 2.5.0 and above. The flags `scan`, `start` and `timeout`
+    will be passed to the stream command for each thread.
 </Card>
