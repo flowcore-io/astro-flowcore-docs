@@ -17,10 +17,10 @@ dataCore:
   name: example-data-core
   description: "An example data core"
   flowTypes:
-    - name: example
+    example:
       description: "An example flow type"
       eventTypes:
-        - name: example.event.0
+        example.event.0:
           description: "An example event"
 ```
 
@@ -42,7 +42,7 @@ scenario:
   name: example-scenario
   description: "An example scenario"
   transformers:
-    - name: example-transformer
+    example-transformer:
       description: "An example transformer"
       dataCore: example-data-core
       flowType: example
