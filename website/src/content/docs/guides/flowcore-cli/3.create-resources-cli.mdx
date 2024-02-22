@@ -24,13 +24,26 @@ dataCore:
           description: "An example event"
 ```
 
-then run the following command:
+to generate a manifest file, you can use the `generate` command:
 
 ```sh
-flowcore-cli data-core apply -f data-core.yaml
+flowcore data-core generate manifest -t example-tenant --placeholder
+```
+
+this will generate a `flowcore.yaml` file, then run the following command to apply the manifest file
+
+```sh
+flowcore data-core apply -f flowcore.yaml
 ```
 
 this will create a plan to create the data core, and then apply the plan to create the data core.
+
+<Card title="overwrite" icon="information">
+    <p>
+        If a data core already exists in the manifest file, you will be prompted to overwrite the existing data core.
+        pass the `--overwrite` flag to overwrite the existing data core without being prompted.
+    </p>
+</Card>
 
 ## Scenarios
 
@@ -56,10 +69,16 @@ scenario:
         artifactUrl: "https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.1.0.zip"
 ```
 
-then run the following command:
+to generate a manifest file, you can use the `generate` command:
 
 ```sh
-flowcore-cli scenario apply -f scenario.yaml
+flowcore scenario generate manifest -t example-tenant --placeholder
+```
+
+this will generate a `flowcore.yaml` file, then run the following command to apply the manifest file
+
+```sh
+flowcore scenario apply -f scenario.yaml
 ```
 
 this will create a plan to create the scenario, and then apply the plan to create the scenario.
@@ -78,7 +97,7 @@ this will create a plan to create the scenario, and then apply the plan to creat
 You can also apply all resources in a manifest file at once by using the root `apply` command:
 
 ```sh
-flowcore-cli apply -f manifest.yaml
+flowcore apply -f manifest.yaml
 ```
 
 ## Delete Protection
