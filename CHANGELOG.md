@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.5.0...v1.5.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* update documentation for local development with flowcore-cli version 2.5.0 and above ([9313ff7](https://github.com/flowcore-io/astro-flowcore-docs/commit/9313ff7305771e72f67fe3ed4e2c94f7b663c0e4))
+
 ## [1.5.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.4.2...v1.5.0) (2024-02-21)
 
 
