@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.5.1...v1.6.0) (2024-02-22)
+
+
+### Features
+
+* update CLI command for generating and applying manifest files ([4376414](https://github.com/flowcore-io/astro-flowcore-docs/commit/4376414dba0dbae5e4a443e5f1824c82197c5817))
+
 ## [1.5.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.5.0...v1.5.1) (2024-02-22)
 
 
