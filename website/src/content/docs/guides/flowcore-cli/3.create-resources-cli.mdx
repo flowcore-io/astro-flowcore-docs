@@ -81,10 +81,10 @@ You can also apply all resources in a manifest file at once by using the root `a
 flowcore-cli apply -f manifest.yaml
 ```
 
-<Card title="Delete Protection" icon="close">
-    <p>
-        By default, data cores are created without delete protection enabled. You can enable delete protection by setting
-        `deleteProtection` to `true` for each resource in the manifest file.
+## Delete Protection
+
+By default, data cores are created without delete protection enabled. You can enable delete protection by setting
+`deleteProtection` to `true` for each resource in the manifest file.
 
 ```yaml
 tenant: example-tenant
@@ -92,7 +92,26 @@ dataCore:
   name: example-data-core
   deleteProtection: true
 ```
-        Keep in mind that if delete protection is enabled on a resource all nested resources will also have delete
-        protection enabled. To delete a resource with delete protection enabled, you must first disable delete protection.
-    </p>
-</Card>
+Keep in mind that if delete protection is enabled on a resource all nested resources will also have delete
+protection enabled. To delete a resource with delete protection enabled, you must first disable delete protection.
+
+## Endpoints (Experimental)
+
+To add an endpoint to a transformer, you can add the this to the manifest file:
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      endPoint:
+        name: example-endpoint
+        type: "DATA_CORE"
+        definition:
+          dataCore: some-data-core
+          flowType: some-flow-type
+          eventType: some-event-type
+```
+
+This will set up an endpoint for the transformer that will send data returned from the transformer to the specified data core.
