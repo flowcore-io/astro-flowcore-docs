@@ -1,0 +1,39 @@
+---
+import {Image} from "astro:assets";
+
+const { name, light, dark, alt } = Astro.props;
+---
+
+<script>
+  var updateImages = function () {
+    var images = document.querySelectorAll(".theme-aware-image");
+    var theme = document.documentElement.dataset.theme;
+
+    if (theme === "dark") {
+      images.forEach((image) => {
+        if (image.getAttribute("data-theme") === "dark") {
+          image.style.display = "block";
+        } else {
+          image.style.display = "none";
+        }
+      });
+    } else {
+      images.forEach((image) => {
+        if (image.getAttribute("data-theme") === "light") {
+          image.style.display = "block";
+        } else {
+          image.style.display = "none";
+        }
+      });
+    }
+  }
+
+  document.documentElement.addEventListener("change", (e) => {
+    updateImages();
+  });
+
+  updateImages();
+</script>
+
+<Image src={light} class="theme-aware-image w-full" alt={ alt} data-theme="light" />
+<Image src={dark} class="theme-aware-image w-full" alt={ alt } data-theme="dark" />

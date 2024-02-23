@@ -5,6 +5,14 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://docs.flowcore.io/',
+  head: [
+    {
+      tag: 'script',
+      attrs: {
+        src: 'theme-aware-image.js',
+      }
+    }
+  ],
   integrations: [starlight({
     title: 'Flowcore Wiki',
     social: {

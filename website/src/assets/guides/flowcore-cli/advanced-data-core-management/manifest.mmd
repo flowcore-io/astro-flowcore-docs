@@ -1,0 +1,53 @@
+classDiagram
+    Source <|-- Organization
+    Source <|-- User
+    Organization <|-- OrganizationProfile
+    Organization <|-- OrganizationState
+    User <|-- UserProfile
+    namespace SourceDomain {
+        class Source {
+            <<DataCore>>
+            dataCore = "flowcore-platform"
+            resourceOwner = true
+            distributed = true
+            description = "This is a platform for the flowcore project"
+            flowTypes = []
+        }
+    }
+    namespace OrganizationDomain {
+
+        class Organization {
+            <<DataCore>>
+            dataCore = "flowcore-platform"
+            resourceOwner = false
+            distributed = true
+        }
+        class OrganizationProfile {
+            <<FlowType>>
+            description = "This is a profile for an organization"
+            enabled: true
+            eventTypes = [...]
+        }
+        class OrganizationState {
+            <<FlowType>>
+            description = "This is a state for an organizatio"
+            enabled: true
+            eventTypes = [...]
+        }
+    }
+
+    namespace UserDomain {
+        class User {
+            <<DataCore>>
+            dataCore = "flowcore-platform"
+            resourceOwner = false
+            distributed = true
+        }
+
+        class UserProfile {
+            <<FlowType>>
+            description = "This is a profile for a user"
+            enabled: true
+            eventTypes = [...]
+        }
+    }
