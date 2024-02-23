@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.6.0...v1.7.0) (2024-02-23)
+
+
+### Features
+
+* add script to convert .mmd files to .svg files in website assets directory ([9c64989](https://github.com/flowcore-io/astro-flowcore-docs/commit/9c64989c0a8d81fc4e238844bfc4938982f38ff3))
+
+
+### Bug Fixes
+
+* update class diagram with new namespaces and classes in the OrganizationDomain and UserDomain namespaces ([e18f657](https://github.com/flowcore-io/astro-flowcore-docs/commit/e18f657c8b0fdd9e2ecb8ae8f935a4f5e9fc6e80))
+
 ## [1.6.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.5.1...v1.6.0) (2024-02-22)
 
 
