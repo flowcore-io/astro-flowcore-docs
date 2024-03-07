@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.7.0...v1.8.0) (2024-03-07)
+
+
+### Features
+
+* add detailed usage examples for streaming data with different options and flags ([9a643d1](https://github.com/flowcore-io/astro-flowcore-docs/commit/9a643d1503dfa7fece074187e9ca55fbb9ef5ab3))
+
 ## [1.7.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.6.0...v1.7.0) (2024-02-23)
 
 
