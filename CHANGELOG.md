@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.9.0...v1.9.1) (2024-03-07)
+
+
+### Bug Fixes
+
+* update resource requirements table with transformer units for each size and add explanation about transformer cost calculation. ([64f80a7](https://github.com/flowcore-io/astro-flowcore-docs/commit/64f80a79084ac61fcdd6f39461b53e7eb8163853))
+
 ## [1.9.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.8.1...v1.9.0) (2024-03-07)
 
 
