@@ -134,3 +134,31 @@ scenario:
 ```
 
 This will set up an endpoint for the transformer that will send data returned from the transformer to the specified data core.
+
+To create a read model endpoint, you can add the following to the manifest file:
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      endPoint:
+        id: 559d9980-0630-4d0f-8ba0-921a944310b2 # visible in the UI, info icon next to the read model name
+        name: example-endpoint # name of the table in the database
+        type: "POSTGRES" # or "MYSQL"
+        definition:
+          blueprint:
+            "example_column":
+              type: "string" # or "text" or "integer" or "decimal" or "boolean"
+              length: 255 # optional
+          matchKey: "some-key"
+          onMatch: "skip" # or "update"
+```
+
+This will set up an endpoint for the transformer that will send data returned from the transformer to the specified database.
+
+<Card title="Experimental" icon="information">
+  Currently, Postgres and MySQL endpoints are supported as read model endpoints. More endpoints will be added in the future.
+  Also, only the blueprint, matchKey and onMatch fields are checked for updates. If you want to update the table name or type of the endpoint, you will have to delete the endpoint and create a new one.
+</Card>
