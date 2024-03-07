@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.8.1...v1.9.0) (2024-03-07)
+
+
+### Features
+
+* add information on transformer configuration options and resource settings ([46d5d76](https://github.com/flowcore-io/astro-flowcore-docs/commit/46d5d7677b3b72da14a7c9eca53bd195e9bd5616))
+
+
+### Bug Fixes
+
+* fix typo in header for Transformer Size section ([640c119](https://github.com/flowcore-io/astro-flowcore-docs/commit/640c119fe63851ae07e6f6a2397b34d4b3d68bd8))
+
 ## [1.8.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.8.0...v1.8.1) (2024-03-07)
 
 
