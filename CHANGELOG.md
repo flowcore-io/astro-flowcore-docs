@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.8.0...v1.8.1) (2024-03-07)
+
+
+### Bug Fixes
+
+* update manifest file instructions for creating read model endpoint and provide information on supported endpoints and update process. ([f8d6d83](https://github.com/flowcore-io/astro-flowcore-docs/commit/f8d6d83d29582435bb6d203f82ac8d7a2b93686c))
+
 ## [1.8.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.7.0...v1.8.0) (2024-03-07)
 
 
