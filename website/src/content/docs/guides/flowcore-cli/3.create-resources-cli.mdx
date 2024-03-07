@@ -131,34 +131,39 @@ This will set the resource requirements for the transformers. The size of the tr
 
 <Card title="Sizes" icon="information">
     <p>
-      In the table below you can see the resource requirements for the different sizes of transformers.
+      In the table below you can see the resource requirements for the different sizes of transformers. The transformer unit indicates what the transformer will consume in terms of cost. A single unit costs `$10` per month. (`5` are included in the free tier)
     </p>
     <table>
       <tbody>
         <tr>
           <th>Size</th>
           <th>CPU (vCPU)</th>
-          <th>Memory (MB)></th>
+          <th>Memory (MB)</th>
+          <th>Transformer Units</th>
         </tr>
         <tr>
           <td>SMALL</td>
           <td>0.25</td>
           <td>512</td>
+          <td>1</td>
         </tr>
         <tr>
           <td>MEDIUM</td>
           <td>0.5</td>
           <td>512</td>
+          <td>2</td>
         </tr>
         <tr>
           <td>LARGE</td>
           <td>1</td>
           <td>1024</td>
+          <td>4</td>
         </tr>
         <tr>
           <td>XLARGE</td>
           <td>2</td>
           <td>2048</td>
+          <td>8</td>
         </tr>
       </tbody>
     </table>
@@ -223,30 +228,6 @@ This will determine the number of replicas of the transformer.
   <p>
     The number of replicas will determine the cost of the transformer. A single replica consumes a transformer unit depending on the size of the transformer. The cost of the transformer is calculated by multiplying the number of replicas with the transformer unit cost.
   </p>
-  <table>
-    <tbody>
-      <tr>
-        <th>Size</th>
-        <th>Cost per replica</th>
-      </tr>
-      <tr>
-        <td>SMALL</td>
-        <td>1</td>
-      </tr>
-      <tr>
-        <td>MEDIUM</td>
-        <td>2</td>
-      </tr>
-      <tr>
-        <td>LARGE</td>
-        <td>4</td>
-      </tr>
-      <tr>
-        <td>XLARGE</td>
-        <td>8</td>
-      </tr>
-    </tbody>
-  </table>
 </Card>
 
 ## Endpoints
