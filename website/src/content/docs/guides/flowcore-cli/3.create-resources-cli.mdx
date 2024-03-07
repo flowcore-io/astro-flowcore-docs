@@ -114,7 +114,147 @@ dataCore:
 Keep in mind that if delete protection is enabled on a resource all nested resources will also have delete
 protection enabled. To delete a resource with delete protection enabled, you must first disable delete protection.
 
-## Endpoints (Experimental)
+## Transformer Size
+
+By default, transformers are created with a size of `SMALL`. You can set the size of the transformer by setting the `size` field to `SMALL`, `MEDIUM` or `LARGE` or `XLARGE` in the manifest file.
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      size: "medium"
+```
+
+This will set the resource requirements for the transformers. The size of the transformer will determine the amount of CPU and memory allocated to the transformer.
+
+<Card title="Sizes" icon="information">
+    <p>
+      In the table below you can see the resource requirements for the different sizes of transformers.
+    </p>
+    <table>
+      <tbody>
+        <tr>
+          <th>Size</th>
+          <th>CPU (vCPU)</th>
+          <th>Memory (MB)></th>
+        </tr>
+        <tr>
+          <td>SMALL</td>
+          <td>0.25</td>
+          <td>512</td>
+        </tr>
+        <tr>
+          <td>MEDIUM</td>
+          <td>0.5</td>
+          <td>512</td>
+        </tr>
+        <tr>
+          <td>LARGE</td>
+          <td>1</td>
+          <td>1024</td>
+        </tr>
+        <tr>
+          <td>XLARGE</td>
+          <td>2</td>
+          <td>2048</td>
+        </tr>
+      </tbody>
+    </table>
+</Card>
+
+## Page Size
+
+By default, transformers are created with a page size of `1000`. You can set the page size of the transformer by setting the `pageSize` field to a number in the manifest file.
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      pageSize: 5000
+```
+
+<Card title="Available values" icon="information">
+    <p>
+      The page size determines how many records the transformer will pull from the data core at a time. The page size can be set to `1000`, `5000` or `10000`.
+    </p>
+</Card>
+
+## Concurrency
+
+By default, transformers are created with a concurrency of `1`. You can set the concurrency of the transformer by setting the `concurrency` field to a number in the manifest file.
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      concurrency: 5
+```
+
+This will set the number of concurrent executions of the transformer.
+
+<Card title="Available values" icon="information">
+    <p>
+      The concurrency can be set to any number between, but a range of `1` and `50` is recommended. This value will determine the amount of concurrent executions of the transformer, and if the transformer is not designed to handle this, it can result in unexpected behavior.
+    </p>
+</Card>
+
+## Replicas
+
+By default, transformers are created with a single replica. You can set the number of replicas of the transformer by setting the `replicas` field to a number in the manifest file.
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      replicas: 3
+```
+
+This will determine the number of replicas of the transformer.
+
+<Card title="Price" icon="information">
+  <p>
+    The number of replicas will determine the cost of the transformer. A single replica consumes a transformer unit depending on the size of the transformer. The cost of the transformer is calculated by multiplying the number of replicas with the transformer unit cost.
+  </p>
+  <table>
+    <tbody>
+      <tr>
+        <th>Size</th>
+        <th>Cost per replica</th>
+      </tr>
+      <tr>
+        <td>SMALL</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>MEDIUM</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>LARGE</td>
+        <td>4</td>
+      </tr>
+      <tr>
+        <td>XLARGE</td>
+        <td>8</td>
+      </tr>
+    </tbody>
+  </table>
+</Card>
+
+## Endpoints
+
+<Card title="Experimental" icon="information">
+  Currently, Postgres and MySQL endpoints are supported as read model endpoints. More endpoints will be added in the future.
+  Also, only the blueprint, matchKey and onMatch fields are checked for updates. If you want to update the table name or type of the endpoint, you will have to delete the endpoint and create a new one.
+</Card>
 
 To add an endpoint to a transformer, you can add the this to the manifest file:
 
@@ -157,8 +297,3 @@ scenario:
 ```
 
 This will set up an endpoint for the transformer that will send data returned from the transformer to the specified database.
-
-<Card title="Experimental" icon="information">
-  Currently, Postgres and MySQL endpoints are supported as read model endpoints. More endpoints will be added in the future.
-  Also, only the blueprint, matchKey and onMatch fields are checked for updates. If you want to update the table name or type of the endpoint, you will have to delete the endpoint and create a new one.
-</Card>
