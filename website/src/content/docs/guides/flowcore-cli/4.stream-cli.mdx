@@ -52,3 +52,90 @@ This will start a stream thread for each of the transformers specified Flow Type
     The `local` command is only available in the `flowcore-cli` version 2.5.0 and above. The flags `scan`, `start` and `timeout`
     will be passed to the stream command for each thread.
 </Card>
+
+## Payload
+
+If you only want the payload of the event, you can use the `--payload` flag to only stream the payload of the event.
+
+```sh
+flowcore-cli stream "stream url" -o log -s 1h --payload
+```
+This will only log the payload of the event to the terminal.
+
+## Only Live
+
+If you only want to stream live data and not data in the past, you can use the `-s` flag with `now` as the value to only stream live data.
+
+```sh
+flowcore-cli stream "stream url" -o log -s now
+```
+
+This will only stream data from the time you run the command and not any data in the past.
+
+## Max Events
+
+If you only want to stream a certain number of events, you can use the `-m` flag to specify the maximum number of events to stream.
+
+```sh
+flowcore-cli stream "stream url" -o log -m 100
+```
+
+This will only stream 100 events and then stop the stream.
+
+## JSON
+
+If you want to stream the data in JSON format, you can use the `--json` flag to stream the data and output it in JSONL format.
+
+```sh
+flowcore-cli stream "stream url" -o log --json
+```
+
+This will stream the data and output it in JSONL format, which is useful for piping the output to another command or file.
+
+## Destination
+
+If you want to send the data to a different location, you can use the `-d` flag to specify the http endpoint to send the data to.
+
+```sh
+flowcore-cli stream "stream url" -o http -d http://localhost:3000/api/transform
+```
+
+This will send the data to the specified endpoint.
+
+<Card title="info" icon="information">
+    If you want to stream the data to a different Data Core, then you need to use the `--payload` flag to only stream the payload of the event to the webhook endpoint.
+</Card>
+
+<Card title="info" icon="information">
+  The default output is `http` so you don't have to specify the `-o` flag if you want to send the data to a different location. And the default endpoint is `http://localhost:3000/transform` so you don't have to specify the `-d` flag either if you want to send the data to the default endpoint.
+</Card>
+
+## Headers
+
+If you want to send headers with the data, you can use the `-H` flag to specify the headers to send with the data.
+
+```sh
+flowcore-cli stream "stream url" -o http -d http://localhost:3000/api/transform -H "Authorization: Bearer token"
+```
+
+This will send the data with the specified headers, you can specify multiple headers by using the `-H` flag multiple times.
+
+## Only stream what is there, don't switch to live
+
+If you only want to stream what is currently in the Data Core and not switch to live data, you can use the `--no-live` flag to only stream what is currently in the Data Core.
+
+```sh
+flowcore-cli stream "stream url" -o log --no-live
+```
+
+This will only stream what is currently in the Data Core and not switch to live data after reaching the end of the data stream.
+
+## Stream from a specific time
+
+If you want to stream data from a specific time, you can use the `-s` flag to specify the start time to fetch events. The `-s` flag accepts a string in the format `1h`, `1d`, `1w`, `1m` or `1y`.
+
+```sh
+flowcore-cli stream "stream url" -o log -s 1h --no-live
+```
+
+This will stream data from the last hour and then stop the stream.
