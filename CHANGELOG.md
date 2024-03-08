@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.10.0...v1.10.1) (2024-03-08)
+
+
+### Bug Fixes
+
+* changed order of tutorials in data core and organization ([6cb142f](https://github.com/flowcore-io/astro-flowcore-docs/commit/6cb142f6fff196fe5e99948b0c1be2cc2c8d3070))
+* fixed all broken links and ordered the groups ([1113163](https://github.com/flowcore-io/astro-flowcore-docs/commit/1113163c558429e6d1e8d11a56f58a186d230069))
+
 ## [1.10.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.9.1...v1.10.0) (2024-03-08)
 
 
