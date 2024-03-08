@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.9.1...v1.10.0) (2024-03-08)
+
+
+### Features
+
+* extend Flowcore CLI with custom commands and output services for streaming data. ([44d1e82](https://github.com/flowcore-io/astro-flowcore-docs/commit/44d1e82271d4c38317b148b4778677a351c3a01d))
+
 ## [1.9.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.9.0...v1.9.1) (2024-03-07)
 
 
