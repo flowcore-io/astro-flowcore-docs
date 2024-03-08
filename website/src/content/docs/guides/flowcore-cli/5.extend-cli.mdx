@@ -1,0 +1,92 @@
+---
+title: Extend The Flowcore CLI
+description: How to extend the Flowcore CLI to fit your needs.
+---
+import {Card} from '@astrojs/starlight/components';
+import {Image} from "astro:assets";
+
+import StreamDialog from "../../../../assets/guides/flowcore-cli/stream-cli/stream-dialog.png";
+import StreamCommand from "../../../../assets/guides/flowcore-cli/stream-cli/stream-command.png";
+
+The Flowcore CLI allows you to stream data from Flowcore. You can extend the CLI and add your own commands to fit your needs.
+
+## Add a new command
+
+To add a new command you need to use the oclif command generator to create a new command.
+
+```sh
+npx oclif generate <plugin name>
+```
+
+<Card title="info" icon="information">
+  We suggest that you prefix the plugin name with `flowcore-cli-plugin-` to make it easier to find.
+</Card>
+
+## Include the basics
+
+To get the benefit of the already existing integration with the Flowcore API, use the `@flowcore/cli-plugin-config` and `@flowcore/cli-plugin-core` plugins.
+
+```sh
+yarn add @flowcore/cli-plugin-config @flowcore/cli-plugin-core
+```
+
+or with npm
+
+```sh
+npm install @flowcore/cli-plugin-config @flowcore/cli-plugin-core
+```
+
+## Stream
+
+To use the streaming functionality you can initialize and register the stream service in the run method of the command.
+
+```ts
+import {StreamService, STREAM_FLAGS, STREAM_ARGS} from '@flowcore/cli-plugin-core';
+import {BaseCommand} from '@flowcore/cli-plugin-config';
+
+class CommandName extends BaseCommand<CommandName> {
+  static args = STREAM_ARGS;
+  static flags = STREAM_FLAGS;
+
+  public async run(): Promise<void> {
+    const { args, flags } = await this.parse(CommandName);
+
+    const yourOutputService = new YourOutputService(flags);
+
+    const streamService = new StreamService(this.cliConfiguration);
+
+    streamService.registerOutputProcessor(yourOutputService);
+
+    await streamService.init(args.STREAM, flags);
+
+    await streamService.startStream();
+  }
+}
+```
+
+you can then create your own output service to handle the data, for example:
+
+```ts
+import {SourceEvent, OutputService} from "@flowcore/cli-plugin-core";
+
+export class LogOutputService implements OutputService {
+  constructor() {
+    this.process.bind(this);
+  }
+
+  getDescription(): string {
+    return "Simple log output."
+  }
+
+  getName(): string {
+    return "log";
+  }
+
+  async process(event: SourceEvent) {
+    ux.log(JSON.stringify(event));
+  }
+}
+```
+<Card title="info" icon="warning">
+  The assumption is that you are familiar with the oclif framework and the flowcore cli. If you are not, we suggest you read the [oclif documentation](https://oclif.io/docs/introduction.html) and the [flowcore cli documentation](/guides/flowcore-cli/4stream-cli/).
+</Card>
