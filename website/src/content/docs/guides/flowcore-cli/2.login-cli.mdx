@@ -32,3 +32,33 @@ the browser window and return to the terminal.
     flowcore config set --port
     ```
 </Card>
+
+## Login with Client Credentials (Service Account)
+
+You can also login with the client credentials flow using the following command.
+
+```bash
+flowcore config set -c <client_id> -n <client_secret>
+```
+
+This will set the client ID and client secret in the configuration file. You can then use the following command to login
+
+```bash
+flowcore login
+```
+
+If you do not want to override the existing configuration, you can use the `FLOWCORE_CLIENT_ID` and `FLOWCORE_CLIENT_SECRET` environment variables.
+They will always have precedence over the configuration file.
+
+```bash
+export FLOWCORE_CLIENT_ID=<client_id>
+export FLOWCORE_CLIENT_SECRET=<client_secret>
+
+flowcore login
+```
+
+<Card title="Early Access" icon="information">
+  This feature is currently in early access, to get access to the client credentials flow, you need to contact the Flowcore team. Please contact us at support@flowcore.com to request access.
+
+  This functionality requires version `2.11.0` or higher.
+</Card>
