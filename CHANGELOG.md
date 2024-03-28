@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.10.1...v1.11.0) (2024-03-28)
+
+
+### Features
+
+* Added instructions for logging in with client credentials and early access information. ([6746e5c](https://github.com/flowcore-io/astro-flowcore-docs/commit/6746e5c8926fc1dec39e832fefb98b7ced031064))
+
 ## [1.10.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.10.0...v1.10.1) (2024-03-08)
 
 
