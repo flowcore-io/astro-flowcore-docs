@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.11.0...v1.12.0) (2024-03-28)
+
+
+### Features
+
+* Update required version to 2.12.0 for client credentials flow and early access information. ([875370f](https://github.com/flowcore-io/astro-flowcore-docs/commit/875370f04e743e67fec7607f3d80f4a786bb9469))
+
 ## [1.11.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.10.1...v1.11.0) (2024-03-28)
 
 
