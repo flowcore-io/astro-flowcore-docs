@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.12.0...v1.13.0) (2024-04-09)
+
+
+### Features
+
+* Add default start date functionality to transformers in manifest file and provide instructions on how to set it. ([9ffaa79](https://github.com/flowcore-io/astro-flowcore-docs/commit/9ffaa796ef56d42ebc9ff270337dacf9d8c8ec9d))
+
 ## [1.12.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.11.0...v1.12.0) (2024-03-28)
 
 
