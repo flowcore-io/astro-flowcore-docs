@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.13.0...v1.14.0) (2024-04-10)
+
+
+### Features
+
+* deprecated the getting started guide ([198df3d](https://github.com/flowcore-io/astro-flowcore-docs/commit/198df3d144f15de1237b7e685214ea4a84b8f37f))
+
 ## [1.13.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.12.0...v1.13.0) (2024-04-09)
 
 
