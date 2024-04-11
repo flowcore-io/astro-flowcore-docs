@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.15.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.14.0...v1.15.0) (2024-04-11)
+
+
+### Features
+
+* added an ingestion tutorial, focusing on api keys ([5e39342](https://github.com/flowcore-io/astro-flowcore-docs/commit/5e39342e6c62657e17ba2d579092195c64bec80f))
+
+
+### Bug Fixes
+
+* bumped scenario section to step 5 ([f9fe9b2](https://github.com/flowcore-io/astro-flowcore-docs/commit/f9fe9b2ac10bfb77c0d293c28241c992fbcce8b5))
+
 ## [1.14.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.13.0...v1.14.0) (2024-04-10)
 
 
