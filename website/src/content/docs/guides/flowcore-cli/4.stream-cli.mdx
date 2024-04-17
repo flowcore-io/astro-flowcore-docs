@@ -39,18 +39,33 @@ the start time to fetch events. The `-s` flag accepts a string in the format `1h
 
 ## Local development
 
-If you have a scenario defined in the flowcore manifest, you can use the `local` command to start a stream thread for
-each of the transformers in the scenario. This is useful for local development and debugging.
+If you have a development defined in the flowcore manifest, you can use the `local` command to start a stream thread for
+each of the proxy endpoints. This is useful for local development and debugging.
 
 ```sh
-flowcore scenario local -f flowcore.yaml -e http://localhost:3000/api/transform
+flowcore scenario local -f flowcore.yaml -e http://localhost:3000
 ```
 
-This will start a stream thread for each of the transformers specified Flow Type and Event Types in the scenario and send the data to the specified endpoint.
+This will start a stream thread for each of the endpoints specified and send the data to the specified endpoint.
+
+```yaml
+development:
+  proxyEndpoints:
+    people:
+      description: "example proxy endpoint"
+      dataCore: example
+      flowType: example.flow.0
+      events:
+        - example.flow.created.0
+        - example.flow.updated.0
+        - example.flow.archived.0
+      endpoints:
+        - "/api/transform/flow.0"
+```
 
 <Card title="info" icon="information">
-    The `local` command is only available in the `flowcore-cli` version 2.5.0 and above. The flags `scan`, `start` and `timeout`
-    will be passed to the stream command for each thread.
+    This is especally useful when you are development an application using for example Next.js and you deploy the
+  transformers as api endpoints.
 </Card>
 
 ## Payload
