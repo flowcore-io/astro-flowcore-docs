@@ -2,11 +2,104 @@
 title: Ingestion Options?
 description: What methods of ingestion is supported in Flowcore?
 ---
-import {Card} from "@astrojs/starlight/components";
+import { Card } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
 
-<Card title="Work in progress" icon="warning">
-    More details will be added later
+import IngestionOptions from "../../../../assets/guides/ingestion/ingestion-options/ingestion-channels.png";
+import IngestionWebhook from "../../../../assets/guides/ingestion/ingestion-options/webhook-ingestion-screen.png";
+import IngestionIntegratePage from "../../../../assets/guides/ingestion/ingestion-options/webhook-integrate.png";
+
+# Ingestion Options
+
+To ingest data into Flowcore, you can see the available options by clicking on the "Ingestion Channels" page. It will show you the available options for ingestion.
+
+<Image alt={"Ingestion Options"} src={IngestionOptions}/>
+
+# Webhook
+
+The simplest and fastest way to get data into Flowcore is to use webhooks. You can use the webhook generation feature to create a url that you can use to send data to Flowcore.
+
+Clicking on the "integrate" link will take you to the webhook generation page where you can create a webhook.
+
+<Image alt={"Integrate"} src={IngestionIntegratePage} />
+
+Then select the `Data Core`, `Flow Type` and `Event Type` you want to send data to. Fill in the API key and you will be presented with two URLs. One for sending single events and the other for sending multiple events.
+
+<Image alt={"Webhook Ingestion"} src={IngestionWebhook} />
+
+You can simply post your event data as JSON to the URL and it will be ingested into Flowcore, into the selected location.
+
+```json
+{
+  // event data
+}
+```
+
+## Multible Events
+
+If you want to send multiple events at once, you can use the batch URL. This will allow you to send multiple events in a single request.
+
+The payload should be an array of events.
+
+```json
+[
+  {
+      // event 1
+  },
+  {
+      // event 2
+  }
+]
+```
+
+## Multipart File Events
+
+It is also possible to send files and have them be converted to multipart events. This is useful if you want to also store files and images in Flowcore.
+
+This uses the same URL as the batch URL, but the payload should be a multipart form data.
+
+```multipart
+{
+  "file": "file",
+  "type": "image/png",
+}
+```
+
+<Card title="Information" icon="information">
+    The type is required, but can be any text you want. This is purely for your own reference when you want to reconstruct the file later.
+
+    The multipart events are of a fixed size of 512KB. If the file is larger than 512KB, it will be split into multiple events. and have a specific format.
+
+    ```json
+    {
+      "fileName": "file.png",
+      "fileSize": 1024,
+      "fileType": "image/png",
+      "part": 1,
+      "totalParts": 2,
+      "data": "base64 encoded data buffer",
+      "checksum": "SHA256 checksum",
+      "hashType": "SHA256"
+    }
+    ```
 </Card>
 
+## Multipart Reconstruction
 
-Currently, we only support webhooks for ingestion
+To reconstruct the file, you simply need to get the events that are part of the file, and then concat the data together. You can compare the checksum of the reconstructed file with the original file to ensure that the file is intact.
+
+```typescript
+const sorted = events.sort((a, b) => a.part - b.part);
+
+const data = sorted.map((event) => Buffer.from(event.data, "base64"));
+
+const payload = Buffer.concat(data);
+
+fs.writeFileSync("reconstructed-file.png", payload);
+```
+
+One way you can use this for example in a database is to have a `write queue` where all events are stored, then a service/worker that periodically scans the queue for completed files, reconstructs them and stores them in a database. Then after the queue can be cleared for the reconstructed file.
+
+<Card title="Under construction" icon="warning">
+    We are working on other ways to ingest data into Flowcore. Stay tuned for more updates.
+</Card>
