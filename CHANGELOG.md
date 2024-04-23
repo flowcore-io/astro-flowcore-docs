@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.15.0...v1.16.0) (2024-04-17)
+
+
+### Features
+
+* **flowcore-cli:** Update local development proxy endpoints ([90be466](https://github.com/flowcore-io/astro-flowcore-docs/commit/90be466ddf127b24f7653e0262171e66e038b7bf))
+
 ## [1.15.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.14.0...v1.15.0) (2024-04-11)
 
 
