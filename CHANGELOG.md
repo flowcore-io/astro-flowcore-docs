@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.16.0...v1.17.0) (2024-04-23)
+
+
+### Features
+
+* Add webhook ingestion options and webhook integration guide. ([914ce35](https://github.com/flowcore-io/astro-flowcore-docs/commit/914ce3528069d997f12fa8c123922e883b0b812a))
+
 ## [1.16.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.15.0...v1.16.0) (2024-04-17)
 
 
