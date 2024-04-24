@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.17.0...v1.18.0) (2024-04-24)
+
+
+### Features
+
+* Add note about additional fields in event payload for multipart data. ([fb30c78](https://github.com/flowcore-io/astro-flowcore-docs/commit/fb30c785d5f238d47f22cfcc795c389e2e8285b3))
+
 ## [1.17.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.16.0...v1.17.0) (2024-04-23)
 
 
