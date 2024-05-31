@@ -22,6 +22,25 @@ and local exploration of your data.
 
 3. Copy the command and run it in your terminal.
 
+## Wildcard
+
+To stream all events from a Data Core, you can use the `*` wildcard to stream all events from the Data Core.
+
+```sh
+flowcore-cli stream "https://flowcore.io/<tenant>/<datacore>/*" -o log
+```
+
+or to stream all events from a Flow Type, you can use the `*` wildcard to stream all events from the Flow Type.
+
+```sh
+flowcore-cli stream "https://flowcore.io/<tenant>/<datacore>/<flowtype>/*" -o log
+```
+
+<Card title="info" icon="information">
+    It is also possible to use the wildcard when specifying event types. For example `event.user.*.0` this will stream all events that start with `event.user.`.
+</Card>
+
+
 ## Configuration
 
 The default command will log out the data to the terminal. If you want to send data to a different location, you can omit
