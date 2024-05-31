@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.18.0...v1.19.0) (2024-05-31)
+
+
+### Features
+
+* added info on wildcard streaming ([23ea0e8](https://github.com/flowcore-io/astro-flowcore-docs/commit/23ea0e844a291f9413adece9fb674a48034a2b60))
+
 ## [1.18.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.17.0...v1.18.0) (2024-04-24)
 
 
