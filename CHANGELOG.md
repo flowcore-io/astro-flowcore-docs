@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.19.0...v1.20.0) (2024-06-03)
+
+
+### Features
+
+* Update ingestion options documentation with metadata information ([ad2470c](https://github.com/flowcore-io/astro-flowcore-docs/commit/ad2470c5a1a164df9156b741b137a05b58179fba))
+
 ## [1.19.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.18.0...v1.19.0) (2024-05-31)
 
 
