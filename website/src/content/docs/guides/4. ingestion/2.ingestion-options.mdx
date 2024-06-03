@@ -2,6 +2,7 @@
 title: Ingestion Options?
 description: What methods of ingestion is supported in Flowcore?
 ---
+
 import { Card } from "@astrojs/starlight/components";
 import { Image } from "astro:assets";
 
@@ -13,7 +14,7 @@ import IngestionIntegratePage from "../../../../assets/guides/ingestion/ingestio
 
 To ingest data into Flowcore, you can see the available options by clicking on the "Ingestion Channels" page. It will show you the available options for ingestion.
 
-<Image alt={"Ingestion Options"} src={IngestionOptions}/>
+<Image alt={"Ingestion Options"} src={IngestionOptions} />
 
 # Webhook
 
@@ -35,6 +36,16 @@ You can simply post your event data as JSON to the URL and it will be ingested i
 }
 ```
 
+## Metadata
+
+You can also add metadata to the event by adding a `base64` encoded stringified JSON value `x-flowcore-metadata-json` header when sending the event.
+
+```json
+{
+  "x-flowcore-metadata-json": "eyJtZXRhZGF0YSI6Im1ldGFkYXRhIn0="
+}
+```
+
 ## Multible Events
 
 If you want to send multiple events at once, you can use the batch URL. This will allow you to send multiple events in a single request.
@@ -44,10 +55,10 @@ The payload should be an array of events.
 ```json
 [
   {
-      // event 1
+    // event 1
   },
   {
-      // event 2
+    // event 2
   }
 ]
 ```
@@ -84,6 +95,7 @@ This uses the same URL as the batch URL, but the payload should be a multipart f
     ```
 
     Any fields other than type and file added to the post will be added to the event payload in addition to the multipart data described above.
+
 </Card>
 
 ## Multipart Reconstruction
@@ -103,5 +115,6 @@ fs.writeFileSync("reconstructed-file.png", payload);
 One way you can use this for example in a database is to have a `write queue` where all events are stored, then a service/worker that periodically scans the queue for completed files, reconstructs them and stores them in a database. Then after the queue can be cleared for the reconstructed file.
 
 <Card title="Under construction" icon="warning">
-    We are working on other ways to ingest data into Flowcore. Stay tuned for more updates.
+  We are working on other ways to ingest data into Flowcore. Stay tuned for more
+  updates.
 </Card>
