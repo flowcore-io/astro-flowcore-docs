@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.20.0...v1.21.0) (2024-07-03)
+
+
+### Features
+
+* Add guide on developing a transformer for Flowcore ([11346db](https://github.com/flowcore-io/astro-flowcore-docs/commit/11346db12185e8d7aacd53aacae22f8f9fe05bd5))
+
 ## [1.20.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.19.0...v1.20.0) (2024-06-03)
 
 
