@@ -166,10 +166,24 @@ This will only stream what is currently in the Data Core and not switch to live 
 
 ## Stream from a specific time
 
-If you want to stream data from a specific time, you can use the `-s` flag to specify the start time to fetch events. The `-s` flag accepts a string in the format `1h`, `1d`, `1w`, `1m` or `1y`.
+If you want to stream data from a specific time, you can use the `-s` flag to specify the start time to fetch events. The `-s` flag accepts a string in the format `ISO date`, `1h`, `1d`, `1w`, `1m` or `1y`.
 
 ```sh
 flowcore-cli stream "stream url" -o log -s 1h --no-live
 ```
 
 This will stream data from the last hour and then stop the stream.
+
+## Stream from and to a specific time
+
+If you want to stream data from a specific time to a specific time, you can use the `-s` and `-e` flags to specify the start and end time to fetch events. The `-s` and `-e` flags accept a string in the format `ISO date`, `1h`, `1d`, `1w`, `1m` or `1y`.
+
+```sh
+flowcore-cli stream "stream url" -o log -s 2022-01-01T00:00:00Z -e 2022-01-02T00:00:00Z
+```
+
+This will stream data from the 1st of January 2022 to the 2nd of January 2022 and then stop the stream.
+
+<Card title="info" icon="information">
+    When using the `-s` and `-e` flags, the stream will stop when it reaches the end time specified.
+</Card>
