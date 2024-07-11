@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.21.0...v1.22.0) (2024-07-08)
+
+
+### Features
+
+* Update stream-cli documentation with new options ([675637e](https://github.com/flowcore-io/astro-flowcore-docs/commit/675637e0bd60a10e5af3d7658ab2f02d7cd858fa))
+
 ## [1.21.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.20.0...v1.21.0) (2024-07-03)
 
 
