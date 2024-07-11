@@ -80,15 +80,13 @@ You can override the valid time by using the `x-flowcore-valid-time` Headers, an
 
 You can override the event time by using the `x-flowcore-event-time` Headers, and pass in an ISO 8601 timestamp.
 
-if you are sending a batch of events, you can override the event time or valid time by specifying which field in the data you want to use as the event time or valid time. with the use of the `x-flowcore-event-time-key` and `x-flowcore-valid-time-key` headers respectively.
+if you are sending a batch of events, you can override the event time or valid time by specifying which field in the data you want to use as the event time or valid time. with the use of the `x-flowcore-event-time-key` and `x-flowcore-valid-time-key` headers respectively. Values for the fields are in the same format as the headers above.
 
 <Card title="Information" icon="information">
   When specifying `event time`, it affects when where an event is stored, and when it is available for querying. If the event it is specified at a time older than the maximum retention period it will be available for querying after an hour, from cold storage.
 
   Adjusting the event time also affects how the event fetched, as adding it in the past will not be sant to a transformer that has it's cursor moved past the event time. A restart of the transformer is required to pick up the event.
 </Card>
-
-
 
 ## Multible Events
 
@@ -162,3 +160,4 @@ One way you can use this for example in a database is to have a `write queue` wh
   We are working on other ways to ingest data into Flowcore. Stay tuned for more
   updates.
 </Card>
+
