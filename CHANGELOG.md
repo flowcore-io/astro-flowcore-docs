@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.23.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.23.0...v1.23.1) (2024-07-11)
+
+
+### Bug Fixes
+
+* added format to event time and valid time field explanation ([4c63dea](https://github.com/flowcore-io/astro-flowcore-docs/commit/4c63deaa2213aa2e399d45e1b998a94aedd179ff))
+* changed ttl to 7 days ([13ce22a](https://github.com/flowcore-io/astro-flowcore-docs/commit/13ce22a574dc886be015787acddbd3c11b4445de))
+
 ## [1.23.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.22.0...v1.23.0) (2024-07-11)
 
 
