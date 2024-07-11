@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.23.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.22.0...v1.23.0) (2024-07-11)
+
+
+### Features
+
+* added description on metadata and bi-temporality ([7e93635](https://github.com/flowcore-io/astro-flowcore-docs/commit/7e936354f91e1d81b4d772d88365377e5237d83e))
+
+
+### Bug Fixes
+
+* fixed ttl key ([a64e130](https://github.com/flowcore-io/astro-flowcore-docs/commit/a64e1300575b314b0dd8b07f7d21b3f3366c0be8))
+
 ## [1.22.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.21.0...v1.22.0) (2024-07-08)
 
 
