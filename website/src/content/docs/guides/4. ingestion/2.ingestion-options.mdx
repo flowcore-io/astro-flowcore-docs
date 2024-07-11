@@ -55,7 +55,7 @@ You can also add metadata to the event by adding a `base64` encoded stringified 
 
 You can customize how long the event is stored in hot storage before it is
 deleted by setting `ttl-on/stored-event` to `true` in the metadata object. This accepts `d`, `h`, `m`, `s`. 
-The maximum value is 14 days and minimum of 2 hours, this can be increased for advanced subscriptions.
+The maximum value is 7 days, this can be increased for higher subscription levels.
 
 <Card title="Information" icon="information">
   When the event is deleted from hot storage it will still be available at a reduced speed from cold storage, this does not affect how you query the event, and is handled transparently for you.
