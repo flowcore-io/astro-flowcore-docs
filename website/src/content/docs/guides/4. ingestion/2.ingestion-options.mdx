@@ -36,6 +36,11 @@ You can simply post your event data as JSON to the URL and it will be ingested i
 }
 ```
 
+<Card title="Information" icon="information">
+  The webhook URL is a POST endpoint that accepts JSON data, you can use gzip and
+  deflate to compress the data if you want to send larger payloads.
+</Card>
+
 ## Metadata
 
 You can also add metadata to the event by adding a `base64` encoded stringified JSON value `x-flowcore-metadata-json` header when sending the event.
@@ -45,6 +50,45 @@ You can also add metadata to the event by adding a `base64` encoded stringified 
   "x-flowcore-metadata-json": "eyJtZXRhZGF0YSI6Im1ldGFkYXRhIn0="
 }
 ```
+
+### Hot Stroage TTL
+
+You can customize how long the event is stored in hot storage before it is
+deleted by adding a `ttl-on-stored-event` to the metadata. This accepts `d`, `h`, `m`, `s`. 
+The maximum value is 14 days and minimum of 2 hours, this can be increased for advanced subscriptions.
+
+<Card title="Information" icon="information">
+  When the event is deleted from hot storage it will still be available at a reduced speed from cold storage, this does not affect how you query the event, and is handled transparently for you.
+</Card>
+
+### Ephemeral events
+
+You can also opt out from storing the event in cold storage by setting the
+`do-not-archive-on/stored-event` to `true`. This will make the event available
+for the ttl specified, after which it will be deleted.
+
+## Bi-Temporality
+
+Events in Flowcore are stored using bi-temporality. This means that each event has two timestamps associated with it. One is the `event time` timestamp, which is the time the event was ingested into Flowcore. The other is the `valid time` timestamp, which is the time the event is valid from.
+
+The default `valid time` is the `event time`, and the `event time` is the time
+the event was ingested into Flowcore.
+
+You can override both these values by using a set of headers at ingestion time. 
+
+You can override the valid time by using the `x-flowcore-valid-time` Headers, and pass in an ISO 8601 timestamp.
+
+You can override the event time by using the `x-flowcore-event-time` Headers, and pass in an ISO 8601 timestamp.
+
+if you are sending a batch of events, you can override the event time or valid time by specifying which field in the data you want to use as the event time or valid time. with the use of the `x-flowcore-event-time-key` and `x-flowcore-valid-time-key` headers respectively.
+
+<Card title="Information" icon="information">
+  When specifying `event time`, it affects when where an event is stored, and when it is available for querying. If the event it is specified at a time older than the maximum retention period it will be available for querying after an hour, from cold storage.
+
+  Adjusting the event time also affects how the event fetched, as adding it in the past will not be sant to a transformer that has it's cursor moved past the event time. A restart of the transformer is required to pick up the event.
+</Card>
+
+
 
 ## Multible Events
 
