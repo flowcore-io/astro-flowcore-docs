@@ -54,7 +54,7 @@ You can also add metadata to the event by adding a `base64` encoded stringified 
 ### Hot Stroage TTL
 
 You can customize how long the event is stored in hot storage before it is
-deleted by adding a `ttl-on-stored-event` to the metadata. This accepts `d`, `h`, `m`, `s`. 
+deleted by setting `ttl-on/stored-event` to `true` in the metadata object. This accepts `d`, `h`, `m`, `s`. 
 The maximum value is 14 days and minimum of 2 hours, this can be increased for advanced subscriptions.
 
 <Card title="Information" icon="information">
