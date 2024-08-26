@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.25.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.24.0...v1.25.0) (2024-08-26)
+
+
+### Features
+
+* added docs for linking to flowcore organizations ([bac4af6](https://github.com/flowcore-io/astro-flowcore-docs/commit/bac4af6963b6940605ee5ad580d729171ed57c8e))
+
+
+### Bug Fixes
+
+* changed route to "account linking" ([a87c3c1](https://github.com/flowcore-io/astro-flowcore-docs/commit/a87c3c18b7016d6cba31d7a29a8d3c1ea10c7c12))
+
 ## [1.24.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.23.1...v1.24.0) (2024-07-15)
 
 
