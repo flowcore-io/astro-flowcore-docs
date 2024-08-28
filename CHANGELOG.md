@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.2...v1.26.3) (2024-08-28)
+
+
+### Bug Fixes
+
+* explicitly specify bun as package manager ([0894390](https://github.com/flowcore-io/astro-flowcore-docs/commit/0894390e554cd3afe110925906975825f8bc4701))
+
 ## [1.26.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.1...v1.26.2) (2024-08-28)
 
 
