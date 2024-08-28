@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.4](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.3...v1.26.4) (2024-08-28)
+
+
+### Bug Fixes
+
+* added cname and no jekyll file to disable Jekyll ([cd19112](https://github.com/flowcore-io/astro-flowcore-docs/commit/cd191120d3b148acb1534ad7b974ca92b2cfefc2))
+
 ## [1.26.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.2...v1.26.3) (2024-08-28)
 
 
