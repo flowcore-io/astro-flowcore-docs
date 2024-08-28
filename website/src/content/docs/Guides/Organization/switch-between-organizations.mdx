@@ -1,0 +1,30 @@
+---
+title: Switch between organizations
+sidebar:
+  order: 5
+description: How to switch between multiple organizations.
+---
+import { Card } from '@astrojs/starlight/components';
+import {Image} from "astro:assets";
+
+import SelectOrganization from "../../../../assets/guides/organization/switch-between-organizations/select-organization.png";
+import GotoOrganization from "../../../../assets/guides/organization/switch-between-organizations/goto-organization-profile.png";
+import OrganizationProfilePage from "../../../../assets/guides/organization/switch-between-organizations/organization-profile-page.png";
+
+To switch between organizations is easy. You can do it from the top left corner of the page. Click on the organization name and select the organization you want to switch to.
+<Image src={SelectOrganization} alt={"Selecting an organization"}/>
+
+And there you go! You have successfully switched between organizations.
+
+<Card title="You only see what is associated with the selected organization" icon="information">
+    Keep in mind that switching the organization will alter what you see under other sections of the app.
+    So if you are unable to find a particular data core, or scenario. It might be because you are looking at the wrong organization.
+</Card>
+
+# Looking at your organization's profile
+
+To look at the profile associated with the organization, click on the icon adjacent to the organization name.
+<Image src={GotoOrganization} alt={"Goto organization"}/>
+
+In doing so, should show the organization profile, for example:
+<Image src={OrganizationProfilePage} alt={"Organization Profile Page"}/>

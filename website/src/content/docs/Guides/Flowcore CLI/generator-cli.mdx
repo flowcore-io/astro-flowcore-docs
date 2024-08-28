@@ -1,0 +1,41 @@
+---
+title: Generator
+sidebar:
+  order: 6
+description: Learn how to use the Flowcore CLI generator to generate Flowcore applications, entities and more
+---
+import { Card } from '@astrojs/starlight/components';
+import { Image } from "astro:assets";
+
+import LoggedInImage from "../../../../assets/guides/account/create-a-flowcore-account/logged-in.png";
+import NotLoggedInImage from "../../../../assets/guides/account/create-a-flowcore-account/not-logged-in.png";
+import SetupFlowcoreAccountImage from "../../../../assets/guides/account/create-a-flowcore-account/setup-flowcore-account.png";
+
+The Flowcore CLI generator is a tool that allows you to generate Flowcore applications, entities and more.
+
+## Generate a new Flowcore NextJS application
+
+To generate a new Flowcore NextJS application, run the following command:
+
+```bash
+flowcore new nextjs-app <app-name>
+```
+
+this will scaffold a new NextJS application that is built using the Flowcore IDD approach and ready to use for the Flowcore Platform.
+
+<Card title="Information" icon="information">
+    This will generate a new directory with the name of the application. Inside the application directory, you will find a
+    new NextJS application that is ready to use for the Flowcore Platform.
+</Card>
+
+## Generate a new Flowcore NextJS Entity
+
+To generate a new Flowcore NextJS entity, run the following command:
+
+```bash
+flowcore generate nextjs-entity <entity-name>
+```
+
+<Card title="Information" icon="information">
+    This needs to be run from inside a Flowcore NextJS application.
+</Card>
