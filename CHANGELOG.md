@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.6](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.5...v1.26.6) (2024-08-28)
+
+
+### Bug Fixes
+
+* removed older numbered cross links ([2f83c76](https://github.com/flowcore-io/astro-flowcore-docs/commit/2f83c76983488634629f6c9a4354c74b89396928))
+
 ## [1.26.5](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.4...v1.26.5) (2024-08-28)
 
 
