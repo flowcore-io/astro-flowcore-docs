@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.25.0...v1.26.0) (2024-08-28)
+
+
+### Features
+
+* **starlight:** :sparkles: updated astro starlight to latest version and refactored pages to use sidebar order ([a7ec485](https://github.com/flowcore-io/astro-flowcore-docs/commit/a7ec48554230993fc7016e893bc18fe42dfa4c7f))
+
 ## [1.25.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.24.0...v1.25.0) (2024-08-26)
 
 
