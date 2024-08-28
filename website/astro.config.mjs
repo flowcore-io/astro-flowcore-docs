@@ -1,6 +1,6 @@
-import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import tailwind from "@astrojs/tailwind";
+import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,7 +14,21 @@ export default defineConfig({
     }
   ],
   integrations: [starlight({
-    title: 'Flowcore Wiki',
+    sidebar: [
+      {
+        label: `Guides`,
+        autogenerate: {
+          directory: "Guides",
+        },
+      },
+      // {
+      //   label: `Components`,
+      //   autogenerate: {
+      //     directory: "Components",
+      //   },
+      // }
+    ],
+    title: 'Flowcore Docs',
     social: {
       linkedin: 'https://www.linkedin.com/company/flowcore'
     },
@@ -28,5 +42,5 @@ export default defineConfig({
   }), tailwind({
     // Disable the default base styles:
     applyBaseStyles: false
-  })]
+  })],
 });
