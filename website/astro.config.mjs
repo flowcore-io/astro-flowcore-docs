@@ -14,20 +14,20 @@ export default defineConfig({
     }
   ],
   integrations: [starlight({
-    // sidebar: [
-    //   {
-    //     label: `Guides`,
-    //     autogenerate: {
-    //       directory: "Guides",
-    //     },
-    //   },
-    //   // {
-    //   //   label: `Components`,
-    //   //   autogenerate: {
-    //   //     directory: "Components",
-    //   //   },
-    //   // }
-    // ],
+    sidebar: [
+      {
+        label: `Guides`,
+        autogenerate: {
+          directory: "Guides",
+        },
+      },
+      // {
+      //   label: `Components`,
+      //   autogenerate: {
+      //     directory: "Components",
+      //   },
+      // }
+    ],
     title: 'Flowcore Docs',
     social: {
       linkedin: 'https://www.linkedin.com/company/flowcore'

@@ -2,9 +2,9 @@ name: Deploy to GitHub Pages
 
 on:
   release:
-    types: [ published ]
+    types: [published]
   workflow_dispatch:
-  
+
 # Allow this job to clone the repo and create a page deployment
 permissions:
   contents: read
@@ -18,11 +18,9 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
       - name: Install, build, and upload your site
-        uses: withastro/action@v0
+        uses: withastro/action@v2.0.2
         with:
-            path: ./website # The root location of your Astro project inside the repository. (optional)
-            node-version: 20.15.0
-            package-manager: bun
+          path: ./website # The root location of your Astro project inside the repository. (optional)
 
   deploy:
     needs: build
