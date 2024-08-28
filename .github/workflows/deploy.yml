@@ -21,6 +21,7 @@ jobs:
         uses: withastro/action@v2.0.2
         with:
           path: ./website # The root location of your Astro project inside the repository. (optional)
+          package-manager: bun
 
   deploy:
     needs: build
