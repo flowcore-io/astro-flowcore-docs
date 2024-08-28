@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.6...v1.27.0) (2024-08-28)
+
+
+### Features
+
+* added info for two new generators in the flowcore cli ([3915179](https://github.com/flowcore-io/astro-flowcore-docs/commit/39151795b6bbe63e09ad24ffeda584232e1ef028))
+
 ## [1.26.6](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.5...v1.26.6) (2024-08-28)
 
 
