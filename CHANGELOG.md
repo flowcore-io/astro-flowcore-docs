@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.26.5](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.4...v1.26.5) (2024-08-28)
+
+
+### Bug Fixes
+
+* delete lowercase guides folder ([49f321b](https://github.com/flowcore-io/astro-flowcore-docs/commit/49f321b5c533ce17c46984db0cb7e477f8694865))
+* renamed guides to Guides ([704e8d8](https://github.com/flowcore-io/astro-flowcore-docs/commit/704e8d8e1521bad8ec4340230481f417d66413f9))
+
 ## [1.26.4](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.3...v1.26.4) (2024-08-28)
 
 
