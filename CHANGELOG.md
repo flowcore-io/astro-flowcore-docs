@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.26.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.0...v1.26.1) (2024-08-28)
+
+
+### Bug Fixes
+
+* reverted back to using npm for the final build ([be050be](https://github.com/flowcore-io/astro-flowcore-docs/commit/be050be81b264cdfc7ea135c028e6d10e2293a82))
+
 ## [1.26.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.25.0...v1.26.0) (2024-08-28)
 
 
