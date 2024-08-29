@@ -4,7 +4,7 @@ sidebar:
   order: 5
 description: How to extend the Flowcore CLI to fit your needs.
 ---
-import { Card } from '@astrojs/starlight/components';
+import { Card, TabItem, Tabs } from '@astrojs/starlight/components';
 import { Image } from "astro:assets";
 
 import StreamCommand from "../../../../assets/guides/flowcore-cli/stream-cli/stream-command.png";
@@ -12,83 +12,139 @@ import StreamDialog from "../../../../assets/guides/flowcore-cli/stream-cli/stre
 
 The Flowcore CLI allows you to stream data from Flowcore. You can extend the CLI and add your own commands to fit your needs.
 
-## Add a new command
+## Add a new plugin
 
-To add a new command you need to use the oclif command generator to create a new command.
-
-```sh
-npx oclif generate <plugin name>
-```
-
-<Card title="info" icon="information">
-  We suggest that you prefix the plugin name with `flowcore-cli-plugin-` to make it easier to find.
-</Card>
-
-## Include the basics
-
-To get the benefit of the already existing integration with the Flowcore API, use the `@flowcore/cli-plugin-config` and `@flowcore/cli-plugin-core` plugins.
+To create a new plugin you can use the flowcore cli
 
 ```sh
-yarn add @flowcore/cli-plugin-config @flowcore/cli-plugin-core
+flowcore new plugin <plugin-name>
 ```
 
-or with npm
+then you can link the plugin to the flowcore cli to test it
 
 ```sh
-npm install @flowcore/cli-plugin-config @flowcore/cli-plugin-core
+flowcore plugins link <path to plugin directory>
 ```
+
+rename the topic to the topic you want to create a command for, for example `stream`.
+
+:::tip[Locations]
+
+The commands are located in the `src/commands/<topic>/<command-name>.ts` directory and in the package.json file in the `oclif` section.
+
+:::
+
+if you run `flowcore --help` you should see your new command in the list.
 
 ## Stream
 
-To use the streaming functionality you can initialize and register the stream service in the run method of the command.
+To create a new stream output you need to add the `@flowcore/cli-plugin-core` package to your plugin.
 
-```ts
-import {StreamService, STREAM_FLAGS, STREAM_ARGS} from '@flowcore/cli-plugin-core';
-import {BaseCommand} from '@flowcore/cli-plugin-config';
+<Tabs>
+  <TabItem label="yarn">
+    ```sh frame=none
+    yarn add @flowcore/cli-plugin-core
+    ```
+  </TabItem>
+  <TabItem label="npm">
+    ```sh frame=none
+    npm install @flowcore/cli-plugin-core
+    ```
+  </TabItem>
+</Tabs>
 
-class CommandName extends BaseCommand<CommandName> {
-  static args = STREAM_ARGS;
-  static flags = STREAM_FLAGS;
+then you can create a new command under the `src/commands/stream` directory.
 
-  public async run(): Promise<void> {
-    const { args, flags } = await this.parse(CommandName);
+<Tabs>
+  <TabItem label="src/services/emoji.service.ts">
+    ```ts frame=none
+    import { OutputService, SourceEvent, StreamFlags } from "@flowcore/cli-plugin-core";
+    import { ux } from "@oclif/core";
 
-    const yourOutputService = new YourOutputService(flags);
+    export class EmojiService implements OutputService {
 
-    const streamService = new StreamService(this.cliConfiguration);
+      // this is called when the stream is done, but only if the stream is not live
+      async done(): Promise<void> {
+        console.log(ux.colorize("green", "Done!!! 🥳"))
+      }
 
-    streamService.registerOutputProcessor(yourOutputService);
+      // this is the description of the output processor, used in the help command
+      getDescription(): string {
+        return "Emojify the output"
+      }
 
-    await streamService.init(args.STREAM, flags);
+      // this is the name of the output processor
+      getName(): string {
+        return "emojify"
+      }
 
-    await streamService.startStream();
-  }
-}
+      // this is called for each event in the stream
+      async process(event: SourceEvent, streamFlags: StreamFlags): Promise<void> {
+        const emojiEvent = {
+          ...event,
+          emoji: "😎",
+        }
+        console.log(JSON.stringify(emojiEvent))
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem label="src/commands/stream/emojify.ts">
+    ```ts frame=none
+    // src/commands/stream/emojify.ts
+    import { Flags } from "@oclif/core"
+    import dayjs from "dayjs"
+    import customParseFormat from "dayjs/plugin/customParseFormat.js"
+
+    import { BaseStreamCommand } from "@flowcore/cli-plugin-core"
+    import { EmojiService } from "../../services/emoji.service.js"
+
+    dayjs.extend(customParseFormat)
+
+    export default class EmojifyStream extends BaseStreamCommand<typeof BaseStreamCommand> {
+      static args = BaseStreamCommand.args
+
+      static description = "Emojify the output"
+      static examples = [
+        '<%= config.bin %> <%= command.id %> "https://flowcore.io/<org>/<data core>/*" -s 1y --no-live',
+      ]
+
+      static flags = {
+        ...BaseStreamCommand.flags,
+        // add flags to the command to pass to the output processor
+      }
+
+      public async init(): Promise<void> {
+        await super.init()
+
+        const { flags } = await this.parse(EmojifyStream)
+
+        const emojiService = new EmojiService()
+
+        // register the emoji service as an output processor
+        this.streamService.registerOutputProcessor(emojiService)
+      }
+
+      public async run(): Promise<void> {
+        const { args, flags } = await this.parse(EmojifyStream)
+
+        // initialize the stream service with the stream url and the output processor
+        await this.streamService.init(args.STREAM, {
+          ...flags,
+          output: "emojify",
+        })
+
+        await this.streamService.startStream()
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+then you can run the command
+
+```sh
+flowcore stream emojify <STREAM URL> --no-live
 ```
 
-you can then create your own output service to handle the data, for example:
-
-```ts
-import {SourceEvent, OutputService} from "@flowcore/cli-plugin-core";
-
-export class LogOutputService implements OutputService {
-  constructor() {
-    this.process.bind(this);
-  }
-
-  getDescription(): string {
-    return "Simple log output."
-  }
-
-  getName(): string {
-    return "log";
-  }
-
-  async process(event: SourceEvent) {
-    ux.log(JSON.stringify(event));
-  }
-}
-```
-<Card title="info" icon="warning">
-  The assumption is that you are familiar with the oclif framework and the flowcore cli. If you are not, we suggest you read the [oclif documentation](https://oclif.io/docs/introduction.html) and the [flowcore cli documentation](/guides/flowcore-cli/4stream-cli/).
-</Card>
+and you should see the output logged to the console with the 😎 emoji in each event, and a done message at the end.
