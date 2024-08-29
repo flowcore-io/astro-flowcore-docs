@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.27.0...v1.28.0) (2024-08-29)
+
+
+### Features
+
+* added description on flowcore new plugin functionality ([b0ff5b7](https://github.com/flowcore-io/astro-flowcore-docs/commit/b0ff5b7bb8e7d729851e3abf54a52ef796531052))
+
 ## [1.27.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.26.6...v1.27.0) (2024-08-28)
 
 
