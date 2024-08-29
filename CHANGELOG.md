@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.28.0...v1.29.0) (2024-08-29)
+
+
+### Features
+
+* updated cli to match newest version 3.0.0 and added description on how to create a new plugin and stream plugin to the cli ([5678dd0](https://github.com/flowcore-io/astro-flowcore-docs/commit/5678dd053a6357bc95c186f9b3c56f4c7d1fc6cf))
+
 ## [1.28.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.27.0...v1.28.0) (2024-08-29)
 
 
