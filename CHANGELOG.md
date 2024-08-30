@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.30.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.29.1...v1.30.0) (2024-08-30)
+
+
+### Features
+
+* added auth key management ([e3f88dc](https://github.com/flowcore-io/astro-flowcore-docs/commit/e3f88dca74b02f6f3dfccc1019f39fafe0e475ea))
+
 ## [1.29.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.29.0...v1.29.1) (2024-08-29)
 
 
