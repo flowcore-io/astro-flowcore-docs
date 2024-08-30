@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.29.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.29.0...v1.29.1) (2024-08-29)
+
+
+### Bug Fixes
+
+* added back oclif required knowledge into the extend cli page ([ca7a3a9](https://github.com/flowcore-io/astro-flowcore-docs/commit/ca7a3a953483fb283235863f8776685c30fa0b41))
+
 ## [1.29.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.28.0...v1.29.0) (2024-08-29)
 
 
