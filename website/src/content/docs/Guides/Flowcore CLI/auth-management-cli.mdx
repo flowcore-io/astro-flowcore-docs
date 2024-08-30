@@ -1,0 +1,36 @@
+---
+title: Auth Management
+description: Manage API keys in Flowcore using the Flowcore CLI
+---
+
+You can manage API keys in Flowcore using the Flowcore CLI.
+
+## Create API Key
+
+To create an API key, you can use the `flowcore api-key create` command. This command will create an API key and print the API key to the console.
+
+```sh
+flowcore auth new key --tenant <tenant-name> <key-name>
+```
+
+:::caution
+
+You will need to store the API key in a secure location, as it will not be shown again.
+
+:::
+
+## Delete API Key
+
+To delete an API key, you can use the `flowcore api-key delete` command. This command will delete an API key, and you will be prompted to confirm the deletion.
+
+```sh
+flowcore auth delete key --tenant <tenant-name> <key-name>
+```
+
+## List API Keys
+
+To list all API keys, you can use the `flowcore api-key list` command. This command will list all API keys in the tenant.
+
+```sh
+flowcore auth list keys --tenant <tenant-name>
+```
