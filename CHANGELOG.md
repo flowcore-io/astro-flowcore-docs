@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.31.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.30.0...v1.31.0) (2024-08-30)
+
+
+### Features
+
+* added get resources docs ([a2bde3d](https://github.com/flowcore-io/astro-flowcore-docs/commit/a2bde3d3b2b24513df9dcb8c143aff6196b22fd3))
+
 ## [1.30.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.29.1...v1.30.0) (2024-08-30)
 
 
