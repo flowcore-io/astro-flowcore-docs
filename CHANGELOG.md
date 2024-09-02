@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.33.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.32.0...v1.33.0) (2024-09-02)
+
+
+### Features
+
+* added flowcore component library ([927f67d](https://github.com/flowcore-io/astro-flowcore-docs/commit/927f67ddc6371d0ea0dab28ba2a22e907022f2c5))
+
 ## [1.32.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.31.0...v1.32.0) (2024-09-02)
 
 
