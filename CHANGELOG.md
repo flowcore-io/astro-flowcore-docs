@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.35.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.34.0...v1.35.0) (2024-09-02)
+
+
+### Features
+
+* **components:** removed the tabs, only present one option with both authentication options available ([677111c](https://github.com/flowcore-io/astro-flowcore-docs/commit/677111c7e96a36b2b627605d3215d20049d60c44))
+
 ## [1.34.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.33.0...v1.34.0) (2024-09-02)
 
 
