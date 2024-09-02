@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.34.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.33.0...v1.34.0) (2024-09-02)
+
+
+### Features
+
+* **components:** updated swagger factory to show how to create authentication, default is simple bearar authentication ([c36c9fa](https://github.com/flowcore-io/astro-flowcore-docs/commit/c36c9fab9fd76d8e252f4ffd2b23043342c9ab64))
+
 ## [1.33.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.32.0...v1.33.0) (2024-09-02)
 
 
