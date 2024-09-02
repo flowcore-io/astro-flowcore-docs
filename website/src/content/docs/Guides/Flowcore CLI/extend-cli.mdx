@@ -149,6 +149,31 @@ flowcore stream emojify <STREAM URL> --no-live
 
 and you should see the output logged to the console with the 😎 emoji in each event, and a done message at the end.
 
+:::note[SourceEvent]
+  The SourceEvent interface is used to define the structure of the event that is passed to the output processor.
+
+```ts
+export interface SourceEvent<TYourType> {
+  /** aggregator name (e.g. "flow-type.name.0") */
+  aggregator: string;
+  /** uuid of the data core */
+  dataCore: string;
+  /** time uuid of the event, when it was stored */
+  eventId: string;
+  /** event type (e.g. "letter-clicked.0") */
+  eventType: string;
+  /** metadata related to the event (e.g. url, user id, etc.) */
+  metadata: Record<string, string>;
+  /** event data */
+  payload: TYourType;
+  /** timebucket of the event, when it was stored */
+  timeBucket: string;
+  /** event timestamp, when this event is valid */
+  validTime: string;
+}
+```
+:::
+
 :::caution[Important]
   The assumption is that you are familiar with the oclif framework and the flowcore cli. If you are not, we suggest you read the [oclif documentation](https://oclif.io/docs/introduction.html) and the [flowcore cli documentation](/guides/flowcore-cli/4stream-cli/).
 :::
