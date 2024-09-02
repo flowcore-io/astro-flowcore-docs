@@ -3,8 +3,6 @@ title: Swagger Factory
 description: Swagger factory for generating swagger documentation from your API that uses ElisyaJS
 ---
 
-import { TabItem, Tabs } from '@astrojs/starlight/components';
-
 The Swagger Factory is a library that allows you to generate Swagger documentation from your API that uses ElisyaJS. It uses the [Swagger Plugin](https://elysiajs.com/plugins/swagger.html) for ElisyaJS to generate the Swagger documentation.
 
 ## Install the Bun Router
@@ -26,158 +24,88 @@ bun add @elysiajs/swagger
 
 add the Swagger Factory to your projects lib folder
 
-<Tabs>
-  <TabItem label="Simple Bearer Authentication">
-    ```typescript
-    // lib/swagger-factory.ts
-    import swagger, { type ElysiaSwaggerConfig } from "@elysiajs/swagger"
-    import pgk from "@root/package.json"
+```typescript
+// lib/swagger-factory.ts
+import swagger, { type ElysiaSwaggerConfig } from "@elysiajs/swagger"
+import pgk from "@root/package.json"
 
-    export type SwaggerTags = {
-      name: string
-      description: string
-    }
+export type SwaggerTags = {
+  name: string
+  description: string
+}
 
-    export const defaultSwaggerTags: SwaggerTags[] = [
-      { name: "health", description: "Get the health of the API. Verifying if it is up and running" },
-    ]
+export const defaultSwaggerTags: SwaggerTags[] = [
+  { name: "health", description: "Get the health of the API. Verifying if it is up and running" },
+]
 
-    /**
-    * Converts a string from kebab case to title case.
-    *
-    * This function takes a string in kebab case (e.g., "hello-world") and converts it to title case (e.g., "Hello World").
-    *
-    * @param kebabCaseString - The string in kebab case to be converted.
-    * @returns The converted string in title case.
-    *
-    * @example
-    * convertKebabCaseToTitle("hello-world") // Returns: "Hello World"
-    */
-    function convertKebabCaseToTitleCase(kebabCaseString: string): string {
-      return kebabCaseString.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
-    }
+/**
+* Converts a string from kebab case to title case.
+*
+* This function takes a string in kebab case (e.g., "hello-world") and converts it to title case (e.g., "Hello World").
+*
+* @param kebabCaseString - The string in kebab case to be converted.
+* @returns The converted string in title case.
+*
+* @example
+* convertKebabCaseToTitle("hello-world") // Returns: "Hello World"
+*/
+function convertKebabCaseToTitleCase(kebabCaseString: string): string {
+  return kebabCaseString.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
+}
 
-    const swaggerFactory = {
-      /**
-      * This method is used to generate Swagger documentation from the provided tags.
-      * It merges the default tags with the provided tags and creates a Swagger object.
-      *
-      * @param fromTags - The custom tags to be added to the Swagger documentation.
-      * @param config - The configuration object for the Swagger documentation.
-      * @returns The Swagger documentation object.
-      */
-      fromTags: (fromTags: SwaggerTags[], config: ElysiaSwaggerConfig = {}) => {
-        return swagger({
-          documentation: {
-            components: {
-              securitySchemes: {
-                bearerAuth: {
-                  type: "http",
-                  scheme: "bearer",
-                  bearerFormat: "JWT",
-                },
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-              } as any,
+const swaggerFactory = {
+  /**
+  * This method is used to generate Swagger documentation from the provided tags.
+  * It merges the default tags with the provided tags and creates a Swagger object.
+  *
+  * @param fromTags - The custom tags to be added to the Swagger documentation.
+  * @param config - The configuration object for the Swagger documentation.
+  * @returns The Swagger documentation object.
+  */
+  fromTags: (fromTags: SwaggerTags[], config: ElysiaSwaggerConfig = {}) => {
+    return swagger({
+      documentation: {
+        components: {
+          securitySchemes: {
+            bearerAuth: {
+              type: "http",
+              scheme: "bearer",
+              bearerFormat: "JWT",
             },
-            tags: [...defaultSwaggerTags, ...fromTags],
-            info: {
-              title: convertKebabCaseToTitleCase(pgk.name),
-              description: pgk.description,
-              version: pgk.version,
-            },
-          },
-          ...config,
-        })
-      },
-    }
-    export { swaggerFactory }
-    ```
-  </TabItem>
-  <TabItem label="With OAuth2 Authentication">
-    ```typescript
-    // lib/swagger-factory.ts
-    import swagger, { type ElysiaSwaggerConfig } from "@elysiajs/swagger"
-    import pgk from "@root/package.json"
-
-    export type SwaggerTags = {
-      name: string
-      description: string
-    }
-
-    export const defaultSwaggerTags: SwaggerTags[] = [
-      { name: "health", description: "Get the health of the API. Verifying if it is up and running" },
-    ]
-
-    /**
-    * Converts a string from kebab case to title case.
-    *
-    * This function takes a string in kebab case (e.g., "hello-world") and converts it to title case (e.g., "Hello World").
-    *
-    * @param kebabCaseString - The string in kebab case to be converted.
-    * @returns The converted string in title case.
-    *
-    * @example
-    * convertKebabCaseToTitle("hello-world") // Returns: "Hello World"
-    */
-    function convertKebabCaseToTitleCase(kebabCaseString: string): string {
-      return kebabCaseString.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
-    }
-
-    const swaggerFactory = {
-      /**
-      * This method is used to generate Swagger documentation from the provided tags.
-      * It merges the default tags with the provided tags and creates a Swagger object.
-      *
-      * @param fromTags - The custom tags to be added to the Swagger documentation.
-      * @param config - The configuration object for the Swagger documentation.
-      * @returns The Swagger documentation object.
-      */
-      fromTags: (fromTags: SwaggerTags[], config: ElysiaSwaggerConfig = {}) => {
-        return swagger({
-          documentation: {
-            components: {
-              securitySchemes: {
-                bearerAuth: {
-                  type: "http",
-                  scheme: "bearer",
-                  bearerFormat: "JWT",
-                },
-                oauth2: {
-                  type: "oauth2",
-                  clientId: "flowcoreweb",
-                  flows: {
-                    authorizationCode: {
-                      authorizationUrl: "https://auth.flowcore.io/realms/flowcore/protocol/openid-connect/auth",
-                      tokenUrl: "https://auth.flowcore.io/realms/flowcore/protocol/openid-connect/token",
-                      redirectUri: "http://localhost:3000/auth/callback",
-                      scopes: {
-                        openid: "OpenID Connect",
-                        profile: "Profile",
-                        email: "Email",
-                        flowcore_user: "Flowcore User",
-                      },
-                      selectedScopes: ["openid", "profile", "email", "flowcore_user"],
-                    },
+            oauth2: {
+              type: "oauth2",
+              clientId: "flowcoreweb",
+              flows: {
+                authorizationCode: {
+                  authorizationUrl: "https://auth.flowcore.io/realms/flowcore/protocol/openid-connect/auth",
+                  tokenUrl: "https://auth.flowcore.io/realms/flowcore/protocol/openid-connect/token",
+                  redirectUri: "http://localhost:3000/auth/callback",
+                  scopes: {
+                    openid: "OpenID Connect",
+                    profile: "Profile",
+                    email: "Email",
+                    flowcore_user: "Flowcore User",
                   },
+                  selectedScopes: ["openid", "profile", "email", "flowcore_user"],
                 },
-                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-              } as any,
+              },
             },
-            tags: [...defaultSwaggerTags, ...fromTags],
-            info: {
-              title: convertKebabCaseToTitleCase(pgk.name),
-              description: pgk.description,
-              version: pgk.version,
-            },
-          },
-          ...config,
-        })
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          } as any,
+        },
+        tags: [...defaultSwaggerTags, ...fromTags],
+        info: {
+          title: convertKebabCaseToTitleCase(pgk.name),
+          description: pgk.description,
+          version: pgk.version,
+        },
       },
-    }
-    export { swaggerFactory }
-    ```
-  </TabItem>
-</Tabs>
+      ...config,
+    })
+  },
+}
+export { swaggerFactory }
+```
 
 </details>
 
