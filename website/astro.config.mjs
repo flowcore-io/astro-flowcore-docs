@@ -21,12 +21,12 @@ export default defineConfig({
           directory: "Guides",
         },
       },
-      // {
-      //   label: `Components`,
-      //   autogenerate: {
-      //     directory: "Components",
-      //   },
-      // }
+      {
+        label: `Components`,
+        autogenerate: {
+          directory: "Components",
+        },
+      }
     ],
     title: 'Flowcore Docs',
     social: {

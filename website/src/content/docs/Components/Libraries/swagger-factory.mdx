@@ -1,0 +1,96 @@
+---
+title: Swagger Factory
+description: Swagger factory for generating swagger documentation from your API that uses ElisyaJS
+---
+
+The Swagger Factory is a library that allows you to generate Swagger documentation from your API that uses ElisyaJS. It uses the [Swagger Plugin](https://elysiajs.com/plugins/swagger.html) for ElisyaJS to generate the Swagger documentation.
+
+## Install the Bun Router
+
+```bash
+flowcore component add library/swagger-factory
+```
+
+## Manual Installation
+
+<details>
+  <summary>Install the Swagger Plugin</summary>
+
+You can install the Swagger Plugin by running the following command:
+
+```bash
+bun add @elysiajs/swagger
+```
+
+add the Swagger Factory to your projects lib folder
+
+```typescript
+// lib/swagger-factory.ts
+import swagger, { type ElysiaSwaggerConfig } from "@elysiajs/swagger"
+import pgk from "@root/package.json"
+
+export type SwaggerTags = {
+  name: string
+  description: string
+}
+
+export const defaultSwaggerTags: SwaggerTags[] = [
+  { name: "health", description: "Get the health of the API. Verifying if it is up and running" },
+]
+
+/**
+ * Converts a string from kebab case to title case.
+ *
+ * This function takes a string in kebab case (e.g., "hello-world") and converts it to title case (e.g., "Hello World").
+ *
+ * @param kebabCaseString - The string in kebab case to be converted.
+ * @returns The converted string in title case.
+ *
+ * @example
+ * convertKebabCaseToTitle("hello-world") // Returns: "Hello World"
+ */
+function convertKebabCaseToTitleCase(kebabCaseString: string): string {
+  return kebabCaseString.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
+}
+
+const swaggerFactory = {
+  /**
+   * This method is used to generate Swagger documentation from the provided tags.
+   * It merges the default tags with the provided tags and creates a Swagger object.
+   *
+   * @param fromTags - The custom tags to be added to the Swagger documentation.
+   * @param config - The configuration object for the Swagger documentation.
+   * @returns The Swagger documentation object.
+   */
+  fromTags: (fromTags: SwaggerTags[], config: ElysiaSwaggerConfig = {}) => {
+    return swagger({
+      documentation: {
+        tags: [...defaultSwaggerTags, ...fromTags],
+        info: {
+          title: convertKebabCaseToTitleCase(pgk.name),
+          description: pgk.description,
+          version: pgk.version,
+        },
+      },
+      ...config,
+    })
+  },
+}
+export { swaggerFactory }
+```
+
+</details>
+
+## Usage
+
+```typescript
+// src/index.ts
+import { swaggerFactory } from "@lib/swagger-factory"
+
+const app = new Elysia()
+  .use(swaggerFactory.fromTags([
+    { name: "example", description: "Example tag" }
+  ]))
+  .get("/example", () => ({ status: "ok" }))
+  .listen(3000)
+```
