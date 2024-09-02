@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.32.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.31.0...v1.32.0) (2024-09-02)
+
+
+### Features
+
+* added source event interface to the docs about extending your cli ([0721bc0](https://github.com/flowcore-io/astro-flowcore-docs/commit/0721bc0516802eb3972d67ac468279c572b405d9))
+
 ## [1.31.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.30.0...v1.31.0) (2024-08-30)
 
 
