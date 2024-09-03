@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.36.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.35.1...v1.36.0) (2024-09-03)
+
+
+### Features
+
+* added documentation on github PAT ([098ffbd](https://github.com/flowcore-io/astro-flowcore-docs/commit/098ffbd84b883d9735d5bc211ea86e71c5d3b01a))
+* added documentation on how to create secrets ([a75c57f](https://github.com/flowcore-io/astro-flowcore-docs/commit/a75c57f1e5a2e4e008db536d288f7154a2acd740))
+
 ## [1.35.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.35.0...v1.35.1) (2024-09-03)
 
 
