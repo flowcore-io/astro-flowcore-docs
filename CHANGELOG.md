@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.35.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.35.0...v1.35.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* **flowcore-cli:** fixed docs cli typo ([88764e6](https://github.com/flowcore-io/astro-flowcore-docs/commit/88764e6b0b20c0899ddb6e0f8e0d5ec7cbcc900f))
+
 ## [1.35.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.34.0...v1.35.0) (2024-09-02)
 
 
