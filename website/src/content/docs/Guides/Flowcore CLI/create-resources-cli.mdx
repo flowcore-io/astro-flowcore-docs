@@ -256,6 +256,30 @@ This will determine the number of replicas of the transformer.
   </p>
 </Card>
 
+## Private Github Artifacts
+
+If you want to use a private Github artifact, you can add the following to the manifest file:
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      blueprint:
+        artifactUrl: "https://github.com/flowcore-io/flowcore-public-runtimes/releases/download/v1.0.0/transformer-proxy-1.0.0.zip"
+        githubPATSecretName: "github-pat"
+```
+
+This will use the Github PAT stored as an organization secret to download the artifact.
+
+To create a Github PAT secret, you can use this link (https://github.com/settings/tokens/new) to create a new token.
+You need to have the `repo` scope to be able to download the artifact. then you can add the secret to the github repository using the following command:
+
+```sh
+flowcore auth new secret "github-pat" --from-literal=<your-pat> --tenant <tenant-name>
+```
+
 ## Endpoints
 
 <Card title="Experimental" icon="information">
