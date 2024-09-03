@@ -34,3 +34,37 @@ To list all API keys, you can use the `flowcore api-key list` command. This comm
 ```sh
 flowcore auth list keys --tenant <tenant-name>
 ```
+
+## Create Secret
+
+To create a secret, you can use the `flowcore auth new secret` command. This command will create a secret in the tenant that you can use in your scenarios.
+
+```sh
+flowcore auth new secret --tenant <tenant-name> <secret-name> --from-literal=<secret-value>
+```
+
+:::tip[From file]
+
+You can also create a secret from a file using the `--from-file` flag.
+
+```sh
+flowcore auth new secret --tenant <tenant-name> <secret-name> --from-file=<path-to-file>
+```
+
+:::
+
+## List Secrets
+
+To list all secrets, you can use the `flowcore auth list secrets` command. This command will list all secrets in the tenant.
+
+```sh
+flowcore auth list secrets --tenant <tenant-name>
+```
+
+## Delete Secret
+
+To delete a secret, you can use the `flowcore auth delete secret` command. This command will delete a secret, and you will be prompted to confirm the deletion.
+
+```sh
+flowcore auth delete secret --tenant <tenant-name> <secret-name>
+```
