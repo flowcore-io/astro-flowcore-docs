@@ -4,7 +4,6 @@ sidebar:
   order: 3
 description: Create resources in Flowcore using a manifest file
 ---
-import { Card } from '@astrojs/starlight/components';
 
 The Flowcore CLI allows you to create resources in Flowcore using a manifest file. This is useful for creating multiple
 resources at once, or for creating resources in a CI/CD pipeline.
@@ -40,12 +39,12 @@ flowcore data-core apply -f flowcore.yaml
 
 this will create a plan to create the data core, and then apply the plan to create the data core.
 
-<Card title="overwrite" icon="information">
+:::note[Overwrite]
     <p>
         If a data core already exists in the manifest file, you will be prompted to overwrite the existing data core.
         pass the `--overwrite` flag to overwrite the existing data core without being prompted.
     </p>
-</Card>
+:::
 
 ## Scenarios
 
@@ -85,7 +84,7 @@ flowcore scenario apply -f scenario.yaml
 
 this will create a plan to create the scenario, and then apply the plan to create the scenario.
 
-<Card title="Parameters" icon="information">
+:::tip[Parameters]
     <p>
         Parameters can be configured with a type of `manual`, `secret` or `variable`. The `manual` type is used for
         parameters that are manually set by the user. The `secret` type is used for parameters that are sensitive and
@@ -95,7 +94,7 @@ this will create a plan to create the scenario, and then apply the plan to creat
     <p>
         If you don't have any parameters to set, you can simply write the following <br/>   `parameters: []`.
     </p>
-</Card>
+:::
 
 ## Apply all resources
 
@@ -134,7 +133,7 @@ scenario:
 
 This will set the resource requirements for the transformers. The size of the transformer will determine the amount of CPU and memory allocated to the transformer.
 
-<Card title="Sizes" icon="information">
+:::note[Sizes]
     <p>
       In the table below you can see the resource requirements for the different sizes of transformers. The transformer unit indicates what the transformer will consume in terms of cost. A single unit costs `$10` per month. (`5` are included in the free tier)
     </p>
@@ -172,7 +171,7 @@ This will set the resource requirements for the transformers. The size of the tr
         </tr>
       </tbody>
     </table>
-</Card>
+:::
 
 ## Page Size
 
@@ -187,11 +186,11 @@ scenario:
       pageSize: 5000
 ```
 
-<Card title="Available values" icon="information">
+:::note[Available values]
     <p>
       The page size determines how many records the transformer will pull from the data core at a time. The page size can be set to `1000`, `5000` or `10000`.
     </p>
-</Card>
+:::
 
 ## Default Start Date
 
@@ -208,11 +207,11 @@ scenario:
 
 This will set the default start date of the transformer to selected ISO start time.
 
-<Card title="Accuracy" icon="information">
+:::note[Accuracy]
     <p>
       This will set the "cursor" of the transformer to the closest event to the selected start date. Do not use this field to start before specific events, this is more for setting the start date to a specific time.
     </p>
-</Card>
+:::
 
 ## Concurrency
 
@@ -229,11 +228,11 @@ scenario:
 
 This will set the number of concurrent executions of the transformer.
 
-<Card title="Available values" icon="information">
+:::note[Available values]
     <p>
       The concurrency can be set to any number between, but a range of `1` and `50` is recommended. This value will determine the amount of concurrent executions of the transformer, and if the transformer is not designed to handle this, it can result in unexpected behavior.
     </p>
-</Card>
+:::
 
 ## Replicas
 
@@ -250,11 +249,11 @@ scenario:
 
 This will determine the number of replicas of the transformer.
 
-<Card title="Price" icon="information">
+:::note[Price]
   <p>
     The number of replicas will determine the cost of the transformer. A single replica consumes a transformer unit depending on the size of the transformer. The cost of the transformer is calculated by multiplying the number of replicas with the transformer unit cost.
   </p>
-</Card>
+:::
 
 ## Private Github Artifacts
 
@@ -282,10 +281,12 @@ flowcore auth new secret "github-pat" --from-literal=<your-pat> --tenant <tenant
 
 ## Endpoints
 
-<Card title="Experimental" icon="information">
-  Currently, Postgres and MySQL endpoints are supported as read model endpoints. More endpoints will be added in the future.
-  Also, only the blueprint, matchKey and onMatch fields are checked for updates. If you want to update the table name or type of the endpoint, you will have to delete the endpoint and create a new one.
-</Card>
+:::caution[Experimental]
+  <p>
+    Currently, Postgres and MySQL endpoints are supported as read model endpoints. More endpoints will be added in the future.
+    Also, only the blueprint, matchKey and onMatch fields are checked for updates. If you want to update the table name or type of the endpoint, you will have to delete the endpoint and create a new one.
+  </p>
+:::
 
 To add an endpoint to a transformer, you can add the this to the manifest file:
 
@@ -328,3 +329,117 @@ scenario:
 ```
 
 This will set up an endpoint for the transformer that will send data returned from the transformer to the specified database.
+
+## Advanced Configuration
+
+### Shell
+
+You can customize what shell container is used for the transformer by adding the following to the manifest file:
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      shell: "example-shell:tag"
+```
+
+This will use the specified shell container to run the transformer.
+
+:::note[Shell]
+  <p>
+    The shell container is the container that runs the transformer runtime. You can create your own shell by extending this shell on docker hub [here](https://hub.docker.com/r/flowcoreio/adapter-nodejs-transformer-shell).
+  </p>
+:::
+
+:::caution[Container Visibility]
+  <p>
+    The container image needs to be visible to the Flowcore platform publicly. If you are using a private container registry, you will need to make the container image public for now. this will be changed in the future.
+  </p>
+:::
+
+### Entrypoint
+
+You can customize what entrypoint is used for the transformer by adding the following to the manifest file:
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      blueprint:
+        entrypoint: "dist/main.js"
+```
+
+This will use the specified entrypoint to run the transformer.
+
+:::note[Entrypoint]
+  <p>
+    This has to be a local path relative to the root of the artifact you are using.
+  </p>
+:::
+
+### Runtime
+
+You can customize what runtime is used for the transformer by adding the following to the manifest file:
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      blueprint:
+        runtime: "node"
+```
+
+this will use the specified runtime to run the transformer.
+
+:::note[Runtime]
+  <p>
+    This has to be a valid runtime command that is supported by the selected shell.
+  </p>
+:::
+
+:::caution[Experimental]
+<p>
+  We have an experimental shell that allows you to use the `bun` runtime. So you can use these values for your manifest file:
+  <ul>
+    <li>shell: "flowcoreio/adapter-nodejs-transformer-shell:2.7.3-bun"</li>
+    <li>entrypoint: index.js</li>
+    <li>runtime: "bun"</li>
+  </ul>
+
+  The flowcore cli command `flowcore new transformer` will create a new transformer with the bun runtime as the default.
+</p>
+:::
+
+### Timeouts
+
+You can customize what timeouts are used for the transformer by adding the following to the manifest file:
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  transformers:
+    example-transformer:
+      processingTimeout: <timeout in seconds>
+      blueprint:
+        processTimeout: <timeout in seconds>
+        startTimeTimeout: <timeout in seconds>
+```
+
+This will set the timeout for the transformer.
+
+:::note[Timeouts]
+  <p>
+    These timeouts are used to determine the maximum duration of the transformer's process and startup times.
+  </p>
+  <p>
+    The `processTimeout` is the maximum duration of the transformer's process. The `startTimeTimeout` is the maximum duration of the transformer's startup time.
+    The `processingTimeout` is the maximum duration of the time it takes for the data pump to send an event to the transformer, and the transformer to process the data and respond with a status code.
+  </p>
+:::
