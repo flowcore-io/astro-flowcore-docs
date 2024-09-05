@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.37.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.36.0...v1.37.0) (2024-09-05)
+
+
+### Features
+
+* added advanced adapter configuration ([ddc1f9f](https://github.com/flowcore-io/astro-flowcore-docs/commit/ddc1f9fd26f6cea6b0d54efa8b4e17b6f068ae31))
+
 ## [1.36.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.35.1...v1.36.0) (2024-09-03)
 
 
