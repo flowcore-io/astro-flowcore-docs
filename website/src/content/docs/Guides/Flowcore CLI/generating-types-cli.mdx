@@ -1,0 +1,45 @@
+---
+title: Generating Types
+description: Generate types for your Flowcore project from your streams
+---
+
+You can generate types for your Flowcore project from your streams using the Flowcore CLI.
+
+## Installation
+
+You can install this plugin to the Flowcore CLI by running the following command:
+
+```sh
+flowcore plugins install @flowcore/cli-plugin-types
+```
+
+## JSON Schema
+
+You can generate a JSON Schema from your Flowcore streams using the `flowcore types <STREAM>` command. This command will generate a JSON Schema for using a collection of events from a stream.
+
+```sh
+flowcore types <STREAM> --last <N> --directory <DIRECTORY>
+```
+
+This command will generate a JSON Schema from a collection of events from a stream prioritzing more recent events over older events.
+
+:::note
+  The `N` is the number of events to use to generate the types.
+:::
+
+:::note
+  The `DIRECTORY` is the directory to output the types to, the file will be named based on the event type.
+:::
+
+## TypeScript Types
+
+You can generate TypeScript types for your Flowcore streams using the `flowcore types typescript <STREAM>` command. This command will use the JSON Schema to generate TypeScript types for the events in the stream.
+
+:::note[Typescript Usage]
+  This requires the `@sinclair/typebox` package to be installed in your project.
+:::
+
+
+:::caution[Single Stream]
+  This command only supports a single event type stream, not a collection of event types streams.
+:::
