@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.38.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.37.0...v1.38.0) (2024-09-06)
+
+
+### Features
+
+* added flowcore type generation documentation ([98e4768](https://github.com/flowcore-io/astro-flowcore-docs/commit/98e476853fc367c9daca8af1d45de17d463b03bd))
+
 ## [1.37.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.36.0...v1.37.0) (2024-09-05)
 
 
