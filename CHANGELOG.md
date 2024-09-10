@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.39.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.39.1...v1.39.2) (2024-09-10)
+
+
+### Bug Fixes
+
+* fixed type in flowcore plugins install ([af85f14](https://github.com/flowcore-io/astro-flowcore-docs/commit/af85f146b21f18867cc15e07c52f8587d5213815))
+
 ## [1.39.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.39.0...v1.39.1) (2024-09-10)
 
 
