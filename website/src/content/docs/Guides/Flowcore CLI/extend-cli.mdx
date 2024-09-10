@@ -71,6 +71,11 @@ then you can create a new command under the `src/commands/stream` directory.
         this.logger.info(ux.colorize("green", "Done!!! 🥳"))
       }
 
+      // this is called for each error in the stream
+      async error(error: Error): Promise<void> {
+        this.logger.error(error.message)
+      }
+
       // this is the description of the output processor, used in the help command
       getDescription(): string {
         return "Emojify the output"
