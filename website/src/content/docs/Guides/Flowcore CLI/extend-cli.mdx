@@ -59,13 +59,16 @@ then you can create a new command under the `src/commands/stream` directory.
   <TabItem label="src/services/emoji.service.ts">
     ```ts frame=none
     import { OutputService, SourceEvent, StreamFlags } from "@flowcore/cli-plugin-core";
+    import type { Logger } from "@flowcore/cli-plugin-config";
     import { ux } from "@oclif/core";
 
     export class EmojiService implements OutputService {
 
+      constructor(private readonly logger: Logger) {}
+
       // this is called when the stream is done, but only if the stream is not live
       async done(): Promise<void> {
-        console.log(ux.colorize("green", "Done!!! 🥳"))
+        this.logger.info(ux.colorize("green", "Done!!! 🥳"))
       }
 
       // this is the description of the output processor, used in the help command
@@ -84,7 +87,7 @@ then you can create a new command under the `src/commands/stream` directory.
           ...event,
           emoji: "😎",
         }
-        console.log(JSON.stringify(emojiEvent))
+        this.logger.info(JSON.stringify(emojiEvent))
       }
     }
     ```
@@ -96,13 +99,13 @@ then you can create a new command under the `src/commands/stream` directory.
     import dayjs from "dayjs"
     import customParseFormat from "dayjs/plugin/customParseFormat.js"
 
-    import { BaseStreamCommand } from "@flowcore/cli-plugin-core"
+    import { BaseStreamCommand, STREAM_ARGS } from "@flowcore/cli-plugin-core"
     import { EmojiService } from "../../services/emoji.service.js"
 
     dayjs.extend(customParseFormat)
 
-    export default class EmojifyStream extends BaseStreamCommand<typeof BaseStreamCommand> {
-      static args = BaseStreamCommand.args
+    export default class EmojifyStream extends BaseStreamCommand<typeof EmojifyStream> {
+      static args = STREAM_ARGS
 
       static description = "Emojify the output"
       static examples = [
@@ -110,23 +113,16 @@ then you can create a new command under the `src/commands/stream` directory.
       ]
 
       static flags = {
-        ...BaseStreamCommand.flags,
         // add flags to the command to pass to the output processor
-      }
-
-      public async init(): Promise<void> {
-        await super.init()
-
-        const { flags } = await this.parse(EmojifyStream)
-
-        const emojiService = new EmojiService()
-
-        // register the emoji service as an output processor
-        this.streamService.registerOutputProcessor(emojiService)
       }
 
       public async run(): Promise<void> {
         const { args, flags } = await this.parse(EmojifyStream)
+
+        const emojiService = new EmojiService(this.logger)
+
+        // register the emoji service as an output processor
+        this.streamService.registerOutputProcessor(emojiService)
 
         // initialize the stream service with the stream url and the output processor
         await this.streamService.init(args.STREAM, {
