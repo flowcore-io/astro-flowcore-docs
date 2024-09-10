@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.39.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.38.0...v1.39.0) (2024-09-10)
+
+
+### Features
+
+* :sparkles: added a quick access method to account linking ([f30e5ea](https://github.com/flowcore-io/astro-flowcore-docs/commit/f30e5ea2d55c00690ec0f69aa748a4329b7c070a))
+
 ## [1.38.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.37.0...v1.38.0) (2024-09-06)
 
 
