@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.39.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.39.0...v1.39.1) (2024-09-10)
+
+
+### Bug Fixes
+
+* updated extending the cli docs to the latest version ([cb753fb](https://github.com/flowcore-io/astro-flowcore-docs/commit/cb753fb1fad5daa93f222c84d08ff0ce9839cbce))
+
 ## [1.39.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.38.0...v1.39.0) (2024-09-10)
 
 
