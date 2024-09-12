@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.39.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.39.2...v1.39.3) (2024-09-10)
+
+
+### Bug Fixes
+
+* **extend-cli:** updated docs to include error method ([24dbfd4](https://github.com/flowcore-io/astro-flowcore-docs/commit/24dbfd4a8b110ca6ffdae8cf088b12bbcf4da3ee))
+
 ## [1.39.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.39.1...v1.39.2) (2024-09-10)
 
 
