@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.40.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.39.3...v1.40.0) (2024-09-12)
+
+
+### Features
+
+* **extending-cli:** updated the docs to show latest functionality of stopping the stream and introduction of start method ([fda135f](https://github.com/flowcore-io/astro-flowcore-docs/commit/fda135f4129973dd47acf904befa9c30e8e782ad))
+
 ## [1.39.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.39.2...v1.39.3) (2024-09-10)
 
 
