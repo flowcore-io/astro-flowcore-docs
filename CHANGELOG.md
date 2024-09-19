@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.41.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.41.0...v1.41.1) (2024-09-19)
+
+
+### Bug Fixes
+
+* **library:** :memo: Updated the predicate documentation to move away from the check word, as well as updated the codebase ([47647fb](https://github.com/flowcore-io/astro-flowcore-docs/commit/47647fb90464f0334a7065276ae1a30aa9001bc4))
+
 ## [1.41.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.40.0...v1.41.0) (2024-09-19)
 
 
