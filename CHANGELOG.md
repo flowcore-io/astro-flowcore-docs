@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.42.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.41.1...v1.42.0) (2024-09-19)
+
+
+### Features
+
+* **library:** :memo: Added automatic setup with redis predicate ([d2847cb](https://github.com/flowcore-io/astro-flowcore-docs/commit/d2847cb39c538c7dce26dba1f589a360344e6306))
+
 ## [1.41.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.41.0...v1.41.1) (2024-09-19)
 
 
