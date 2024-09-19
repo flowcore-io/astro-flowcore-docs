@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.41.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.40.0...v1.41.0) (2024-09-19)
+
+
+### Features
+
+* **library:** :construction: Added an initial predicate page with redis predicate ([140cee6](https://github.com/flowcore-io/astro-flowcore-docs/commit/140cee641f539dc49656694955d183105f53dbce))
+
 ## [1.40.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.39.3...v1.40.0) (2024-09-12)
 
 
