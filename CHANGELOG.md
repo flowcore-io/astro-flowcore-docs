@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.43.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.42.0...v1.43.0) (2024-09-19)
+
+
+### Features
+
+* **library:** :memo: added in-memory predicate documentation ([960baa7](https://github.com/flowcore-io/astro-flowcore-docs/commit/960baa7baf003d2bafd4d6c4173b196d2ac08041))
+
 ## [1.42.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.41.1...v1.42.0) (2024-09-19)
 
 
