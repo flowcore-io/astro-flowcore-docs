@@ -1,21 +1,21 @@
 ---
-title: Redis Predicate Check
+title: Redis Predicate
 description: When working with Webhooks, you may want to check if a condition is bet after the webhook is triggered. Allowing you to that the action was successful.
 ---
 
-## Install the Redis Predicate Check
+## Install the Redis Predicate
 :::note
 Work in progress
 :::
 
 {/* ```bash
-flowcore component add library/redis-predicate-check
+flowcore component add library/redis-predicates
 ``` */}
 
 ## Manual Installation
 
 <details>
-  <summary>Install the Redis Predicate Check manually</summary>
+  <summary>Install the Redis Predicate manually</summary>
 
     First install the following dependencies:
 
@@ -46,8 +46,7 @@ flowcore component add library/redis-predicate-check
     * @param options - The options for the Redis connection and the key pattern.
     * @returns A webhook predicate function that checks the existence of the Redis key and returns true if it exists.
     */
-    export function createRedisPredicateChecker(options: RedisPredicateOptions): WebhookPredicate {
-      const redis = new Redis(options.redisUrl)
+    export function createPredicateRedisChecker(redis: Redis, options: RedisPredicateOptions): WebhookPredicate {
       return async (eventId: string) => {
         const loaded = await redis?.get(`${options.redisEventIdKey}:${eventId}`)
         return !!loaded
@@ -61,10 +60,8 @@ flowcore component add library/redis-predicate-check
     * @param options - The options for the Redis connection and the key pattern.
     * @returns A webhook predicate function that sets the Redis key and returns true.
     */
-    export function createRedisPredicateNotifier(options: RedisPredicateOptions): TransformerSuccessHandler {
-      const redis = new Redis(options.redisUrl)
-
-      return async (payload) => {
+    export function createPredicateRedisNotifier(redis: Redis, options: RedisPredicateOptions): TransformerSuccessHandler {
+      return async (payload: { eventId: string }) => {
         await redis.set(`${options.redisEventIdKey}:${payload.eventId}`, "1", "EX", "60")
         return true
       }
@@ -76,10 +73,12 @@ flowcore component add library/redis-predicate-check
     * @param options - The options for the Redis connection and the key pattern.
     * @returns An object with a check function that checks the existence of the Redis key and a notify function that sets the Redis key.
     */
-    export function redisPredicateFactory(options: RedisPredicateOptions) {
+    export function predicateRedisFactory(options: RedisPredicateOptions) {
+      const redis = new Redis(options.redisUrl)
+
       return {
-        check: createRedisPredicateChecker(options),
-        notify: createRedisPredicateNotifier(options),
+        check: createPredicateRedisChecker(redis, options),
+        notify: createPredicateRedisNotifier(redis, options),
       }
     }
     ```
@@ -184,59 +183,6 @@ Then we recommend you add this to your test `docker-compose.yml` file:
           retries: 10
     ```
 
-    and adding this file to your project, to be able to wait for redis to be ready before running your tests:
-    ```typescript
-    // redis-connection-check.ts
-    import Redis from "ioredis"
-
-    /**
-    * Options for the Redis connection fixture.
-    * @property redisUrl - The URL of the Redis server.
-    * @property connectionAttempts - The number of attempts to connect to Redis. Defaults to 10.
-    * @property connectionTimeout - The timeout in milliseconds between connection attempts. Defaults to 1000.
-    */
-    export type RedisFixtureOptions = {
-      redisUrl: string
-      connectionAttempts?: number
-      connectionTimeout?: number
-    }
-
-    /**
-    * Waits for a connection to Redis to be established.
-    *
-    * This function attempts to ping the Redis server with a specified number of attempts and timeout between attempts.
-    * If the connection is successful, it returns. If all attempts fail, it throws an error.
-    *
-    * @param options - The options for the Redis connection fixture.
-    */
-    export async function waitForRedisConnection(options: RedisFixtureOptions) {
-      const client = new Redis(options.redisUrl)
-
-      const attempts = options.connectionAttempts ?? 10
-      const timeout = options.connectionTimeout ?? 1000
-
-      for (let i = 0; i < attempts; i++) {
-        const result = await client.ping()
-        if (result === "PONG") {
-          return
-        }
-
-        Bun.sleep(timeout)
-      }
-
-      throw new Error("Failed to connect to Redis")
-    }
-
-    ```
-
-  and utilise it inside your `setup.ts` file, like so:
-  ```typescript
-  // setup.ts
-  import { waitForRedisConnection } from "@/lib/redis-connection-check"
-
-  beforeAll(async () => {
-    await waitForRedisConnection({
-      redisUrl: "redis://localhost:6379",
-    })
-  })
-  ```
+:::note
+If you start up your services via a docker-compose during each test run, then you should remember to use the [`--wait`](https://github.com/docker/compose/pull/8777#issuecomment-1665847669) flag in docker-compose, to make sure the redis service is ready before running the tests start executing.
+:::

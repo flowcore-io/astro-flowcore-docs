@@ -1,5 +1,5 @@
 ---
-title: Predicate Check
+title: Predicates
 description: When working with Webhooks, you may want to check if a condition is bet after the webhook is triggered. Allowing you to that the action was successful.
 ---
 
@@ -10,7 +10,7 @@ import SVGDiagram from "@/components/svg-diagram.astro";
 An inherent challenge with Flowcore, is that we our primary ingestion method is webhooks. Webhooks are asynchronous by nature. 
 This means that you cannot know if the webhook was successful or not. This is where **predicate checks** come in.
 
-Using a predicate check, you can check if a condition is met. If the condition is met, the webhook is considered <span style={{ color: "green", fontWeight: "bold" }}>successful</span>. If the condition is not met, the webhook is considered <span style={{ color: "red", fontWeight: "bold" }}>failed</span>.
+Using a predicate, you can check if a condition is met. If the condition is met, the webhook is considered <span style={{ color: "green", fontWeight: "bold" }}>successful</span>. If the condition is not met, the webhook is considered <span style={{ color: "red", fontWeight: "bold" }}>failed</span>.
 
 ***For example**, if you have a "create user" async request, you may want to check your database to see if the user was created successfully, as a predicate check.*
 
@@ -23,5 +23,5 @@ We recommend using this SDK in general, for a quicker development experience.
 You are free to use these snippets without using the SDK, if you so desire.
 ::::
 
-Here are a set of various predicate check options:
-- [Redis Predicate Check](/components/libraries/predicate-checks/redis-predicate-check)
+Here are a set of various predicates options:
+- [Redis Predicate](/components/libraries/predicate-checks/redis-predicate-check)
