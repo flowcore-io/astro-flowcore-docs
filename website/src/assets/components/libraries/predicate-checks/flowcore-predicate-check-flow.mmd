@@ -1,0 +1,21 @@
+sequenceDiagram
+    My App->>Flowcore: Create a user through webhook ingestion
+
+    par [Wait for predicate check]
+        My App->>My App: Wait for predicate check is successful
+
+    and [Process requests from Flowcore]
+
+        Flowcore->>My App: Send "user-created" event to user specified transformer endpoint
+        My App->>My App: Process "user-created" event within the transformer
+
+        opt store some data in a database
+            My App->>Some Database: store data related to user creation
+        end
+
+        My App->>Flowcore: Return a http success response
+    end
+
+    My App->>My App: Continue with the flow...
+
+   
