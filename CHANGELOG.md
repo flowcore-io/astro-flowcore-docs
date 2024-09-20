@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.44.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.43.0...v1.44.0) (2024-09-20)
+
+
+### Features
+
+* **cli:** :memo: Added documentation for using the logs cli command ([134dc9e](https://github.com/flowcore-io/astro-flowcore-docs/commit/134dc9e0aba18a7b5bafaa6b53372f5ec2687964))
+
+
+### Bug Fixes
+
+* **cli:** :pencil2: the commands were in plural. This is not the case in the cli ([cd1c2b4](https://github.com/flowcore-io/astro-flowcore-docs/commit/cd1c2b4ca5b62c421d574fa75d98564957cf155e))
+
 ## [1.43.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.42.0...v1.43.0) (2024-09-19)
 
 
