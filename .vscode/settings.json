@@ -1,6 +1,7 @@
 {
   "conventionalCommits.scopes": [
     "starlight",
-    "library"
+    "library",
+    "cli"
   ]
 }

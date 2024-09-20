@@ -1,0 +1,24 @@
+---
+title: Get Logs
+description: Get logs from your deployed adapters using the Flowcore CLI
+---
+
+To get logs for a specific adapter, you first need to look up the adapters within a scenario. Use the following command, replacing the tenant and scenario names with your specific values:
+
+```sh
+flowcore get adapters --tenant my-tenant --scenario my-scenario
+```
+
+:::note
+If you want to know more about fetching adapters or other resources, check out the [get resources guide](/guides/flowcore-cli/get-resources-cli/).
+:::
+
+After running that command, you'll see a list of adapters along with their adapter IDs. Once you have the adapter ID, you can retrieve the logs using the following command:
+
+```sh
+flowcore logs adapter <adapter-id> --scenario my-scenario --tenant my-tenant
+```
+
+Make sure to replace **\<adapter-id\>** with the actual adapter ID you found from the previous command, and adjust the scenario and tenant names as needed.
+
+Doing this, will result in a stream of logs being printed to the console.
