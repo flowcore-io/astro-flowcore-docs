@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.46.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.45.0...v1.46.0) (2024-09-23)
+
+
+### Features
+
+* added architecture section that explains the primitives ([bfbb7e9](https://github.com/flowcore-io/astro-flowcore-docs/commit/bfbb7e98e53fe7dc9c34c7c358f92fe2f357caa7))
+
 ## [1.45.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.44.0...v1.45.0) (2024-09-23)
 
 
