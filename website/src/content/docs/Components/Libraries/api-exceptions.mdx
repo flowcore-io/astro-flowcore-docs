@@ -1,0 +1,160 @@
+---
+title: API Exceptions
+description: A collection of api exceptions, useful for generating descriptive error messages in your API
+---
+
+API Exceptions is a library that provides a collection of exceptions, useful for generating descriptive error messages in your API.
+Additionally, the library provides a way of extending the provided roster of exceptions with your own exception implementations.
+If you run into exceptions that you think would be useful for others, please consider joining our [Discord](https://discord.gg/8ZcjtmSB) and sharing your ideas.
+
+## Install the API Exceptions
+
+```bash
+flowcore component add library/api-exceptions
+```
+
+<details>
+  <summary>Manually install the API Exceptions</summary>
+
+  Create a `api/exceptions.ts` file in your project's lib folder, and add the following code:
+
+    ```typescript
+    /**
+     * Base class for all API exceptions. This class extends the built-in Error class and adds properties for HTTP status code and error code.
+     * 
+     * @property {number} status - The HTTP status code for the exception.
+     * @property {string} code - The error code for the exception.
+     * @example
+     * ```ts
+     * // example exception implementation
+     * export class ApiNotFoundException extends ApiException {
+        public status = 404
+        public code = "NOT_FOUND"
+    * }
+    * ```
+    * ```ts
+    * // example usage
+    * throw new ApiNotFoundException("User not found", "user", { id: "123" })
+    * ```
+    */
+    export abstract class ApiException extends Error {
+        public status = 0
+        public code = ""
+    }
+
+    // ==============================
+    // Exceptions
+    // ==============================
+
+    /**
+     * Represents an API conflict exception. This exception is thrown when a request conflicts with the current state of the resource.
+     *
+     * @property {number} status - The HTTP status code for the exception, which is 409.
+     * @property {string} code - The error code for the exception, which is "CONFLICT".
+     */
+    export class ApiConflictException extends ApiException {
+        public status = 409
+        public code = "CONFLICT"
+    }
+
+    /**
+     * Represents an API forbidden exception. This exception is thrown when the server refuses to authorize the request.
+     *
+     * @property {number} status - The HTTP status code for the exception, which is 403.
+     * @property {string} code - The error code for the exception, which is "FORBIDDEN".
+     */
+    export class ApiForbiddenException extends ApiException {
+        public status = 403
+        public code = "FORBIDDEN"
+    }
+
+    /**
+     * Represents an API internal server error exception. This exception is thrown when the server encounters an unexpected condition that prevents it from fulfilling the request.
+     *
+     * @property {number} status - The HTTP status code for the exception, which is 500.
+     * @property {string} code - The error code for the exception, which is "INTERNAL_SERVER_ERROR".
+     */
+    export class ApiInternalServerErrorException extends ApiException {
+        public status = 500
+        public code = "INTERNAL_SERVER_ERROR"
+    }
+
+    /**
+     * Represents an API not found exception. This exception is thrown when the requested resource could not be found.
+     *
+     * @property {number} status - The HTTP status code for the exception, which is 404.
+     * @property {string} code - The error code for the exception, which is "NOT_FOUND".
+     */
+    export class ApiNotFoundException extends ApiException {
+        public status = 404
+        public code = "NOT_FOUND"
+    }
+
+    /**
+     * Represents an API unauthorized exception. This exception is thrown when the request lacks valid authentication credentials for the target resource.
+     *
+     * @property {number} status - The HTTP status code for the exception, which is 401.
+     * @property {string} code - The error code for the exception, which is "UNAUTHORIZED".
+     *
+     * @param {string} message - The error message for the exception.
+     */
+    export class ApiUnauthorizedException extends ApiException {
+        public status = 401
+        public code = "UNAUTHORIZED"
+
+        constructor() {
+            super("Unauthorized")
+        }
+    }
+
+    /**
+     * Represents an API unprocessable content exception. This exception is thrown when the server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions.
+     *
+     * @property {number} status - The HTTP status code for the exception, which is 422.
+     * @property {string} code - The error code for the exception, which is "UNPROCESSABLE_CONTENT".
+     * @property {(string | undefined)} on - The field or property that caused the error.
+     * @property {(Record<string, string> | undefined)} errors - A record of errors, where each key is the field or property name and the value is the error message.
+     *
+     * @param {string} message - The error message for the exception.
+     * @param {(string | undefined)} on - The field or property that caused the error.
+     * @param {(Record<string, string> | undefined)} errors - A record of errors.
+     */
+    export class ApiUnprocessableContentException extends ApiException {
+        public status = 422
+        public code = "UNPROCESSABLE_CONTENT"
+        public on?: string
+        public errors?: Record<string, string>
+
+        constructor(message: string, on?: string, errors?: Record<string, string>) {
+            super(message)
+            this.on = on
+            this.errors = errors
+        }
+    }
+    ```
+</details>
+
+## Usage
+
+There is a set of exceptions that you can use - all of which are utilised in roughly the same way.
+So in the example below, we're throwing an `ApiForbiddenException` which is a 403 error.
+
+```typescript
+throw new ApiForbiddenException("You are not allowed to access this resource")
+```
+
+## Extending the API Exceptions
+
+You can extend the API Exceptions with your own exceptions. This is useful if you run into exceptions that you think would be useful for others.
+
+```typescript
+// my-custom-exception.ts
+
+export class ApiMyCustomException extends ApiException {
+  public status = 418
+  public code = "I_AM_A_TEAPOT"
+}
+
+// usage
+throw new ApiMyCustomException("I'm a teapot")
+```
