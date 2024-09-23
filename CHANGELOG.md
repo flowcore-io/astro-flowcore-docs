@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.45.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.44.0...v1.45.0) (2024-09-23)
+
+
+### Features
+
+* **library:** :memo: Added new exception library ([4112956](https://github.com/flowcore-io/astro-flowcore-docs/commit/4112956a9aeff12f94070b3dc9f83fd91323f6dc))
+
 ## [1.44.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.43.0...v1.44.0) (2024-09-20)
 
 
