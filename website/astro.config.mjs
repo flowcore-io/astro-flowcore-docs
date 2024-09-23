@@ -16,7 +16,7 @@ export default defineConfig({
   integrations: [starlight({
     sidebar: [
       {
-        label: `Guides`,
+        label: `Platform`,
         autogenerate: {
           directory: "Guides",
         },

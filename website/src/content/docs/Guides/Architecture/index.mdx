@@ -1,0 +1,38 @@
+---
+title: About Flowcore
+sidebar:
+  order: 1
+description: About Flowcore
+---
+
+### About
+
+The Flowcore Platform is a developer-focused data infrastructure solution designed for easy creation and deployment of scalable data systems. Key features include:
+
+- Simple manifest-based setup
+- Data ingestion via webhooks or filehooks
+- Event streaming through CLI, SDK, or on-platform Transformers
+- Linear scalability of all components
+- Self-use in platform development, demonstrating reliability [^1]
+
+### Primitives
+
+1. Data Core: Main data container, similar to a database instance
+2. Flow Type: Collection of data types within a Data Core
+3. Event Type: Specific data type container, comparable to a database table
+4. Event: Core data unit with metadata, payload, and bi-temporal properties
+5. Scenario: Collection of data processing pipelines or services
+6. Strand: Combination of a stream and a transformer
+7. Transformer: Data processing runtime in a transformer shell
+8. Read Model: Database for storing processed data for specific use-cases
+
+### Best Practices
+
+1. Version all Flow Types and Event Types for easier data management
+2. Create simple, single-responsibility services
+3. Utilize production data for development and testing
+4. Leverage event-driven architecture for decoupled services
+5. Use appropriate database types for different read models
+6. Follow the platform's versioning system for backward compatibility
+
+The Flowcore Platform simplifies data infrastructure creation while maintaining scalability and flexibility, making it an effective solution for modern, event-driven data systems.

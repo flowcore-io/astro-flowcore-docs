@@ -1,12 +1,12 @@
 ---
 title: Create a Data Core
 sidebar:
-  order: 2
+  order: 1
 description: How you create a Data Core
 ---
 
-import {Card} from '@astrojs/starlight/components';
-import {Image} from "astro:assets";
+import { Card } from '@astrojs/starlight/components';
+import { Image } from "astro:assets";
 
 import CreateDataCoreButton from "../../../../assets/guides/data-core/create-data-core/create-data-core-button.png";
 import CreateDataCoreDialog from "../../../../assets/guides/data-core/create-data-core/create-data-core-dialog.png";
@@ -17,7 +17,7 @@ import CreateDataCoreDialog from "../../../../assets/guides/data-core/create-dat
 </Card>
 
 <Card title="Do you know what a data core is?" icon="information">
-    If not, then you should read about them [here](/guides/data-core/what-is-a-data-core).
+    If not, then you should read about them [here](/guides/architecture/primitives/#data-core).
 </Card>
 
 
@@ -28,12 +28,6 @@ import CreateDataCoreDialog from "../../../../assets/guides/data-core/create-dat
 
 3. Name your Data Core <br/> _Optionally give it a description_
 <Image src={CreateDataCoreDialog} alt={"Showing the create data core dialog"}/>
-
-<Card title="You can buy private data cores with a basic subscription" icon="warning">
-    Bear with us. This is a change that is being worked on. 🚧 You can in fact [purchase additional private data
-    core](/guides/organization/upgrade-your-organization)
-    slots with a `BASIC` subscription.
-</Card>
 
 4. Click `Create Data Core`
 

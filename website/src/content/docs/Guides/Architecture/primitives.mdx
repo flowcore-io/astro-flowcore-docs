@@ -1,0 +1,71 @@
+---
+title: Primitives
+sidebar:
+  order: 2
+description: What are primitives?
+---
+
+# Flowcore Platform Primitives
+
+The Flowcore Platform is built on a set of fundamental building blocks, or primitives, that work together to create a powerful and flexible data infrastructure. Understanding these primitives is key to effectively using and leveraging the platform's capabilities.
+
+## Data Core
+
+The Data Core is the primary container for your data, analogous to a database instance or a collection of databases. It's typically structured at the application level.
+
+- **Example**: A Data Core called `flowcore-platform` contains all data related to the Flowcore Platform's operations.
+
+## Flow Type
+
+A Flow Type is similar to a database within your Data Core. It's a collection of data types, usually organized around specific business logic domains.
+
+- **Example**: Separate Flow Types for each domain, such as `organization`, `user`, `data-core`, etc.
+
+## Event Type
+
+An Event Type is comparable to a table in a database. It's where each specific data type resides. While there's no strict schema enforcement, a loose schema is derived from the ingested data.
+
+- **Tip**: Use the `flowcore types <stream>` command to generate a schema based on the stream's contents.
+
+## Event
+
+Events are the core data units in Flowcore. They can be thought of as enhanced database rows with the following characteristics:
+
+- Contain metadata and a payload
+- Bi-temporal design (two time dimensions)
+- TimeUuid event ID for recording time
+- Valid time axis
+- Immutable once recorded
+- Automatically scheduled for backup and cold storage management
+
+## Scenario
+
+A scenario in Flowcore is a collection of pipelines or a set of services that transform or process data.
+
+- **Example**: A scenario for the `Organization` business domain.
+
+## Strand
+
+A strand combines a stream and a transformer, acting as a data conveyor belt.
+
+- **Example**: A strand for CRUD operations on an organization, pulling events from `organization.created`, `organization.updated`, and `organization.archived`.
+- **Feature**: Each strand can be restarted individually to any point in time, allowing event replay as needed.
+
+## Transformer
+
+Transformers are the data processing engines of Flowcore. They run in a transformer shell and can be developed for specific cases or created as configurable runtimes for reuse.
+
+- **Supported runtimes**: NodeJS, Bun, and Python out of the box
+- **Extensibility**: Can be extended from the base transformer shell to use other languages
+
+## Read Model
+
+A Read Model is a database where processed data is stored for specific application use-cases. It should be chosen based on the specific requirements of your application.
+
+- **Flexibility**: Different databases can be used for various business domains (e.g., ArangoDB, PostgreSQL)
+- **Multiple databases**: It's often beneficial to use multiple database types for the same data to leverage their different strengths
+- **Synchronization**: Flowcore and transformers handle keeping data in sync across different read models
+- **Current limitation**: At present, users need to deploy and manage their own read model deployments
+- **Future plans**: Flowcore is working on options to deploy various read models for users
+
+Understanding these primitives allows developers to effectively structure their data, create scalable processing pipelines, and build robust, event-driven systems using the Flowcore Platform. Each primitive plays a crucial role in the overall architecture, providing flexibility, scalability, and power to your data infrastructure.

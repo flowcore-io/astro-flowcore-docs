@@ -1,0 +1,61 @@
+---
+title: Best Practices
+sidebar:
+  order: 3
+description: Best Practices
+---
+
+# Flowcore Platform Best Practices
+
+At Flowcore, we use our own platform for development, which has led us to discover and refine a set of best practices. These guidelines will help you make the most of the Flowcore Platform and build robust, scalable, and maintainable data systems.
+
+## Versioning
+
+Implement versioning for all Flow Types and Event Types. This practice allows for easier management of breaking changes and maintains backward compatibility.
+
+- **Naming Convention**: Use names like `organization.0` for Flow Types and `organization.created.0` for Event Types.
+- **Benefits**: 
+  - Easier to reclassify data
+  - Simplifies maintaining backward compatibility
+  - Allows for smooth transitions when updating data structures
+
+## Keep Services Simple
+
+Create simple services that adhere to the single responsibility principle. This approach leverages Flowcore's strengths and promotes a more maintainable architecture.
+
+- **Decoupling**: Extend functionality by hooking into streams, allowing for decoupled services.
+- **Data Independence**: Each service can build its own data based on events, reducing cross-service communication.
+- **Scalability**: Simple services are easier to scale and maintain independently.
+
+## Leverage Production Data in Development
+
+One of Flowcore's strengths is the ability to safely use production data in development and testing environments.
+
+- **Reliability**: This practice often results in "it just works, first try!" experiences, even with multiple decoupled services.
+- **Contract Definition**: Events define the contracts used when communicating with external systems, simplifying integration.
+- **Realistic Testing**: Using real data ensures your development and testing environments closely mirror production.
+
+## Embrace Event-Driven Architecture
+
+Utilize Flowcore's event-driven nature to create loosely coupled, real-time systems.
+
+- **Flexibility**: Easy to add new services or modify existing ones without disrupting the entire system.
+- **Real-time Processing**: Events enable immediate data processing and updates.
+- **Audit Trail**: Event streams provide a natural audit trail of all data changes.
+
+## Utilize Appropriate Database Types
+
+Choose the right database type for each read model based on your specific use case.
+
+- **Diversity**: Don't hesitate to use different databases for various domains (e.g., ArangoDB, PostgreSQL).
+- **Multiple Databases**: Consider using multiple database types for the same data to leverage their unique strengths.
+- **Synchronization**: Trust Flowcore and the transformers to handle data synchronization across different read models.
+
+## Continuous Learning and Improvement
+
+Stay updated with Flowcore's evolving features and best practices.
+
+- **Community Engagement**: Participate in the Flowcore community to learn from others' experiences.
+- **Feedback**: Provide feedback to the Flowcore team to help shape the platform's future development.
+
+By following these best practices, you can maximize the benefits of the Flowcore Platform, creating efficient, scalable, and maintainable data systems. Remember, these practices are born from real-world usage of the platform, ensuring their practicality and effectiveness in production environments.
