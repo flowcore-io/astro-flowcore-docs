@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.47.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.46.1...v1.47.0) (2024-09-24)
+
+
+### Features
+
+* **cli:** :memo: Added description for adapter reset command in cli ([7dc1fd7](https://github.com/flowcore-io/astro-flowcore-docs/commit/7dc1fd7931d94faf92e79b393120e738356ed05d))
+
 ## [1.46.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.46.0...v1.46.1) (2024-09-24)
 
 
