@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.46.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.46.0...v1.46.1) (2024-09-24)
+
+
+### Bug Fixes
+
+* reordered the docs about flowcore ([1f14db7](https://github.com/flowcore-io/astro-flowcore-docs/commit/1f14db77540ca1a3ff72d2d6be00a97bbe532c8d))
+
 ## [1.46.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.45.0...v1.46.0) (2024-09-23)
 
 
