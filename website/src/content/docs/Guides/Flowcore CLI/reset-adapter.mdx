@@ -1,0 +1,51 @@
+---
+title: Reset Adapter
+description: Reset an adapter in Flowcore using the Flowcore CLI
+---
+
+You can reset an adapter in Flowcore using the Flowcore CLI.
+
+## Reset Adapter
+
+To reset an adapter, you can use the `flowcore reset adapter` command. This command will reset the specified adapter.
+
+```sh
+flowcore reset adapter ADAPTER -s <value> -t <value> [-b <value>] [-e <value>]
+```
+
+### Arguments
+
+- **ADAPTER**: Adapter name or ID.
+
+### Flags
+
+- `-b, --bucket=<value>`: Time bucket (YYYYMMDDHHmmss or first).
+- `-e, --eventId=<value>`: Time UUID.
+- `-s, --scenario=<value>`: (required) Scenario. You can obtain your Scenarios [here](/guides/flowcore-cli/get-resources-cli).
+- `-t, --tenant=<value>`: (required) Tenant. E.g `my-tenant`.
+
+## Description
+
+This command resets an adapter.
+
+## Examples
+
+To reset an adapter with a specific tenant and scenario:
+
+```sh
+flowcore reset adapter adapter-name -t tenant-name -s scenario-name -b 20240718110000
+```
+
+To reset an adapter using the first time bucket:
+
+```sh
+flowcore reset adapter adapter-name -t tenant-name -s scenario-name -b first
+```
+
+To reset an adapter using a specific event ID:
+
+```sh
+flowcore reset adapter adapter-name -t tenant-name -s scenario-name -e 9cb35da2-ba64-4bb5-86d6-ef20ebc62ab7
+```
+```
+
