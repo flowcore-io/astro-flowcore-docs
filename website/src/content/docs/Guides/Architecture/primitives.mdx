@@ -38,11 +38,12 @@ Events are the core data units in Flowcore. They can be thought of as enhanced d
 - Immutable once recorded
 - Automatically scheduled for backup and cold storage management
 
-## Scenario
+## Transformer
 
-A scenario in Flowcore is a collection of pipelines or a set of services that transform or process data.
+Transformers are the stream processing engines of Flowcore. They run in a transformer shell and can be developed for specific cases or created as configurable runtimes for reuse.
 
-- **Example**: A scenario for the `Organization` business domain.
+- **Supported runtimes**: NodeJS, Bun, and Python out of the box
+- **Extensibility**: Can be extended from the base transformer shell to use other languages
 
 ## Strand
 
@@ -51,12 +52,11 @@ A strand combines a stream and a transformer, acting as a data conveyor belt.
 - **Example**: A strand for CRUD operations on an organization, pulling events from `organization.created`, `organization.updated`, and `organization.archived`.
 - **Feature**: Each strand can be restarted individually to any point in time, allowing event replay as needed.
 
-## Transformer
+## Scenario
 
-Transformers are the data processing engines of Flowcore. They run in a transformer shell and can be developed for specific cases or created as configurable runtimes for reuse.
+A scenario in Flowcore is a collection of strands or services that transform or process data.
 
-- **Supported runtimes**: NodeJS, Bun, and Python out of the box
-- **Extensibility**: Can be extended from the base transformer shell to use other languages
+- **Example**: A scenario for the `Organization` business domain.
 
 ## Read Model
 
