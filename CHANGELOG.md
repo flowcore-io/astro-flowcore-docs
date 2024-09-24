@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.47.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.47.0...v1.47.1) (2024-09-24)
+
+
+### Bug Fixes
+
+* **cli:** :memo: improved upon reset adapter documentation. ([ec36caa](https://github.com/flowcore-io/astro-flowcore-docs/commit/ec36caa00717e63e54f620f681743d0b4598dbc3))
+
 ## [1.47.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.46.1...v1.47.0) (2024-09-24)
 
 
