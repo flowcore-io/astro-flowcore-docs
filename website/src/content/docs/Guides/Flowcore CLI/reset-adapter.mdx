@@ -3,30 +3,35 @@ title: Reset Adapter
 description: Reset an adapter in Flowcore using the Flowcore CLI
 ---
 
-You can reset an adapter in Flowcore using the Flowcore CLI.
+You can reset an adapter in Flowcore using the Flowcore CLI, to run from a set moment in time.
 
 ## Reset Adapter
 
-To reset an adapter, you can use the `flowcore reset adapter` command. This command will reset the specified adapter.
+To reset an adapter, you can use the `flowcore reset adapter` command. This command will reset the specified adapter, to a specified moment in time.
+You can think of it as a rewind button for your adapter, allowing you to rewind to a specific point in time, and replay all the events that have occurred since then.
+
+:::caution
+If your adapter is processing the events into an already existing data storage, you need to make sure that your transformation logic is able to handle re-entries.
+
+For example, you can check if the payload within the event already exists in your data storage, and if it does, you can skip the event, or handle it as a re-entry.
+
+This is generally a good design for when have your transformation logic, to always support replays.
+:::
 
 ```sh
-flowcore reset adapter ADAPTER -s <value> -t <value> [-b <value>] [-e <value>]
+flowcore reset adapter adapter-name-or-id -s scenario-name -t tenant-name -b bucket-name -e event-id
 ```
 
-### Arguments
-
-- **ADAPTER**: Adapter name or ID.
+If you wish to use the adapter id, you can read about how to obtain your adapter id [here](/guides/flowcore-cli/get-resources-cli).
 
 ### Flags
 
-- `-b, --bucket=<value>`: Time bucket (YYYYMMDDHHmmss or first).
-- `-e, --eventId=<value>`: Time UUID.
-- `-s, --scenario=<value>`: (required) Scenario. You can obtain your Scenarios [here](/guides/flowcore-cli/get-resources-cli).
-- `-t, --tenant=<value>`: (required) Tenant. E.g `my-tenant`.
-
-## Description
-
-This command resets an adapter.
+|argument|abbreviation|required|description|
+|:--|:--|:--|:--|
+|`--scenario`|`-s`|Yes|The scenario the adapter resides in. You can obtain all your scenarios within a tenant [here](/guides/flowcore-cli/get-resources-cli).|
+|`--tenant`|`-t`|Yes|Tenant. e.g `my-tenant`. Meaning, the name of your organization. Which you can find by visiting [flowcore.io](https://flowcore.io) | 
+|`--bucket`|`-b`|No|Time bucket (YYYYMMDDHHmmss or first). This correlates to Year (YYYY), Month (MM), Day (DD), Hour (HH), Minute (mm), Second (ss).|
+|`--eventId`|`-e`|No|Time UUID. This is the UUID of the event you wish to reset to.|
 
 ## Examples
 
@@ -47,5 +52,3 @@ To reset an adapter using a specific event ID:
 ```sh
 flowcore reset adapter adapter-name -t tenant-name -s scenario-name -e 9cb35da2-ba64-4bb5-86d6-ef20ebc62ab7
 ```
-```
-
