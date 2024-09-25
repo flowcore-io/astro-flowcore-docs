@@ -13,28 +13,28 @@ This is ideal for automated look ups, or giving AIs full context of our document
 <summary>This is the code used to generate this page</summary>
 ```astro
 // list-pages.astro
+---
+import { getCollection } from "astro:content";
 
-<script>
-    import { getCollection } from "astro:content";
-    const ignorePages = ["all-documentation-pages"];
+const allPages: { slug: string }[] = await getCollection("docs");
 
-    const ul = document.getElementById("list-pages");
+// ignore "this" page, to simplify usage - removing the worry of infinite link loopbacks
+const thisPath = Astro.url.pathname;
+const pages = allPages.filter((doc) => `/${doc.slug}/` !== thisPath);
+---
 
-    const allPages: { slug: string }[] = await getCollection("docs");
+<ul>
+    {
+        pages.map((page) => (
+            <li>
+                <a id={page.slug} href={`/${page.slug}`}>
+                    {page.slug}
+                </a>
+            </li>
+        ))
+    }
+</ul>
 
-    const pages = allPages.filter((doc) => !ignorePages.includes(doc.slug));
-
-    pages.forEach((doc) => {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = `/${doc.slug}`;
-        a.textContent = doc.slug;
-        li.appendChild(a);
-        ul!.appendChild(li);
-    });
-</script>
-
-<ul id="list-pages"></ul>
 ```
 </details>
 <ListPages/>
