@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.48.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.47.1...v1.48.0) (2024-09-25)
+
+
+### Features
+
+* **automation:** :sparkles: Added an automatic page indexer ([aa5a218](https://github.com/flowcore-io/astro-flowcore-docs/commit/aa5a218d1858babb0a57703437c75b1b5a38f44a))
+
 ## [1.47.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.47.0...v1.47.1) (2024-09-24)
 
 
