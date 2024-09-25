@@ -1,0 +1,41 @@
+---
+title: Documentation Indexing
+description: An index of all the pages in our documentation
+---
+
+import ListPages from "../../../components/list-pages.astro";
+
+Below is a list of all the pages in our documentation.
+
+This is ideal for automated look ups, or giving AIs full context of our documentation.
+
+<details>
+<summary>This is the code used to generate this page</summary>
+```astro
+// list-pages.astro
+
+<script>
+    import { getCollection } from "astro:content";
+    const ignorePages = ["all-documentation-pages"];
+
+    const ul = document.getElementById("list-pages");
+
+    const allPages: { slug: string }[] = await getCollection("docs");
+
+    const pages = allPages.filter((doc) => !ignorePages.includes(doc.slug));
+
+    pages.forEach((doc) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = `/${doc.slug}`;
+        a.textContent = doc.slug;
+        li.appendChild(a);
+        ul!.appendChild(li);
+    });
+</script>
+
+<ul id="list-pages"></ul>
+```
+</details>
+<ListPages/>
+

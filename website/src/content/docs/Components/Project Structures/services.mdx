@@ -1,0 +1,63 @@
+---
+title: Services
+description: How our services are structured
+---
+
+Here is a guide on how we structure our services. Each section broken down into a specific part of the service.
+
+## Overall
+Before we dive into the structure of each element in the service, we'll first look at the overall structure of the service.
+
+If you would like to dive through some example code, then you can can check it out here https://github.com/flowcore-io/bun-service-example
+
+```
+bun-service-example/
+│
+├── src/                        # Source files
+│   ├── database/               # Database related files
+│   │   ├── index.ts            # Database connection and exports
+│   │   └── schemas.ts          # Database schemas
+│   │
+│   ├── env/                    # Environment variable management
+│   │   └── index.ts            # Environment configuration
+│   │
+│   ├── lib/                    # Library utilities
+│   │   ├── logger.ts           # Logger setup
+│   │   ├── scheduler.ts        # Scheduler utilities
+│   │   ├── utils/              # Utility functions
+│   │   └── ...                 # Other utility files
+│   │
+│   ├── server/                 # Server setup and routes
+│   │   ├── index.ts            # Main server entry point
+│   │   ├── routes/             # API routes
+│   │   │   ├── api/            # API versioned routes
+│   │   │   │   └── v1/         # Version 1 of API
+│   │   │   └── health.ts       # Health check route
+│   │   └── transformers/       # Transformers for processing events
+│   │
+│   ├── schedules/              # Scheduled tasks
+│   │   └── example-schedule.ts # Example scheduled task
+│   │
+│   ├── transformers/           # Transformer logic
+│   │   ├── example.0/          # Example transformer
+│   │   └── ...                 # Other transformers
+│   │
+│   ├── webhooks/               # Webhook handling
+│   │   └── example.0.ts        # Example webhook
+│   │
+│   └── index.ts                # Main entry point for the application
+│
+├── tests/                      # Test files
+│   ├── fixtures/               # Test fixtures
+│   ├── setup.ts                # Test setup
+│   └── ...                     # Other test files
+```
+
+## Database
+1. `index.ts`
+- Purpose: This file serves as the main entry point for database interactions. It typically includes the database connection setup and exports the database instance for use throughout the application.
+What to Include:
+Database connection logic (e.g., using a connection pool).
+Initialization of ORM (Object-Relational Mapping) or query builder.
+Exporting the database instance for use in other parts of the application.
+Example Structure:

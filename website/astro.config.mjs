@@ -26,6 +26,12 @@ export default defineConfig({
         autogenerate: {
           directory: "Components",
         },
+      },
+      {
+        label: "Automation",
+        autogenerate: {
+          directory: "Automation",
+        },
       }
     ],
     title: 'Flowcore Docs',

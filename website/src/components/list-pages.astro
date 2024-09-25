@@ -1,0 +1,21 @@
+<script>
+    import { getCollection } from "astro:content";
+    const ignorePages = ["all-documentation-pages"];
+
+    const ul = document.getElementById("list-pages");
+
+    const allPages: { slug: string }[] = await getCollection("docs");
+
+    const pages = allPages.filter((doc) => !ignorePages.includes(doc.slug));
+
+    pages.forEach((doc) => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = `/${doc.slug}`;
+        a.textContent = doc.slug;
+        li.appendChild(a);
+        ul!.appendChild(li);
+    });
+</script>
+
+<ul id="list-pages"></ul>
