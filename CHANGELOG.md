@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.48.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.1...v1.48.2) (2024-09-25)
+
+
+### Bug Fixes
+
+* **library:** :memo: Improved writing to help with ai interpretation ([a94fe0d](https://github.com/flowcore-io/astro-flowcore-docs/commit/a94fe0dc3ae64ab7efd7f1365c2a8aadb1801510))
+
 ## [1.48.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.0...v1.48.1) (2024-09-25)
 
 
