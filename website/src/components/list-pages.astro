@@ -3,7 +3,9 @@ import { getCollection } from "astro:content";
 
 const allPages: { slug: string }[] = await getCollection("docs");
 
-// ignore "this" page, to simplify usage - removing the worry of infinite link loopbacks
+/* ignore "this" page, to simplify usage;
+ * removing the worry of potential infinite link loopbacks
+ * when running your automation scripts or ai scrapers */
 const thisPath = Astro.url.pathname;
 const pages = allPages.filter((doc) => `/${doc.slug}/` !== thisPath);
 ---
