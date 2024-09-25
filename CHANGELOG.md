@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.48.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.0...v1.48.1) (2024-09-25)
+
+
+### Bug Fixes
+
+* **automation:** :bug: The links are now generated on the server side and served as raw html. No javascript needed ([b343875](https://github.com/flowcore-io/astro-flowcore-docs/commit/b3438753b94985a66e0c4147c3c05be00fdb7c1c))
+* **automation:** :children_crossing: updated the example comment to be more descriptive, in the automation indexing page ([f6181b0](https://github.com/flowcore-io/astro-flowcore-docs/commit/f6181b0cb3a02b4256fa75ddc18a2ebd821939d0))
+
 ## [1.48.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.47.1...v1.48.0) (2024-09-25)
 
 
