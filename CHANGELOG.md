@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.48.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.2...v1.48.3) (2024-09-27)
+
+
+### Bug Fixes
+
+* **cli:** :memo: Added missing get logs cli details ([3faaf8e](https://github.com/flowcore-io/astro-flowcore-docs/commit/3faaf8e6879e131c0ca2b463e95b940b2a089f50))
+
 ## [1.48.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.1...v1.48.2) (2024-09-25)
 
 
