@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.48.4](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.3...v1.48.4) (2024-09-27)
+
+
+### Bug Fixes
+
+* **cli:** :lipstick: improved visuals of tables in get logs and reset ([e6f344e](https://github.com/flowcore-io/astro-flowcore-docs/commit/e6f344ed9ba6a6822dc72dfa971624dc226cf9a3))
+
 ## [1.48.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.2...v1.48.3) (2024-09-27)
 
 
