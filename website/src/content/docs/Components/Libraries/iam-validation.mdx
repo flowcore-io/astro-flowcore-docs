@@ -28,13 +28,31 @@ flowcore component add library/iam-validation
 
     ```typescript
     // lib/iam-validation.ts
-    import { ApiForbiddenException } from "@components/api-exceptions"
+    import { ApiException } from "@components/api-exceptions"
     import type { FlowcoreAuthenticatedUser } from "@components/jwks-guard"
-    import { type Logger, createLogger } from "@components/logger"
+    import type { Logger } from "@components/logger"
     import type * as xxHash from "@jabr/xxhash64"
+    import { type Static, Type } from "@sinclair/typebox"
     import type { Redis } from "ioredis"
 
-    import { type Static, Type } from "@sinclair/typebox"
+    /**
+     * Represents an API forbidden exception. This exception is thrown when the server refuses to authorize the request.
+     *
+     * @property {number} status - The HTTP status code for the exception, which is 403.
+     * @property {string} code - The error code for the exception, which is "FORBIDDEN".
+     */
+    export class IamForbiddenException extends ApiException {
+      public status = 403
+      public code = "FORBIDDEN"
+
+      constructor(
+        message: string,
+        public readonly validPolicies?: { policyFrn: string; statementId: string }[],
+        public readonly invalidRequest?: RequestedAccess,
+      ) {
+        super(message)
+      }
+    }
 
     /**
      * Defines the structure of requested access for IAM validation.
@@ -98,8 +116,8 @@ flowcore component add library/iam-validation
       private hash!: xxHash.Hasher
       private type: "users" | "keys" = "users"
       private mode: "tenant" | "organization" = "tenant"
-      private logger: Logger = createLogger("iam-validate")
       private hashMap: Map<string, boolean> = new Map()
+      private logger: Logger | undefined
 
       constructor(private readonly iamApiUrl: string) {}
 
@@ -164,7 +182,9 @@ flowcore component add library/iam-validation
        * @param {RequestedAccess} requestedAccess - The requested access details.
        * @returns {(flowcoreUser: FlowcoreAuthenticatedUser) => Promise<void>} - A promise that resolves to void.
        */
-      public build(requestedAccess: RequestedAccess): (flowcoreUser: FlowcoreAuthenticatedUser) => Promise<void> {
+      public build(
+        requestedAccess: RequestedAccess,
+      ): (options: { flowcoreUser: FlowcoreAuthenticatedUser }) => Promise<void> {
         const checksum = this.hash.hash(JSON.stringify(requestedAccess), "hex").toString()
         return async ({ flowcoreUser }: { flowcoreUser: FlowcoreAuthenticatedUser }): Promise<void> => {
           const { id } = flowcoreUser
@@ -195,10 +215,10 @@ flowcore component add library/iam-validation
 
           if (data.valid) {
             this.hashMap.set(`${id}-${data.checksum}`, true)
-            this.logger.debug(`IAM validation passed for ${this.type} ${id} with checksum ${data.checksum}`)
+            this.logger?.debug(`IAM validation passed for ${this.type} ${id} with checksum ${data.checksum}`)
           } else {
-            this.logger.error("IAM validation failed", data)
-            throw new ApiForbiddenException("IAM validation failed", data.validPolicies, data.invalidRequest)
+            this.logger?.error("IAM validation failed", data)
+            throw new IamForbiddenException("IAM validation failed", data.validPolicies, data.invalidRequest)
           }
         }
       }
@@ -268,21 +288,51 @@ flowcore component add library/iam-validation
 Create a factory for your IAM validation
 
 ```typescript
-// lib/iam-validation-factory.ts
-/**
- * Factory function to create an instance of IamValidateBuilder.
- * 
- * @param {"users" | "keys"} type - The type of validation.
- * @param {"tenant" | "organization"} mode - The mode of validation.
- * @returns {IamValidateBuilder} - An instance of IamValidateBuilder.
- */
-export const iamValidationFactory = async (type: "users" | "keys", mode: "tenant" | "organization" = "tenant") => {
-  const hash = await xxHash.create3()
-  return new IamValidateBuilder(env.IAM_API_URL)
-    .withRedisClient(new Redis(env.IAM_REDIS_URL))
-    .withHash(hash)
-    .withType(type)
-    .withMode(mode)
+// services/request-access.ts
+import env from "@/env"
+import type { RequestedAccess } from "@components/iam-validation"
+import { type FrnAction, FrnType, IamValidateBuilder, buildListFrn } from "@components/iam-validation"
+import type { FlowcoreAuthenticatedUser } from "@components/jwks-guard"
+import * as xxHash from "@jabr/xxhash64"
+import { Redis } from "ioredis"
+
+const hash = await xxHash.create3()
+const iamValidation = new IamValidateBuilder(env.IAM_API_URL)
+  .withRedisClient(new Redis(env.IAM_REDIS_URL))
+  .withHash(hash)
+  .withType("users")
+  .withMode("organization")
+
+export class RequestedAccessService {
+  private requestedAccess: RequestedAccess = []
+
+  constructor(private readonly flowcoreUser: FlowcoreAuthenticatedUser) {}
+
+  /**
+   * Adds a data core access request to the list of requested accesses.
+   * @param {FrnAction | FrnAction[]} action - The action(s) to be performed on the data core.
+   * @param {string} organizationId - The ID of the organization.
+   * @param {string} [id] - The ID of the specific data core. If not provided, defaults to "*" (all data cores).
+   * @returns {this} The current instance for method chaining.
+   */
+  onDataCore(action: FrnAction | FrnAction[], organizationId: string, id?: string) {
+    this.requestedAccess.push({
+      action,
+      resource: buildListFrn([{ type: FrnType.DATA_CORE, id: id ?? "*" }], organizationId),
+    })
+
+    return this
+  }
+
+  // add `on<resource>` methods for other resources
+
+  /**
+   * Evaluates the requested accesses against the user's permissions.
+   * @returns {Promise<boolean>} A promise that resolves to true if the user has all requested permissions, false otherwise.
+   */
+  evaluate() {
+    return iamValidation.build(this.requestedAccess)({ flowcoreUser: this.flowcoreUser })
+  }
 }
 ```
 
@@ -297,12 +347,9 @@ export const myEndpoint = new Elysia()
     () => "Hello World", 
     {
       beforeHandler: ({ flowcoreUser, params }) => {
-        return iamValidation.withLogger(this.logger).build([
-              {
-              action: [FrnAction.READ],
-              resource: buildListFrn([{ type: FrnType.DATA_CORE, id: "*" }], params.tenant)
-              }
-          ])({ flowcoreUser: flowcoreUser })
+        return new RequestedAccessService(flowcoreUser)
+          .onDataCore(FrnAction.READ, params.tenant)
+          .evaluate()
       },
       params: t.Object({
         tenant: t.String()
