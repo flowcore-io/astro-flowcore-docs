@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.49.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.4...v1.49.0) (2024-09-30)
+
+
+### Features
+
+* **library:** :sparkles: Added docs for iam validation library ([0cc0b61](https://github.com/flowcore-io/astro-flowcore-docs/commit/0cc0b61cac8b19b1e96b48cf70428c3e7c0e4dff))
+
 ## [1.48.4](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.3...v1.48.4) (2024-09-27)
 
 
