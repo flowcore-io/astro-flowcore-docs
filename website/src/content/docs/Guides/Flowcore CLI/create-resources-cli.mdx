@@ -25,10 +25,10 @@ dataCore:
           description: "An example event"
 ```
 
-to generate a manifest file, you can use the `generate` command:
+to generate a manifest file, you can use the `init` command:
 
 ```sh
-flowcore data-core generate manifest -t example-tenant --placeholder
+flowcore data-core init -t example-tenant
 ```
 
 this will generate a `flowcore.yaml` file, then run the following command to apply the manifest file
@@ -70,10 +70,10 @@ scenario:
         artifactUrl: "https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.1.0.zip"
 ```
 
-to generate a manifest file, you can use the `generate` command:
+to generate a manifest file, you can use the `init` command:
 
 ```sh
-flowcore scenario generate manifest -t example-tenant --placeholder
+flowcore scenario init -t example-tenant
 ```
 
 this will generate a `flowcore.yaml` file, then run the following command to apply the manifest file

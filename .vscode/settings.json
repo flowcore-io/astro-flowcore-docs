@@ -3,6 +3,7 @@
     "starlight",
     "library",
     "cli",
-    "automation"
+    "automation",
+    "manifests"
   ]
 }
