@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.50.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.49.1...v1.50.0) (2024-09-30)
+
+
+### Features
+
+* **library:** :sparkles: added jwks guard library ([e1bc8f6](https://github.com/flowcore-io/astro-flowcore-docs/commit/e1bc8f6b89d9b8d5938cef42ca097cd91d833f10))
+* **library:** :sparkles: added logger library and renamed document header for jwks and added apiKey security for swagger factory ([f8b8af5](https://github.com/flowcore-io/astro-flowcore-docs/commit/f8b8af5a5b8fb21b7cf9c7cdab4dd89def860edc))
+
+
+### Bug Fixes
+
+* **library:** :bug: updated iam validation usage and manual install ([2660395](https://github.com/flowcore-io/astro-flowcore-docs/commit/2660395b960a239182f909f70a15eaf6f6196b75))
+* **library:** :memo: added ts-doc commends on the manual install of the exception guard ([35e95c8](https://github.com/flowcore-io/astro-flowcore-docs/commit/35e95c8fd4a77429f1671710bdc1ce7a65103d5e))
+
 ## [1.49.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.49.0...v1.49.1) (2024-09-30)
 
 
