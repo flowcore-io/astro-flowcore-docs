@@ -1,0 +1,313 @@
+---
+title: IAM Validation
+description: A library for validating IAM permissions in your API, and adding flowcore guards to your endpoints
+---
+
+IAM Validation is a library for validating IAM permissions in your API, and adding flowcore guards to your endpoints.
+
+## Install the IAM Validation
+
+```bash
+flowcore component add library/iam-validation
+```
+
+<details>
+  <summary>Or install the IAM Validation manually</summary>
+
+    Run this command in your project's root directory:
+
+    ```bash
+    bun add ioredis @sinclair/typebox
+    ```
+
+    ```bash
+    bunx jsr add @jabr/xxhash64
+    ```
+
+    Create a `iam-validation.ts` file in your project's lib folder, and add the following code:
+
+    ```typescript
+    // lib/iam-validation.ts
+    import { ApiForbiddenException } from "@components/api-exceptions"
+    import type { FlowcoreAuthenticatedUser } from "@components/jwks-guard"
+    import { type Logger, createLogger } from "@components/logger"
+    import type * as xxHash from "@jabr/xxhash64"
+    import type { Redis } from "ioredis"
+
+    import { type Static, Type } from "@sinclair/typebox"
+
+    /**
+     * Defines the structure of requested access for IAM validation.
+     *
+     * @property {action} - The action or actions to validate against.
+     * @property {resource} - The resource to validate, in order of granularity. First match wins.
+     */
+    export const requestedAccess = Type.Array(
+      Type.Object({
+        action: Type.Union([Type.String(), Type.Array(Type.String())], {
+          description: "The action or actions to validate against",
+          examples: ["read", "write", "fetch", "ingest"],
+        }),
+        resource: Type.Array(Type.String({ pattern: "^frn::" }), {
+          description: "The resource to validate, in order of granularity. First match wins.",
+          examples: [
+            [
+              "frn::tenant",
+              "frn::tenant:data-core/24005dde-7476-4692-aec4-175d2e5a9b9e",
+              "frn::tenant:flow-type/6a394228-e1a1-4491-b280-0117f481be32",
+              "frn::tenant:event-type/ffff7fe3-45c7-4a96-afe2-2519ee342d69",
+            ],
+            [
+              "frn::13ea0ce0-2f5c-46c4-b4f2-e0e15c5d1cda",
+              "frn::13ea0ce0-2f5c-46c4-b4f2-e0e15c5d1cda:data-core/24005dde-7476-4692-aec4-175d2e5a9b9e",
+              "frn::13ea0ce0-2f5c-46c4-b4f2-e0e15c5d1cda:flow-type/6a394228-e1a1-4491-b280-0117f481be32",
+              "frn::13ea0ce0-2f5c-46c4-b4f2-e0e15c5d1cda:event-type/ffff7fe3-45c7-4a96-afe2-2519ee342d69",
+            ],
+          ],
+        }),
+      }),
+    )
+
+    /**
+     * Represents the type of requested access for IAM validation.
+     */
+    export type RequestedAccess = Static<typeof requestedAccess>
+
+    /**
+     * Represents the response from IAM validation.
+     *
+     * @property {valid} - Indicates if the validation was successful.
+     * @property {validPolicies} - The policies that were validated.
+     * @property {checksum} - The checksum of the validation request.
+     * @property {invalidRequest} - The invalid request details if validation failed.
+     */
+    export type IamValidationResponse =
+      | {
+          valid: true
+          validPolicies: { policyFrn: string; statementId: string }[]
+          checksum: string
+        }
+      | {
+          valid: false
+          invalidRequest: RequestedAccess
+          validPolicies: { policyFrn: string; statementId: string }[]
+        }
+
+    export class IamValidateBuilder {
+      private redisClient: Redis | undefined
+      private hash!: xxHash.Hasher
+      private type: "users" | "keys" = "users"
+      private mode: "tenant" | "organization" = "tenant"
+      private logger: Logger = createLogger("iam-validate")
+      private hashMap: Map<string, boolean> = new Map()
+
+      constructor(private readonly iamApiUrl: string) {}
+
+      /**
+       * Sets the Redis client for caching.
+       *
+       * @param {Redis} redisClient - The Redis client instance.
+       * @returns {IamValidateBuilder} - This instance for method chaining.
+       */
+      public withRedisClient(redisClient: Redis): IamValidateBuilder {
+        this.redisClient = redisClient
+        return this
+      }
+
+      /**
+       * Sets the hash function for generating checksums.
+       *
+       * @param {xxHash.Hasher} hash - The hash function instance.
+       * @returns {IamValidateBuilder} - This instance for method chaining.
+       */
+      public withHash(hash: xxHash.Hasher): IamValidateBuilder {
+        this.hash = hash
+        return this
+      }
+
+      /**
+       * Sets the type of validation to perform.
+       *
+       * @param {"users" | "keys"} type - The type of validation.
+       * @returns {IamValidateBuilder} - This instance for method chaining.
+       */
+      public withType(type: "users" | "keys"): IamValidateBuilder {
+        this.type = type
+        return this
+      }
+
+      /**
+       * Sets the mode of validation to perform.
+       *
+       * @param {"tenant" | "organization"} mode - The mode of validation.
+       * @returns {IamValidateBuilder} - This instance for method chaining.
+       */
+      public withMode(mode: "tenant" | "organization"): IamValidateBuilder {
+        this.mode = mode
+        return this
+      }
+
+      /**
+       * Sets the logger for logging validation events.
+       *
+       * @param {Logger} logger - The logger instance.
+       * @returns {IamValidateBuilder} - This instance for method chaining.
+       */
+      public withLogger(logger: Logger): IamValidateBuilder {
+        this.logger = logger
+        return this
+      }
+
+      /**
+       * Builds the IAM validation process.
+       *
+       * @param {RequestedAccess} requestedAccess - The requested access details.
+       * @returns {(flowcoreUser: FlowcoreAuthenticatedUser) => Promise<void>} - A promise that resolves to void.
+       */
+      public build(requestedAccess: RequestedAccess): (flowcoreUser: FlowcoreAuthenticatedUser) => Promise<void> {
+        const checksum = this.hash.hash(JSON.stringify(requestedAccess), "hex").toString()
+        return async ({ flowcoreUser }: { flowcoreUser: FlowcoreAuthenticatedUser }): Promise<void> => {
+          const { id } = flowcoreUser
+          const localChecksum = this.hashMap.has(`${id}-${checksum}`)
+          if (localChecksum) {
+            const cacheKey = `iam:${this.type}-validation:${checksum}:${id}`
+
+            if (this.redisClient) {
+              const cached = await this.redisClient.get(cacheKey)
+              if (cached === "true") {
+                return
+              }
+            }
+          }
+
+          const validation = await fetch(`${this.iamApiUrl}/api/v1/validate/${this.type}/${id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mode: this.mode,
+              requestedAccess,
+            }),
+          })
+
+          const data = (await validation.json()) as IamValidationResponse
+
+          if (data.valid) {
+            this.hashMap.set(`${id}-${data.checksum}`, true)
+            this.logger.debug(`IAM validation passed for ${this.type} ${id} with checksum ${data.checksum}`)
+          } else {
+            this.logger.error("IAM validation failed", data)
+            throw new ApiForbiddenException("IAM validation failed", data.validPolicies, data.invalidRequest)
+          }
+        }
+      }
+    }
+
+    /**
+     * Enum for defining the types of FRNs.
+     *
+     * @enum {string}
+     */
+    export enum FrnType {
+      USER = "user",
+      KEY = "key",
+      ROLE = "role",
+      POLICY = "policy",
+      ORGANIZATION = "organization",
+      DATA_CORE = "data-core",
+      FLOW_TYPE = "flow-type",
+      EVENT_TYPE = "event-type",
+      ALL = "*",
+    }
+
+    /**
+     * Enum for defining the actions that can be performed on FRNs.
+     *
+     * @enum {string}
+     */
+    export enum FrnAction {
+      READ = "read",
+      WRITE = "write",
+      INGEST = "ingest",
+      FETCH = "fetch",
+      ALL = "*",
+    }
+
+    /**
+     * Builds a fully qualified FRN string.
+     *
+     * @param {string} tenantOrOrganizationId - The tenant or organization ID.
+     * @param {FrnType} type - The type of FRN.
+     * @param {string} [id] - The ID of the FRN.
+     * @returns {string} - The fully qualified FRN string.
+     */
+    export const buildFrn = (tenantOrOrganizationId: string, type: FrnType, id?: string): string => {
+      return `frn::${tenantOrOrganizationId}:${type}${id ? `/${id}` : ""}`
+    }
+
+    /**
+     * Builds a list of fully qualified FRN strings.
+     *
+     * @param {{ type: FrnType; id?: string }[]} items - The list of items to build FRNs for.
+     * @param {string} tenantOrOrganizationId - The tenant or organization ID.
+     * @returns {string[]} - A list of fully qualified FRN strings.
+     */
+    export const buildListFrn = (items: { type: FrnType; id?: string }[], tenantOrOrganizationId: string): string[] => {
+      return [
+        buildFrn(tenantOrOrganizationId, FrnType.ALL),
+        ...items.map((item) => buildFrn(tenantOrOrganizationId, item.type, item.id)),
+      ]
+    }
+    ```
+</details>
+
+## Usage
+
+
+Create a factory for your IAM validation
+
+```typescript
+// lib/iam-validation-factory.ts
+/**
+ * Factory function to create an instance of IamValidateBuilder.
+ * 
+ * @param {"users" | "keys"} type - The type of validation.
+ * @param {"tenant" | "organization"} mode - The mode of validation.
+ * @returns {IamValidateBuilder} - An instance of IamValidateBuilder.
+ */
+export const iamValidationFactory = async (type: "users" | "keys", mode: "tenant" | "organization" = "tenant") => {
+  const hash = await xxHash.create3()
+  return new IamValidateBuilder(env.IAM_API_URL)
+    .withRedisClient(new Redis(env.IAM_REDIS_URL))
+    .withHash(hash)
+    .withType(type)
+    .withMode(mode)
+}
+```
+
+For your endpoints, add the following the beforeHandler in your subsequent endpoints
+
+```typescript
+// my-endpoint.ts
+
+export const myEndpoint = new Elysia()
+  .get(
+    "/", 
+    () => "Hello World", 
+    {
+      beforeHandler: ({ flowcoreUser, params }) => {
+        return iamValidation.withLogger(this.logger).build([
+              {
+              action: [FrnAction.READ],
+              resource: buildListFrn([{ type: FrnType.DATA_CORE, id: "*" }], params.tenant)
+              }
+          ])({ flowcoreUser: flowcoreUser })
+      },
+      params: t.Object({
+        tenant: t.String()
+      })
+    }
+  )
+```
+
