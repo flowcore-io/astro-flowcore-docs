@@ -1,0 +1,244 @@
+---
+title: Exception Guard
+description: A library that helps you handle exceptions in a more elegant way
+---
+
+A library that helps you handle exceptions in a more elegant way.
+
+## Install the Exception Guard
+
+```bash
+flowcore component add library/exception-guard
+```
+
+<details>
+  <summary>Or install the Logger manually</summary>
+
+  Create a `lib/exception-guard.ts` file in your project's lib folder, and add the following code:
+
+    ```typescript
+    /**
+     * @module ExceptionGuard
+     * This module provides functionality for handling and guarding against exceptions in an API context.
+     */
+
+    import {
+      ApiException,
+      ApiInternalServerErrorException,
+      ApiNotFoundException,
+      ApiUnauthorizedException,
+      ApiUnprocessableContentException,
+    } from "@/lib/api-exceptions"
+    import type { Logger } from "@/lib/logger"
+    import { Type } from "@sinclair/typebox"
+    import { Value } from "@sinclair/typebox/value"
+    import type { StatusMap } from "elysia"
+    import type { ElysiaCookie } from "elysia/cookies"
+    import type { HTTPHeaders } from "elysia/types"
+
+    /** Represents an error during JSON parsing */
+    type SafeJsonParseError = [Error, undefined]
+    /** Represents a successful JSON parse */
+    type SafeJsonParseSuccess = [undefined, Error]
+    /** Represents the result of a safe JSON parse operation */
+    type SafeJsonParseResult = SafeJsonParseError | SafeJsonParseSuccess
+
+    /**
+     * Safely parses a JSON string
+     * @param obj - The string to parse
+     * @returns A tuple containing either an Error and undefined, or undefined and the parsed object
+     */
+    function safeParseJson(obj: string): SafeJsonParseResult {
+      try {
+        const parsed = JSON.parse(obj)
+        return [undefined, parsed]
+      } catch (error) {
+        return [error as Error, undefined]
+      }
+    }
+
+    /** Schema for validation errors */
+    export const ValidationErrorSchema = Type.Object({
+      on: Type.String(),
+      errors: Type.Array(
+        Type.Object({
+          path: Type.String(),
+          message: Type.String(),
+        }),
+      ),
+    })
+
+    /** Possible error codes */
+    type ErrorCode =
+      | "VALIDATION"
+      | "UNKNOWN"
+      | "NOT_FOUND"
+      | "PARSE"
+      | "INTERNAL_SERVER_ERROR"
+      | "INVALID_COOKIE_SIGNATURE"
+      | "UNAUTHORIZED"
+
+    /** State to be set in response */
+    type SetState = {
+      headers: HTTPHeaders
+      status?: number | keyof StatusMap
+      redirect?: string
+      cookie?: Record<string, ElysiaCookie>
+    }
+
+    /** Result of an error specifier */
+    type ErrorSpecifierResult<T extends ApiException> =
+      | {
+          match: true
+          result: T
+        }
+      | {
+          match: false
+          result?: never
+        }
+
+    /** Function to specify how to handle a specific type of ApiException */
+    type ErrorSpecifier<T extends ApiException> = (exception: ApiException) => ErrorSpecifierResult<T>
+
+    /** Options for the ExceptionGuard */
+    interface ExceptionGuardOptions {
+      logAllErrors?: boolean
+    }
+
+    /**
+     * Builder class for creating an exception guard
+     */
+    export class ExceptionGuardBuilder {
+      private logger: Logger = console
+      private errorSpecifiers: ErrorSpecifier<ApiException>[] = []
+      private options: ExceptionGuardOptions = {}
+
+      /**
+       * Sets the logger for the exception guard
+       * @param logger - The logger to use
+       */
+      withLogger(logger: Logger) {
+        this.logger = logger
+        return this
+      }
+
+      /**
+       * Sets the options for the exception guard
+       * @param options - The options to set
+       */
+      withOptions(options: ExceptionGuardOptions) {
+        this.options = options
+        return this
+      }
+
+      /**
+       * Adds an error specifier to the exception guard
+       * @param specifier - The error specifier to add
+       */
+      withErrorSpecifier<T extends ApiException>(specifier: ErrorSpecifier<T>) {
+        this.errorSpecifiers.push(specifier)
+        return this
+      }
+
+      /**
+       * Builds and returns the exception guard function
+       */
+      build() {
+        return (code: ErrorCode, set: SetState, error: Error, request: Request) => {
+          if (code === "VALIDATION") {
+            let on: string | undefined
+            let validationErrors: Record<string, string> | undefined
+            const [_err, parsedMessage] = safeParseJson(error.message)
+            if (Value.Check(ValidationErrorSchema, parsedMessage)) {
+              on = parsedMessage.on
+              validationErrors = {}
+              for (const validationError of parsedMessage.errors) {
+                validationErrors[validationError.path] = validationError.message
+              }
+            }
+            // biome-ignore lint/style/noParameterAssign: intentional
+            error = new ApiUnprocessableContentException("Unprocessable Content", on, validationErrors)
+          } else if (code === "NOT_FOUND" && !(error instanceof ApiNotFoundException)) {
+            // biome-ignore lint/style/noParameterAssign: intentional
+            error = new ApiNotFoundException("Not Found")
+          } else if (code === "UNAUTHORIZED" && !(error instanceof ApiUnauthorizedException)) {
+            // biome-ignore lint/style/noParameterAssign: intentional
+            error = new ApiUnauthorizedException()
+          }
+          const apiError = error instanceof ApiException ? error : new ApiInternalServerErrorException()
+
+          const errorLogContext = {
+            method: request.method,
+            pathname: new URL(request.url).pathname,
+          }
+
+          if (error !== apiError) {
+            this.logger.error(error, errorLogContext)
+          }
+          set.status = apiError.status
+          for (const specifier of this.errorSpecifiers) {
+            const { match, result } = specifier(apiError)
+            if (match) {
+              set.status = result.status
+              if (this.options.logAllErrors) {
+                this.logger.error(result, errorLogContext)
+              }
+              return result
+            }
+          }
+          if (error === apiError && this.options.logAllErrors) {
+            this.logger.error(error, errorLogContext)
+          }
+          return {
+            status: apiError.status,
+            code: apiError.code,
+            message: apiError.status === 500 ? "Internal server error" : apiError.message,
+          }
+        }
+      }
+    }
+
+    /**
+     * Creates a new ExceptionGuardBuilder with a default error specifier for ApiUnprocessableContentException
+     * @returns An ExceptionGuardBuilder instance
+     */
+    export function createExceptionGuard() {
+      return new ExceptionGuardBuilder().withErrorSpecifier<ApiUnprocessableContentException>((apiError) => {
+        if (apiError instanceof ApiUnprocessableContentException) {
+          return {
+            match: true,
+            result: {
+              ...apiError,
+              status: apiError.status,
+              code: apiError.code,
+              message: apiError.message,
+              on: apiError.on,
+              errors: apiError.errors,
+            },
+          }
+        }
+        return {
+          match: false,
+        }
+      })
+    }
+    ```
+</details>
+
+## Usage
+
+To use the Exception Guard, you need to create an instance of the ExceptionGuardBuilder and add your own error specifiers.
+
+```typescript
+// server/index.ts
+const logger = createLogger("server")
+
+const exceptionGuard = createExceptionGuard()
+  .withLogger(logger)
+  .withOptions({ logAllErrors: env.LOG_ALL_ERRORS })
+  .build()
+
+export const server = new Elysia()
+  .onError(({ code, set, error, request }) => exceptionGuard(code, set, error, request))
+  // ...
+```
