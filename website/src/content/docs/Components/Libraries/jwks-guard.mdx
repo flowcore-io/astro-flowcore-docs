@@ -1,0 +1,171 @@
+---
+title: JWKS Guard
+description: A library for validating JWKS
+---
+
+JWKS Guard is a library that provides a way of validating JWKS.
+
+
+## Install the API Exceptions
+
+```bash
+flowcore component add library/jwks-guard
+```
+
+<details>
+  <summary>Or install the JWKS Guard manually</summary>
+
+  Create a `lib/jwks-guard.ts` file in your project's lib folder, and add the following code:
+
+    ```typescript
+    // lib/jwks-guard.ts
+    import { ApiUnauthorizedException } from "@components/api-exceptions"
+    import bearer from "@elysiajs/bearer"
+    import Elysia from "elysia"
+    import { type JWTPayload, createRemoteJWKSet, jwtVerify } from "jose"
+
+    export type AuthOptions = {
+      certificateUrl: string
+    }
+
+    export type FlowcoreJWTPayload = JWTPayload & {
+      flowcore_user_id: string
+      email: string
+    }
+
+    export type FlowcoreAuthenticatedUser = {
+      id: string
+      email: string
+    }
+
+    /**
+     * This method is used to create a JWKS guard.
+     * @param {AuthOptions} options - The options for JWKS guard creation.
+     * @returns The Elysia instance with the JWKS guard.
+     * @throws {Error} - If the bearer token is invalid or the JWKS validation fails with a 401 error
+     */
+    export function createJwksGuard(options: AuthOptions) {
+      const jwks = createRemoteJWKSet(new URL(options.certificateUrl))
+
+      const guardRoute = new Elysia()
+        .use(bearer())
+        .derive({ as: "scoped" }, async ({ bearer, set }): Promise<{ flowcoreUser: FlowcoreAuthenticatedUser }> => {
+          const token = bearer as string
+
+          const { payload } = await jwtVerify<FlowcoreJWTPayload>(token, jwks, {}).catch(() => ({
+            payload: null,
+          }))
+
+          if (!payload?.flowcore_user_id) {
+            throw new ApiUnauthorizedException()
+          }
+
+          return {
+            flowcoreUser: {
+              id: payload.flowcore_user_id,
+              email: payload.email,
+            },
+          }
+        })
+
+      return guardRoute
+    }
+    ```
+</details>
+
+## Usage
+
+Add a guard to your Elysia app:
+
+```typescript
+// server/guards/authenticated-user.ts
+import env from "@/env"
+import { ApiUnauthorizedException } from "@/lib/api-exceptions"
+import { type FlowcoreAuthenticatedUser, createJwksGuard } from "@/lib/jwks-guard"
+import { RequestedAccessService } from "@/services/request-access" // Assuming you have a service for request access
+import Elysia from "elysia"
+
+/**
+ * Creates a JWKS guard using the provided certificate URL from the environment.
+ * This guard is used to validate JWT tokens against a JWKS endpoint.
+ */
+export const authenticatedFlowcoreUserGuard = createJwksGuard({ certificateUrl: env.JWKS_URL })
+
+/**
+ * An Elysia plugin that derives an authenticated Flowcore user from the context.
+ * It checks if the user is a valid Flowcore user and creates a RequestedAccessService instance.
+ * 
+ * @throws {ApiUnauthorizedException} If the user is not a valid Flowcore user.
+ * @returns An object containing the flowcoreUser and requestAccessService.
+ */
+export const authenticatedFlowcoreUser = new Elysia().derive({ as: "scoped" }, (context) => {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  const flowcoreUser = (context as any).flowcoreUser as unknown
+  if (!isFlowcoreUser(flowcoreUser)) {
+    throw new ApiUnauthorizedException()
+  }
+
+  // Assuming you have a service for request access
+  const requestAccessService = new RequestedAccessService(flowcoreUser)
+
+  return {
+    flowcoreUser,
+    requestAccessService,
+  }
+})
+
+/**
+ * Type guard function to check if a user object is a valid FlowcoreAuthenticatedUser.
+ * 
+ * @param user - The user object to check.
+ * @returns A boolean indicating whether the user is a valid FlowcoreAuthenticatedUser.
+ */
+function isFlowcoreUser(user: unknown): user is FlowcoreAuthenticatedUser {
+  return typeof user === "object" && user !== null && "id" in user && typeof user.id === "string"
+}
+```
+
+:::note[Request Access Service]
+
+The `RequestedAccessService` is a service that is used to check if a user has access to a resource, install the library [here](../iam-validation/) to learn more about scenarios.
+:::
+
+then add the guard to your Elysia app:
+
+```typescript
+// server/routes/api/index.ts
+export default new Elysia({
+  prefix: "/api",
+  tags: ["api"],
+  detail: {
+    security: [{ bearerAuth: [], oauth2: [] }],
+  },
+})
+  .use(authenticatedFlowcoreUserGuard)
+```
+
+then for your endpoints
+
+```typescript
+// server/routes/api/v1/data-cores/index.ts
+export default new Elysia({
+  prefix: "/v1/data-cores",
+  tags: ["data-cores"],
+  detail: {
+    security: [{ bearerAuth: [], oauth2: [] }],
+  },
+})
+  .use(authenticatedFlowcoreUser)
+  .get("/", async () => {
+    return {
+      message: "Hello, world!",
+    }
+  }, {
+    beforeHandle: ({ flowcoreUser, RequestedAccessService, params}) => 
+      requestAccessService.onDataCore(FrnAction.Write, params.organizationId, params.dataCoreId ?? "*"),
+    params: t.Object({
+      organizationId: t.String(),
+      dataCoreId: t.Optional(t.String()),
+    }),
+  })
+```
