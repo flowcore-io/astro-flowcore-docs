@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.51.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.50.0...v1.51.0) (2024-09-30)
+
+
+### Features
+
+* **automation:** :sparkles: added changelog generation during build ([12d5fbc](https://github.com/flowcore-io/astro-flowcore-docs/commit/12d5fbcdb6c2d632d23ad7e2e39468be6d08289b))
+* **starlight:** :art: added badges to new and updated pages ([bdc1dc3](https://github.com/flowcore-io/astro-flowcore-docs/commit/bdc1dc35d18a1319786bce3d5f03f375e83037b5))
+
 ## [1.50.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.49.1...v1.50.0) (2024-09-30)
 
 
