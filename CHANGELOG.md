@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.49.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.49.0...v1.49.1) (2024-09-30)
+
+
+### Bug Fixes
+
+* **manifests:** :fire: updated the documentation for data-core init and scenario init ([9c45723](https://github.com/flowcore-io/astro-flowcore-docs/commit/9c45723820a0e04732cda75b39d1aeed9a52b1f0))
+
 ## [1.49.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.48.4...v1.49.0) (2024-09-30)
 
 
