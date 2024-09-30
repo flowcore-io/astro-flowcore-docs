@@ -65,6 +65,11 @@ const swaggerFactory = {
       documentation: {
         components: {
           securitySchemes: {
+            apiKey: {
+              type: "apiKey",
+              name: "x-secret",
+              in: "header",
+            },
             bearerAuth: {
               type: "http",
               scheme: "bearer",
@@ -118,5 +123,24 @@ const app = new Elysia()
     { name: "example", description: "Example tag" }
   ]))
   .get("/example", () => ({ status: "ok" }))
+  .listen(3000)
+```
+
+to enable authentication in your swagger documentation you need to use add the security to the details on each route or group
+
+```typescript
+// src/index.ts
+import { swaggerFactory } from "@lib/swagger-factory"
+
+const app = new Elysia({
+  detail: {
+    security: [
+      {
+        oauth2: [],
+      },
+    ],
+  },
+})
+  .get("/", () => "Hello World")
   .listen(3000)
 ```

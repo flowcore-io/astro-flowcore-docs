@@ -1,0 +1,136 @@
+---
+title: Logger
+description: A logger library that is built on top of winston
+---
+
+A logger library that is built on top of winston.
+
+## Install the Logger
+
+```bash
+flowcore component add library/logger
+```
+
+<details>
+  <summary>Or install the Logger manually</summary>
+
+  Create a `lib/logger.ts` file in your project's lib folder, and add the following code:
+
+    ```typescript
+    import { format, transports, createLogger as winstonCreateLogger } from "winston"
+        
+    enum Style {
+      BOLD = 1,
+      THIN = 2,
+      ITALIC = 3,
+      PURPLE = 35,
+      CYAN = 36,
+      GREEN = 32,
+      YELLOW = 33,
+      RED = 31,
+      GRAY = 90,
+    }
+
+    const PREFIX = "\x1b"
+
+    const colorize = (text: string, style: Style[]) => {
+      if (!style.length) {
+        return text
+      }
+      return `${PREFIX}[${style.join(";")}m${text}${PREFIX}[0m`
+    }
+
+    // TODO: https://www.npmjs.com/package/@opentelemetry/instrumentation-winston
+
+    export enum LogLevel {
+      Debug = "debug",
+      Info = "info",
+      Warn = "warn",
+      Error = "error",
+    }
+
+    interface LoggerMeta {
+      [key: string]: unknown
+      label?: never
+      level?: never
+      message?: never
+      timestamp?: never
+    }
+
+    export type Logger = {
+      [LogLevel.Debug]: (message: string, meta?: LoggerMeta) => void
+      [LogLevel.Info]: (message: string, meta?: LoggerMeta) => void
+      [LogLevel.Warn]: (message: string, meta?: LoggerMeta) => void
+      [LogLevel.Error]: (message: string | Error, meta?: LoggerMeta) => void
+    }
+
+    // Pretty print
+
+    const levelColors: Record<string, Style[]> = {
+      [LogLevel.Debug]: [Style.CYAN],
+      [LogLevel.Info]: [Style.GREEN],
+      [LogLevel.Warn]: [Style.YELLOW],
+      [LogLevel.Error]: [Style.RED],
+    }
+
+    const customPrettyPrint = format.printf((log) => {
+      const { timestamp, label, level, message, ...rest } = log
+      return [
+        colorize(timestamp, [Style.BOLD]),
+        colorize(`(${label})`, [Style.PURPLE]),
+        colorize(`${level.toUpperCase()}:`, levelColors[level] || []),
+        message,
+        colorize(`- ${JSON.stringify(rest, null, 2)}`, [Style.THIN]),
+      ].join(" ")
+    })
+
+    /**
+     * Creates a logger factory with customizable logging options.
+     * 
+     * @param {boolean} prettyPrintLogs - Indicates if logs should be pretty printed.
+     * @param {LogLevel} logLevel - The minimum log level to output.
+     * @returns An object with a method to create a logger instance.
+     */
+    export function loggerFactory(prettyPrintLogs: boolean, logLevel: LogLevel) {
+      return {
+        /**
+         * Creates a logger instance with the specified label.
+         * 
+         * @param {string} [label] - The label for the logger.
+         * @returns A logger instance.
+         */
+        createLogger: (label?: string): Logger => {
+          const winstonFormat = prettyPrintLogs
+            ? format.combine(format.errors({ stack: true }), format.label({ label }), format.timestamp(), customPrettyPrint)
+            : format.combine(format.errors({ stack: true }), format.label({ label }), format.timestamp(), format.json())
+
+          return winstonCreateLogger({
+            level: logLevel,
+            format: winstonFormat,
+            defaultMeta: { label },
+            transports: [new transports.Console()],
+          })
+        },
+      }
+    }
+    ```
+</details>
+
+## Usage
+
+To use the logger, create a logger instance using the `loggerFactory` function.
+
+```typescript
+import env from "@/env"
+import { loggerFactory } from "@/lib/logger"
+
+export const createLogger = loggerFactory(env.LOG_PRETTY, env.LOG_LEVEL).createLogger
+```
+
+then use the logger instance to log messages:
+
+```typescript
+const logger = createLogger("my-logger")
+
+logger.info("Hello, world!")
+```
