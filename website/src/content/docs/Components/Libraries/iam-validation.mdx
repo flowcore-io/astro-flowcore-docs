@@ -317,7 +317,7 @@ export class RequestedAccessService {
    * @param {string} [id] - The ID of the specific data core. If not provided, defaults to "*" (all data cores).
    * @returns {this} The current instance for method chaining.
    */
-  onDataCore(action: FrnAction | FrnAction[], organizationId: string, id?: string) {
+  onDataCore(action: FrnAction | FrnAction[], organizationId: string, id?: string): this {
     this.requestedAccess.push({
       action,
       resource: buildListFrn([{ type: FrnType.DATA_CORE, id: id ?? "*" }], organizationId),
@@ -330,9 +330,9 @@ export class RequestedAccessService {
 
   /**
    * Evaluates the requested accesses against the user's permissions.
-   * @returns {Promise<boolean>} A promise that resolves to true if the user has all requested permissions, false otherwise.
+   * @returns {Promise<void>} A promise that resolves to true if the user has all requested permissions, false otherwise.
    */
-  evaluate() {
+  evaluate(): Promise<void> {
     return iamValidation.build(this.requestedAccess)({ flowcoreUser: this.flowcoreUser })
   }
 }
