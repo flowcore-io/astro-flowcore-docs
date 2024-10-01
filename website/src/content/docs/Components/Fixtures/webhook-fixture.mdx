@@ -1,0 +1,160 @@
+---
+title: Webhook Fixture
+description: Webhook Fixture is a fixture for testing Flowcore Webhooks in a Flowcore Unified Api Service
+---
+
+Webhook Fixture is a fixture for testing Flowcore Webhooks in a Flowcore Unified Api Service.
+
+
+## Install the Webhook Fixture
+
+```bash
+flowcore component add fixture/webhook-fixture
+```
+
+<details>
+  <summary>Or install the Webhook Fixture manually</summary>
+
+  Create a `/fixtures/webhook.ts` file in your project's test folder, and add the following code:
+
+    ```typescript
+    import type { FlowcoreEventSchema } from "@flowcore/sdk-transformer-core"
+    import type { Static } from "@sinclair/typebox"
+    import Elysia from "elysia"
+    import { v4 as uuid } from "uuid"
+
+    export type WebhookTestFixtureServer = Elysia<"">
+
+    export type WebhookTestFixtureOptions = {
+      tenant: string
+      dataCore: string
+      port: number
+      secret: string
+      transformerPort: number
+      secured?: boolean
+    }
+
+    export type WebhookTestFixtureEndpoint = {
+      flowType: string
+      eventType: string
+      redirectTo: string
+    }
+
+    export class WebhookTestFixture {
+      private readonly app = new Elysia()
+      private readonly redirects: WebhookTestFixtureEndpoint[] = []
+      constructor(private readonly options: WebhookTestFixtureOptions) {
+        this.options = { ...{ secured: false }, ...options }
+      }
+
+      public addEndpoint(flowType: string, eventType: string, redirectTo?: string): this {
+        this.redirects.push({
+          flowType,
+          eventType,
+          redirectTo: redirectTo ?? `http://localhost:${this.options.transformerPort}/transformers/${flowType}`,
+        })
+        return this
+      }
+
+      public async stop() {
+        await this.app.stop()
+      }
+
+      public async start() {
+        this.app.get("/health", () => "ok")
+
+        for (const redirect of this.redirects) {
+          this.app.post(
+            `/event/${this.options.tenant}/${this.options.dataCore}/${redirect.flowType}/${redirect.eventType}`,
+            async (req) => {
+              let metadata: Record<string, string> | undefined
+              if (req.headers["x-flowcore-metadata-json"]) {
+                metadata = JSON.parse(Buffer.from(req.headers["x-flowcore-metadata-json"], "base64").toString("utf-8"))
+              }
+
+              const event: Static<typeof FlowcoreEventSchema> = {
+                eventId: uuid(),
+                aggregator: redirect.flowType,
+                eventType: redirect.eventType,
+                validTime: new Date().toISOString(),
+                payload: req.body,
+                metadata: metadata ?? {},
+              }
+
+              if (this.options.secured) {
+                if (!metadata?.["audit/user-id"]) {
+                  console.error(
+                    `Missing audit/user-id in metadata when secured webhook is expected when sending to: /event/${this.options.tenant}/${this.options.dataCore}/${redirect.flowType}/${redirect.eventType}`,
+                  )
+                  throw new Error("Missing audit/user-id in metadata when secured webhook is expected")
+                }
+                if (metadata["audit/user-id"] && !metadata?.["audit/on-behalf-of"]) {
+                  console.error(
+                    `Missing audit/on-behalf-of in metadata when secured webhook is expected when sending, as system, to: /event/${this.options.tenant}/${this.options.dataCore}/${redirect.flowType}/${redirect.eventType}`,
+                  )
+                  throw new Error("Missing audit/on-behalf-of in metadata when secured webhook is expected")
+                }
+              }
+
+              try {
+                const response = await fetch(`${redirect.redirectTo}`, {
+                  method: "POST",
+                  body: JSON.stringify(event),
+                  headers: {
+                    "Content-Type": "application/json",
+                    "x-secret": this.options.secret,
+                  },
+                })
+
+                if (![200, 201].includes(response.status)) {
+                  throw new Error(
+                    `Received non-success status code: ${response.status} (${response.statusText}) with body ${await response.text()}`,
+                  )
+                }
+              } catch (error) {
+                console.log(`Error ${redirect.flowType}/${redirect.eventType}: ${error}`)
+              }
+
+              return {
+                eventId: event.eventId,
+              }
+            },
+          )
+        }
+
+        return this.app.listen(this.options.port)
+      }
+    }
+
+    ```
+</details>
+
+## Usage
+
+Run the follwing commands in the setup phase of your test suite:
+
+```typescript
+import { WebhookTestFixture } from "@fixtures/fixture-webhook"
+
+export const webhookFixture = new WebhookTestFixture({
+  tenant: env.FLOWCORE_TENANT,
+  dataCore: env.FLOWCORE_DATA_CORE,
+  port: WEBHOOK_PORT,
+  secret: env.TRANSFORMER_SECRET,
+  transformerPort: env.SERVICE_PORT,
+  secured: true,
+})
+  .addEndpoint("my-flow", "my-event")
+```
+
+then in your test suite, you should start and stop the webhook fixture in the before and after hooks:
+
+```typescript
+beforeEach(async () => {
+  await webhookFixture.start()
+})
+
+afterEach(async () => {
+  await webhookFixture.stop()
+})
+```
