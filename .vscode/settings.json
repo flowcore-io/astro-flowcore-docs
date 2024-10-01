@@ -1,9 +1,10 @@
 {
-  "conventionalCommits.scopes": [
-    "starlight",
-    "library",
-    "cli",
-    "automation",
-    "manifests"
-  ]
+	"conventionalCommits.scopes": [
+		"starlight",
+		"library",
+		"cli",
+		"automation",
+		"manifests",
+		"fixture"
+	]
 }
