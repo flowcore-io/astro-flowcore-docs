@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.52.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.51.0...v1.52.0) (2024-10-01)
+
+
+### Features
+
+* **fixture:** :sparkles: added webhook fixture ([4a649b3](https://github.com/flowcore-io/astro-flowcore-docs/commit/4a649b36846752b284a1f35b8885a24f747aac9e))
+
+
+### Bug Fixes
+
+* **library:** :memo: Adjusted the iam-validation usage example, to reflect the ts doc return types ([e832a17](https://github.com/flowcore-io/astro-flowcore-docs/commit/e832a17976cd5495dd2fe0ee25d63221f9163659))
+
 ## [1.51.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.50.0...v1.51.0) (2024-09-30)
 
 
