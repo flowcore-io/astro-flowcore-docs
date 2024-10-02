@@ -298,11 +298,15 @@ import type { FlowcoreAuthenticatedUser } from "@components/jwks-guard"
 import * as xxHash from "@jabr/xxhash64"
 import { Redis } from "ioredis"
 
+// Utilise your logger of choice here, utilising the flowcore logger library
+const logger = createLogger("iam-validation")
+
 const hash = await xxHash.create3()
 const iamValidation = new IamValidateBuilder(env.IAM_API_URL)
   .withRedisClient(new Redis(env.IAM_REDIS_URL))
   .withHash(hash)
   .withType("users")
+  .withLogger(logger)
   .withMode("organization")
 
 export class RequestedAccessService {
