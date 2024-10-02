@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.52.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.52.0...v1.52.1) (2024-10-02)
+
+
+### Bug Fixes
+
+* **library:** :wheelchair: Added logger to the iam-validation docs, to make users aware of potentially lack of logging ([8f4ffda](https://github.com/flowcore-io/astro-flowcore-docs/commit/8f4ffda7e4cdcf0c35b1d776e5a03e8126afaedc))
+
 ## [1.52.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.51.0...v1.52.0) (2024-10-01)
 
 
