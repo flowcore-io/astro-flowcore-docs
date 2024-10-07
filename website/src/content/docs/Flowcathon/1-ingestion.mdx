@@ -4,14 +4,181 @@ sidebar:
   order: 2
 description: Ingestion is the process of collecting data from various sources and storing it in a database.
 ---
+import { Steps } from "@astrojs/starlight/components";
 import ProtectedContent from '../../../components/ProtectedContent.astro';
 
 <ProtectedContent>
 
-# 1. Ingestion
-
 Ingestion is the process of collecting data from various sources and storing it in a database.
 
-(Your content here)
+
+## 1. Create your data core
+
+Create a data core with:
+```sh
+flowcore data-core init -t <your-tenant>
+```
+When asked to use placeholders, say yes.
+
+:::note
+  You can name the data core `ticketing-system`, the flow-type `tickets.0`, and the event-types: `ticket.created.0`, `ticket.updated.0`, `ticket.deleted.0`.
+:::
+
+
+
+This will generate a `flowcore.yaml`, file with the following content:
+
+```yaml
+# flowcore.yaml
+
+dataCore:
+  deleteProtection: false
+  description: Data related to the Flowcathon challenges
+  flowTypes:
+    ingestion.0:
+      deleteProtection: false
+      description: ''
+      eventTypes:
+        ingestion.challenge-a-ingested.0:
+          deleteProtection: false
+          description: ''
+        ingestion.challenge-b-ingested.0:
+          deleteProtection: false
+          description: ''
+        ingestion.challenge-c-ingested.0:
+          deleteProtection: false
+          description: ''
+  isPublic: false
+  name: flowcathon
+tenant: <your-tenant>
+```
+
+## 2. Create your scenario
+Create a scenario with:
+```sh
+flowcore scenario init -t <your-tenant>
+```
+
+When asked to use placeholders, say yes.
+
+:::note
+  You can name:
+  - scenario `flowcathon`, 
+  - transformer `challenge-1`,
+  - the data core `flowcathon`, 
+  - the flow-type `ingestion.0`, 
+  - the event-types: `ingestion.challenge-a-ingested.0,ingestion.challenge-b-ingested.0,ingestion.challenge-c-ingested.0`.
+  - proxy endpoint: `https://flowcathon.customer.flowcore.io/api/transform/ingestion.0`
+  - transformer secret name: `transformer-secret-flowcathon`
+  - generated transformer secret value: look in discord
+:::
+
+```yaml
+dataCore:
+  deleteProtection: false
+  description: Data related to the Flowcathon challenges
+  flowTypes:
+    ingestion.0:
+      deleteProtection: false
+      description: ''
+      eventTypes:
+        ingestion.challenge-a-ingested.0:
+          deleteProtection: false
+          description: ''
+        ingestion.challenge-b-ingested.0:
+          deleteProtection: false
+          description: ''
+        ingestion.challenge-c-ingested.0:
+          deleteProtection: false
+          description: ''
+  isPublic: false
+  name: flowcathon
+tenant: <your-tenant>
+scenario:
+  description: ''
+  name: flowcathon
+  transformers:
+    challenge-1:
+      blueprint:
+        artifactUrl: >-
+          https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
+      dataCore: flowcathon
+      description: processing challenge 1
+      events:
+        - ingestion.challenge-a-ingested.0
+        - ingestion.challenge-b-ingested.0
+        - ingestion.challenge-c-ingested.0
+      flowType: ingestion.0
+      parameters:
+        - name: PROXY_ENDPOINT
+          type: manual
+          value: https://flowcathon.customer.flowcore.io/api/transform/ingestion.0
+        - name: PROXY_SECRET_HEADER
+          type: secret
+          value: transformer-secret-flowcathon
+```
+
+## 3. Deploy your manifest
+Now that you have scaffolded your entire project, you can deploy your manifest with:
+
+```sh
+flowcore apply -f flowcore.yaml
+```
+
+When asked if you want to create your data core, say yes. Afterwards you will be asked if you want to create your scenario, say yes again.
+Once the command is finished, your scaffoled project manifest will have been setup in [flowcore.io](https://flowcore.io), under your tenant.
+Verify these resources have been created, please visit your tenant page, and the scenario page
+
+:::tip
+To figure out if your scenario is ready and running, you can view the transformer logs from [here](https://docs.flowcore.io/guides/flowcore-cli/get-logs/):
+:::
+
+## 4. Ingest your data 
+
+Firstly, generate an api key for your tenant, by running the following command:
+```sh
+flowcore auth new key <your-api-key-name> -t <your-tenant>
+```
+
+:::caution
+  Remember to save the key, as it will not be shown again.
+:::
+
+This key is used to ingest data into your tenant. Please copy the key, as you will need it in the next step. You can read more about the api keys [here](http://localhost:4321/guides/flowcore-cli/auth-management-cli/).
+
+Next, go to the [ingestion page](https://flowcore.io/f/ingestion-channels), and generate a webhook ingestion url, as shown [here](https://docs.flowcore.io/guides/ingestion/ingestion-options/).
+
+
+### Challenge A
+Send some data to your ingestion url, and observe the data showing up on the [on the flowcathon mini app](https://flowcathon.customer.flowcore.io/challenges/2).
+This can be done from your terminal, with something like curl.
+
+For example:
+```sh
+curl -X POST "<your-ingestion-url>" \
+-H "Content-Type: application/json" \
+-d '{"hello": "bread"}'
+```
+
+:::note
+  You can also verify that the data is ingested, by viewing your data core on [flowcore.io](https://flowcore.io).
+
+:::
+
+### Challenge B
+Now that you have confirmed that you are able to ingest data, lets try to ingest data into a separate event type.
+Try sending some data to your `ingestion.challenge-b-ingested.0` event type. To do so, please refer to Challenge A, as well as the prerequisites.
+
+### Challenge C
+Now that you have figured out how to ingest data into multiple different event types. You now need to process a .csv file into yet another event type, called `ingestion.challenge-c-ingested.0`.
+
+So, what you need to do is this:
+1. Download the csv file from the [flowcathon mini app](https://flowcathon.customer.flowcore.io/challenges/2)
+2. Write a script (or use any method you like) to read the csv file
+3. Send the entries in the csv file to your `ingestion.challenge-c-ingested.0` event type
+
+:::tip
+Flowcore also supports bulk ingestion, which means that you can ingest multiple events at once. You can read about it [here](https://docs.flowcore.io/guides/ingestion/bulk-ingestion/).
+:::
 
 </ProtectedContent>

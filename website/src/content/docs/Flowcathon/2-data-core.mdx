@@ -11,8 +11,131 @@ import ProtectedContent from '../../../components/ProtectedContent.astro';
 
 # 2. Data Core
 
+## 2. Add a new flow type, dedicated to the Data Core challenge
+Go to your existing `flowcore.yaml` file, and add an additional flow type
+```yaml
+    stream.0:
+      description: Contains the data for the stream challenge
+      eventTypes:
+        stream.challenge-b-solved.0:
+          description: Collecting stream data for the stream challenge B
+```
+
+So that the data core manifest section can look like this:
+```yaml
+dataCore:
+  name: flowcathon
+  deleteProtection: true
+  isPublic: false
+  description: This data core contains the data for the Application Flowcathon application
+  flowTypes:
+    ingestion.0:
+      description: Contains the data for the ingesdtion challenge
+      eventTypes:
+        ingestion.challenge-a-ingested.0:
+          description: Collecting ingestions for the ingestion challenge A
+        ingestion.challenge-b-ingested.0:
+          description: Collecting ingestions for the ingestion challenge B
+        ingestion.challenge-c-ingested.0:
+          description: Collecting ingestions for the ingestion challenge C
+    # V- Add this flow type -V
+    stream.0:
+      description: Contains the data for the stream challenge
+      eventTypes:
+        stream.challenge-b-solved.0:
+          description: Collecting stream data for the stream challenge B
+```
+
+## 3. Add a new scenario, dedicated to the Data Core challenge
+Go to your existing `flowcore.yaml` file, and add an additional transformer.
+```yaml
+    stream:
+      description: Stream transformer
+      dataCore: flowcathon
+      flowType: stream.0
+      events:
+        - stream.challenge-b-solved.0
+      parameters:
+        - name: PROXY_ENDPOINT
+          type: manual
+          value: >-
+            https://flowcathon.customer.flowcore.io/api/transform/stream.0
+        - name: PROXY_HEADER_SECRET
+          type: secret
+          value: transformer-secret-flowcathon
+      blueprint:
+        artifactUrl: >-
+          https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
+```
+
+So that the scenario section of your manifest can look like this:
+```yaml
+scenario:
+  name: flowcathon
+  description: >-
+    This scenario is used for development of the Application Flowcathon
+    application
+  transformers:
+    ingestion:
+      description: Ingestion Challenge
+      dataCore: flowcathon
+      flowType: ingestion.0
+      events:
+        - ingestion.challenge-a-ingested.0
+        - ingestion.challenge-b-ingested.0
+        - ingestion.challenge-c-ingested.0
+      parameters:
+        - name: PROXY_ENDPOINT
+          type: manual
+          value: >-
+            https://flowcathon.customer.flowcore.io/api/transform/ingestion.0
+        - name: PROXY_HEADER_SECRET
+          type: secret
+          value: transformer-secret-flowcathon-mini
+      blueprint:
+        artifactUrl: >-
+          https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
+    # V- Add this transformer -V
+    stream:
+      description: Stream transformer
+      dataCore: flowcathon
+      flowType: stream.0
+      events:
+        - stream.challenge-b-solved.0
+      parameters:
+        - name: PROXY_ENDPOINT
+          type: manual
+          value: >-
+            https://flowcathon.customer.flowcore.io/api/transform/stream.0
+        - name: PROXY_HEADER_SECRET
+          type: secret
+          value: transformer-secret-flowcathon-mini
+      blueprint:
+        artifactUrl: >-
+          https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
+```
+
+## 4. Deploy your manifest changes
+This is done, just like before, by running the following cli command:
+
+```sh
+flowcore apply -f flowcore.yaml
+```
+
+
 Data Core is a platform for building and testing Flowcore flows.
 
 (Your content here)
+
+## Challenge A
+Now that you have ingested some data into your data core.
+
+We can try to stream the data back onto your machine. This requires you to both find the stream url, as well as stream the data onto your machine.
+
+Please, follow this [guide](https://docs.flowcore.io/guides/flowcore-cli/stream-cli/) to stream the data back onto your machine.
+
+## Challenge B
+
+
 
 </ProtectedContent>
