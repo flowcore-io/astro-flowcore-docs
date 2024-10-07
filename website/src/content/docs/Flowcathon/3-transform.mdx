@@ -2,17 +2,49 @@
 title: 3. Transform
 sidebar:
   order: 4
-description: Transform is a platform for building and testing Flowcore flows.
+description: The transformer challenge is to transform the data from a data core into a new format.
 ---
 
 import ProtectedContent from '../../../components/ProtectedContent.astro';
 
 <ProtectedContent>
 
-# 3. Transform
+To transform data in from any data core, you can use a transformer. You can read more about transformers [here](https://docs.flowcore.io/guides/architecture/primitives/#transformer).
 
-Transform is a platform for building and testing Flowcore flows.
+## Challenge A
 
-(Your content here)
+Create a transformer on your local machine using any programming language you like, the only requirement is that it should listen for a post on an endpoint for example `http://localhost:3000/transform`. For the first challenge you can just echo out the data you receive.
+
+To send data to your locally running transformer, you can use the following curl command:
+
+```sh
+flowcore stream http <stream-url> -d "http://localhost:3000/transform"
+```
+
+This will stream the events from your stream into your transformer, meaning that you can test your transformer locally with real data.
+
+:::tip
+You can read more about the stream cli's http destination [here](https://docs.flowcore.io/guides/flowcore-cli/stream-cli/#destination)
+:::
+
+## Challenge B
+
+Now that you have confirmed that you are able to stream data from your data core, lets try to transform the data of the [challenge2c](https://flowcore.io/flowcathon/flowcathon-mini-public#stream.0) data core.
+
+Your challenge is to find the unique event, that is hidden in this haystack of events, and use the information in that event to write the solution to a postgres database that we will provide you with. Your credentials will only have access to write to a specific table called `af_transform`.
+
+The table has the following columns:
+
+- id
+- agent
+- eye_color
+- hair_color
+- challenger
+- postedAt
+
+:::tip
+The agent name is the first and last name of the agent described in the event.
+:::
+
 
 </ProtectedContent>

@@ -1,131 +1,142 @@
 ---
-title: 2. Data Core
+title: 2. Stream
 sidebar:
   order: 3
-description: Data Core is a platform for building and testing Flowcore flows.
+description: The data core challenge shows you how to stream data from a data core in the Flowcore Platform.
 ---
 
+import { Steps } from "@astrojs/starlight/components";
 import ProtectedContent from '../../../components/ProtectedContent.astro';
 
 <ProtectedContent>
 
-# 2. Data Core
+The data core challenge shows you how to stream data from a data core in the Flowcore Platform. But first we need to setup the platform for the challenges.
 
-## 2. Add a new flow type, dedicated to the Data Core challenge
-Go to your existing `flowcore.yaml` file, and add an additional flow type
-```yaml
-    stream.0:
-      description: Contains the data for the stream challenge
-      eventTypes:
-        stream.challenge-b-solved.0:
-          description: Collecting stream data for the stream challenge B
-```
+<Steps>
+<ol>
+  <li>
+    #### Add a new flow type, dedicated to the stream challenge
+    Go to your existing `flowcore.yaml` file, and add an additional flow type
 
-So that the data core manifest section can look like this:
-```yaml
-dataCore:
-  name: flowcathon
-  deleteProtection: true
-  isPublic: false
-  description: This data core contains the data for the Application Flowcathon application
-  flowTypes:
-    ingestion.0:
-      description: Contains the data for the ingesdtion challenge
-      eventTypes:
-        ingestion.challenge-a-ingested.0:
-          description: Collecting ingestions for the ingestion challenge A
-        ingestion.challenge-b-ingested.0:
-          description: Collecting ingestions for the ingestion challenge B
-        ingestion.challenge-c-ingested.0:
-          description: Collecting ingestions for the ingestion challenge C
-    # V- Add this flow type -V
-    stream.0:
-      description: Contains the data for the stream challenge
-      eventTypes:
-        stream.challenge-b-solved.0:
-          description: Collecting stream data for the stream challenge B
-```
+    ```yaml
+    # flowcore.yaml
+        stream.0:
+          description: Contains the data for the stream challenge
+          eventTypes:
+            stream.challenge-b-solved.0:
+              description: Collecting stream data for the stream challenge B
+    ```
 
-## 3. Add a new scenario, dedicated to the Data Core challenge
-Go to your existing `flowcore.yaml` file, and add an additional transformer.
-```yaml
-    stream:
-      description: Stream transformer
-      dataCore: flowcathon
-      flowType: stream.0
-      events:
-        - stream.challenge-b-solved.0
-      parameters:
-        - name: PROXY_ENDPOINT
-          type: manual
-          value: >-
-            https://flowcathon.customer.flowcore.io/api/transform/stream.0
-        - name: PROXY_HEADER_SECRET
-          type: secret
-          value: transformer-secret-flowcathon
-      blueprint:
-        artifactUrl: >-
-          https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
-```
+    So that the data core manifest section can look like this:
+    ```yaml
+    # flowcore.yaml
+    dataCore:
+      name: flowcathon
+      deleteProtection: true
+      isPublic: false
+      description: This data core contains the data for the Application Flowcathon application
+      flowTypes:
+        ingestion.0:
+          description: Contains the data for the ingesdtion challenge
+          eventTypes:
+            ingestion.challenge-a-ingested.0:
+              description: Collecting ingestions for the ingestion challenge A
+            ingestion.challenge-b-ingested.0:
+              description: Collecting ingestions for the ingestion challenge B
+            ingestion.challenge-c-ingested.0:
+              description: Collecting ingestions for the ingestion challenge C
+        # V- Add this flow type -V
+        stream.0:
+          description: Contains the data for the stream challenge
+          eventTypes:
+            stream.challenge-b-solved.0:
+              description: Collecting stream data for the stream challenge B
+    ```
+    </li>
+    <li>
+      #### Add a new scenario, dedicated to the stream challenge
+      Go to your existing `flowcore.yaml` file, and add an additional transformer.
+      ```yaml
+      # flowcore.yaml
+          stream:
+            description: Stream transformer
+            dataCore: flowcathon
+            flowType: stream.0
+            events:
+              - stream.challenge-b-solved.0
+            parameters:
+              - name: PROXY_ENDPOINT
+                type: manual
+                value: >-
+                  https://flowcathon.customer.flowcore.io/api/transform/stream.0
+              - name: PROXY_HEADER_SECRET
+                type: secret
+                value: transformer-secret-flowcathon
+            blueprint:
+              artifactUrl: >-
+                https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
+      ```
 
-So that the scenario section of your manifest can look like this:
-```yaml
-scenario:
-  name: flowcathon
-  description: >-
-    This scenario is used for development of the Application Flowcathon
-    application
-  transformers:
-    ingestion:
-      description: Ingestion Challenge
-      dataCore: flowcathon
-      flowType: ingestion.0
-      events:
-        - ingestion.challenge-a-ingested.0
-        - ingestion.challenge-b-ingested.0
-        - ingestion.challenge-c-ingested.0
-      parameters:
-        - name: PROXY_ENDPOINT
-          type: manual
-          value: >-
-            https://flowcathon.customer.flowcore.io/api/transform/ingestion.0
-        - name: PROXY_HEADER_SECRET
-          type: secret
-          value: transformer-secret-flowcathon-mini
-      blueprint:
-        artifactUrl: >-
-          https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
-    # V- Add this transformer -V
-    stream:
-      description: Stream transformer
-      dataCore: flowcathon
-      flowType: stream.0
-      events:
-        - stream.challenge-b-solved.0
-      parameters:
-        - name: PROXY_ENDPOINT
-          type: manual
-          value: >-
-            https://flowcathon.customer.flowcore.io/api/transform/stream.0
-        - name: PROXY_HEADER_SECRET
-          type: secret
-          value: transformer-secret-flowcathon-mini
-      blueprint:
-        artifactUrl: >-
-          https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
-```
+      So that the scenario section of your manifest can look like this:
+      ```yaml
+      # flowcore.yaml
+      scenario:
+        name: flowcathon
+        description: >-
+          This scenario is used for development of the Application Flowcathon
+          application
+        transformers:
+          ingestion:
+            description: Ingestion Challenge
+            dataCore: flowcathon
+            flowType: ingestion.0
+            events:
+              - ingestion.challenge-a-ingested.0
+              - ingestion.challenge-b-ingested.0
+              - ingestion.challenge-c-ingested.0
+            parameters:
+              - name: PROXY_ENDPOINT
+                type: manual
+                value: >-
+                  https://flowcathon.customer.flowcore.io/api/transform/ingestion.0
+              - name: PROXY_HEADER_SECRET
+                type: secret
+                value: transformer-secret-flowcathon-mini
+            blueprint:
+              artifactUrl: >-
+                https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
+          # V- Add this transformer -V
+          stream:
+            description: Stream transformer
+            dataCore: flowcathon
+            flowType: stream.0
+            events:
+              - stream.challenge-b-solved.0
+            parameters:
+              - name: PROXY_ENDPOINT
+                type: manual
+                value: >-
+                  https://flowcathon.customer.flowcore.io/api/transform/stream.0
+              - name: PROXY_HEADER_SECRET
+                type: secret
+                value: transformer-secret-flowcathon-mini
+            blueprint:
+              artifactUrl: >-
+                https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.4.1.zip
+      ```
+    </li>
+    <li>
+      #### Deploy your manifest changes
+      This is done, just like before, by running the following cli command:
 
-## 4. Deploy your manifest changes
-This is done, just like before, by running the following cli command:
+      ```sh
+      flowcore apply -f flowcore.yaml
+      ```
+    </li>
 
-```sh
-flowcore apply -f flowcore.yaml
-```
+</ol>
 
-
-Data Core is a platform for building and testing Flowcore flows.
-
-(Your content here)
+</Steps>
 
 ## Challenge A
 Now that you have ingested some data into your data core.
@@ -136,6 +147,18 @@ Please, follow this [guide](https://docs.flowcore.io/guides/flowcore-cli/stream-
 
 ## Challenge B
 
+Now that you have confirmed that you are able to stream data from your data core, lets try something a bit more challenging, [here](https://flowcore.io/flowcathon/flowcathon-mini-public#stream.0) is a public data core that you can stream from. Your challenge is to find a unique event (the needle) in this haystack of events. Then you will need to send that event id back to us.
+
+Then you can post your event back to the `stream.challenge-b-solved.0` event type in the `stream.0` flow type in your own data core. The data needs to be in the following format:
+
+```json
+{
+  "needleId": "<id in the needle payload>",
+  "challenger": "<your name>"
+}
+```
+
+### Challenge C
 
 
 </ProtectedContent>
