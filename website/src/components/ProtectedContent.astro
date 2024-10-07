@@ -1,0 +1,121 @@
+---
+---
+
+<div id="protectedContent" style="display: none;">
+  <slot />
+</div>
+
+<dialog id="codeProtectionDialog" class="starlight-dialog">
+  <div class="dialog-content">
+    <h2>Enter Access Code</h2>
+    <p class="dialog-description">This content is for an on-site Flowcathon. Your instructor will provide you with the access code.</p>
+    <form method="dialog">
+      <input type="text" id="accessCode" required>
+      <button type="submit" class="submit-button">Submit</button>
+    </form>
+  </div>
+</dialog>
+
+<script>
+  const protectedContent = document.getElementById('protectedContent');
+  const dialog = document.getElementById('codeProtectionDialog');
+  const form = dialog?.querySelector('form');
+  const input = document.getElementById('accessCode');
+
+  const correctCode = 'flowcathon2024';
+
+  function checkAccess() {
+    const storedCode = localStorage.getItem('flowcathonAccessCode');
+    if (storedCode === correctCode) {
+      if (protectedContent) protectedContent.style.display = 'block';
+    } else {
+      (dialog as HTMLDialogElement)?.showModal();
+    }
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const code = (input as HTMLInputElement)?.value.trim();
+    if (code === correctCode) {
+      localStorage.setItem('flowcathonAccessCode', code);
+      (dialog as HTMLDialogElement)?.close();
+      if (protectedContent) protectedContent.style.display = 'block';
+    } else {
+      alert('Incorrect code. Please try again.');
+    }
+  });
+
+  checkAccess();
+</script>
+
+<style>
+  .starlight-dialog {
+    background-color: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-border);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .starlight-dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .dialog-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dialog-content h2 {
+    color: var(--sl-color-white);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .dialog-description {
+    color: var(--sl-color-gray-2);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .dialog-content form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .dialog-content input {
+    background-color: var(--sl-color-bg-sidebar);
+    border: 1px solid var(--sl-color-gray-5);
+    color: var(--sl-color-gray-2);
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+  }
+
+  .submit-button {
+    background-color: var(--sl-color-text-accent);
+    color: var(--sl-color-black);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+  }
+
+  .submit-button:hover {
+    background-color: var(--sl-color-text-accent);
+    opacity: 0.9;
+  }
+</style>
