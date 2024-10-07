@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.55.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.1...v1.55.2) (2024-10-07)
+
+
+### Bug Fixes
+
+* **flowcathon:** :memo: cleaned up some links and phrasings ([d713c32](https://github.com/flowcore-io/astro-flowcore-docs/commit/d713c32b89a9fcb62c65e547c7bbdeb040299654))
+
 ## [1.55.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.0...v1.55.1) (2024-10-07)
 
 
