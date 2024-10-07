@@ -5,13 +5,54 @@ sidebar:
 description: Flowcathon is a platform for building and testing Flowcore flows.
 ---
 
-Welcome to Flowcathon! This is a platform for building and testing Flowcore flows.
+import { Steps } from '@astrojs/starlight/components';
 
-To access the protected content, you'll need to enter the correct access code. Once you've entered the code, you'll be able to view all the protected pages.
+Welcome to Flowcathon! This is a workshop where you will learn the basics of the Flowcore platform.
 
-(Add any additional instructions or information here)
+## Prerequisites
 
-- create a flowcore account
-- install flowcore cli (min version 4.2.0)
-- run `flowcore login` and login with your flowcore account
-- run `flowcore version` and check that you have the correct version
+<Steps>
+<ol>
+<li>
+To get started, you will need to create a flowcore account. You can do this by going to [flowcore.io](https://flowcore.io) and signing in with your Github account.
+</li>
+<li>
+Install the flowcore cli with the following command:
+
+```sh
+npm install -g @flowcore/cli
+```
+
+You can find the full installation instructions [here](https://docs.flowcore.io/guides/flowcore-cli/install-cli/).
+
+:::caution
+The flowcore cli requires node v20 or higher.
+:::
+</li>
+<li>
+Run the following command to login with your flowcore account. 
+
+```sh
+flowcore login
+```
+
+You can find the full login instructions [here](https://docs.flowcore.io/guides/flowcore-cli/login-cli/).
+</li>
+<li>
+Run the following command to check that you have the correct version.
+
+```sh
+flowcore version
+```
+
+:::caution
+You must have version 4.2.0 or higher.
+:::
+</li>
+</ol>
+</Steps>
+
+:::note
+The next few pages are protected, meaning that you will not be able to view them unless you have the correct access code, 
+the instructors will provide you with an access code for the protected content.
+:::
