@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.53.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.52.1...v1.53.0) (2024-10-07)
+
+
+### Features
+
+* **cli:** :sparkles: added flowcore new transformer command ([04a6825](https://github.com/flowcore-io/astro-flowcore-docs/commit/04a68253480d3bf2804a3f882b196ddc62293ed9))
+* **flowcathon:** :construction: Started setting up ingestion and data core ([77d4aa3](https://github.com/flowcore-io/astro-flowcore-docs/commit/77d4aa32b78d1e8234fd89ae5fe7e09200d85a4b))
+* **flowcathon:** :sparkles: added new flowcathon section ([43c074a](https://github.com/flowcore-io/astro-flowcore-docs/commit/43c074a8f125326edb665ff41bff71e062bfdbdc))
+* **flowcathon:** :sparkles: added steps to all challenges and filled in transform and stream challenge c ([db1c951](https://github.com/flowcore-io/astro-flowcore-docs/commit/db1c95118487e0502b9cf19220b45a8d76a9064a))
+
 ## [1.52.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.52.0...v1.52.1) (2024-10-02)
 
 
