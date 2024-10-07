@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.54.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.53.0...v1.54.0) (2024-10-07)
+
+
+### Features
+
+* **flowcathon:** :fire: removed challenge c in the stream challenge ([aa57630](https://github.com/flowcore-io/astro-flowcore-docs/commit/aa57630fdce57ce25b7fa036a2748f27d4ef89ef))
+* **flowcathon:** :sparkles: updated the getting started docs ([37e059d](https://github.com/flowcore-io/astro-flowcore-docs/commit/37e059defa51f6defaaf9d65b58eee1e907de0c4))
+
 ## [1.53.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.52.1...v1.53.0) (2024-10-07)
 
 
