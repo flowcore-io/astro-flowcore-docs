@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.55.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.54.0...v1.55.0) (2024-10-07)
+
+
+### Features
+
+* **flowcathon:** :memo: added communication to the getting-started section of the flowcathon ([f6b7901](https://github.com/flowcore-io/astro-flowcore-docs/commit/f6b7901e905619b839113604e0f90109583570cb))
+
 ## [1.54.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.53.0...v1.54.0) (2024-10-07)
 
 
