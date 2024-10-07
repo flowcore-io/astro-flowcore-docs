@@ -53,6 +53,30 @@ flowcore new bun-service <service-name>
     new Bun application that is ready to use for the Flowcore Platform.
 </Card>
 
+## Generate a new Flowcore Bun Transformer
+
+To generate a new Flowcore Bun Transformer, run the following command:
+
+```bash
+flowcore new transformer <transformer-name>
+```
+
+<Card title="Information" icon="information">
+    This will create a new Transformer written in Bun, when deploying this on the Flowcore Platform. In order to use this Transformer, you need to add these parameters to the scenario YAML manifest.
+
+    ```yaml
+    scenario:
+      transformers:
+        <transformer-name>:
+          # ...other parameters
+          shell: flowcoreio/adapter-nodejs-transformer-shell:2.7.3-bun
+          entrypoint: index.js
+          runtime: bun
+          # ...other parameters
+    ```
+</Card>
+
+
 ## Generate a new Template Generator written using Bun
 
 To generate a new Template Generator written in Bun, run the following command:

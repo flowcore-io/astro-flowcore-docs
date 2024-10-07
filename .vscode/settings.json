@@ -5,6 +5,7 @@
 		"cli",
 		"automation",
 		"manifests",
-		"fixture"
+		"fixture",
+		"flowcathon"
 	]
 }

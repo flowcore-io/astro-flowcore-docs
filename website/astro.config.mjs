@@ -16,13 +16,13 @@ export default defineConfig({
   integrations: [starlight({
     sidebar: [
       {
-        label: `Platform`,
+        label: "Platform",
         autogenerate: {
           directory: "Guides",
         },
       },
       {
-        label: `Components`,
+        label: "Components",
         autogenerate: {
           directory: "Components",
         },
