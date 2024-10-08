@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.55.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.2...v1.55.3) (2024-10-08)
+
+
+### Bug Fixes
+
+* **cli:** :bug: updated the generator cli for the bun service with the correct bun image ([d9b0844](https://github.com/flowcore-io/astro-flowcore-docs/commit/d9b08446ad0d49518e6c7e06b5858f0af78c40e7))
+* **flowcathon:** :recycle: moved the steps to create additional flow type and event type to the correct challenge in 2. stream ([73f5738](https://github.com/flowcore-io/astro-flowcore-docs/commit/73f57380230aa7a0fc76f984ef72adf8df467fd8))
+
 ## [1.55.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.1...v1.55.2) (2024-10-07)
 
 
