@@ -4,7 +4,7 @@ sidebar:
   order: 2
 description: Ingestion is the process of collecting data from various sources and storing it in a database.
 ---
-import { Steps } from "@astrojs/starlight/components";
+import { Steps, TabItem, Tabs } from "@astrojs/starlight/components";
 import ProtectedContent from '../../../components/ProtectedContent.astro';
 
 <ProtectedContent>
@@ -152,15 +152,30 @@ Send some data to your ingestion url, and observe the data showing up on the [on
 This can be done from your terminal, with something like curl.
 
 For example:
-```sh
-curl -X POST "<your-ingestion-url>" \
--H "Content-Type: application/json" \
--d '{"hello": "bread"}'
-```
+<Tabs>
+  <TabItem label="Mac OS">
+    Using `curl` in a unix compatible terminal
+    ```sh
+    curl -X POST "<your-ingestion-url>" \
+    -H "Content-Type: application/json" \
+    -d '{"hello": "<my-name>"}'
+    ```
+  </TabItem>
+  <TabItem label="Windows">
+    Using `Invoke-WebRequest` in Powershell
+    ```sh
+    Invoke-WebRequest -Uri "<your-ingestion-url>" -Method Post -Body '{"hello": "<my-name>"}'
+    ```
+  </TabItem>
+  <TabItem label="Software">
+    You can, for example, use one of the following software options:
+    - [Postman](https://www.postman.com/)
+    - [Insomnia](https://insomnia.rest/)
+  </TabItem>
+</Tabs>
 
 :::note
   You can also verify that the data is ingested, by viewing your data core on [flowcore.io](https://flowcore.io).
-
 :::
 
 ### Challenge B
