@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.55.4](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.3...v1.55.4) (2024-10-08)
+
+
+### Bug Fixes
+
+* **flowcathon:** :bug: Fixed incorrect invoke-webrequest example for windows, on ingestion challenge page ([ecd2f8b](https://github.com/flowcore-io/astro-flowcore-docs/commit/ecd2f8b61e648411daa7c7a0a728cdcfc0326f6d))
+* **flowcathon:** :memo: improved getting-started page, by adding additional contexts and links ([e72eb3b](https://github.com/flowcore-io/astro-flowcore-docs/commit/e72eb3b798ba8449ead5e9d17ef15693fefd6700))
+* **flowcathon:** :wheelchair: Added Multiple suggestive post methods to the ingestion challenge ([7187cd9](https://github.com/flowcore-io/astro-flowcore-docs/commit/7187cd9ddfa45466482aa672c2146bddc99f5532))
+* **flowcathon:** :wheelchair: added post abilities to the pre-requisites ([5075ffd](https://github.com/flowcore-io/astro-flowcore-docs/commit/5075ffd5dc147321060a3f9c50607c1593d262e0))
+* **flowcathon:** :wheelchair: simplified the setup section of the ingestion challenge ([94d6db8](https://github.com/flowcore-io/astro-flowcore-docs/commit/94d6db8e6f8a95b894a9e199949ca514afa9f757))
+
 ## [1.55.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.2...v1.55.3) (2024-10-08)
 
 
