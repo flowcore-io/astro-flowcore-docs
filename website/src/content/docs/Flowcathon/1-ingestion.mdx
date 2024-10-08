@@ -158,13 +158,13 @@ For example:
     ```sh
     curl -X POST "<your-ingestion-url>" \
     -H "Content-Type: application/json" \
-    -d '{"hello": "<my-name>"}'
+    -d '{"hello": "<your-name>"}'
     ```
   </TabItem>
   <TabItem label="Windows">
     Using `Invoke-WebRequest` in Powershell
     ```sh
-    Invoke-WebRequest -Uri "<your-ingestion-url>" -Method Post -Body '{"hello": "<my-name>"}'
+    Invoke-WebRequest -Uri "<your-ingestion-url>" -Method Post -Body @{hello="<your-name>"}
     ```
   </TabItem>
   <TabItem label="Software">
