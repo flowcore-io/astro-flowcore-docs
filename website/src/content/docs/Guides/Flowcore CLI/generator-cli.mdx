@@ -2,6 +2,7 @@
 title: Generator
 sidebar:
   order: 6
+  badge: Updated
 description: Learn how to use the Flowcore CLI generator to generate Flowcore applications, entities and more
 ---
 import { Card } from '@astrojs/starlight/components';
@@ -69,9 +70,10 @@ flowcore new transformer <transformer-name>
       transformers:
         <transformer-name>:
           # ...other parameters
-          shell: flowcoreio/adapter-nodejs-transformer-shell:2.7.3-bun
-          entrypoint: index.js
-          runtime: bun
+          shell: flowcoreio/adapter-nodejs-transformer-shell:2.7.4-bun
+          blueprint:
+            entrypoint: index.js
+            runtime: bun
           # ...other parameters
     ```
 </Card>
