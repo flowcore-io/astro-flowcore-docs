@@ -23,10 +23,8 @@ Ingestion is the process of collecting data from various sources and storing it 
     When asked to use placeholders, say yes.
 
     :::note
-      You can name the data core `ticketing-system`, the flow-type `tickets.0`, and the event-types: `ticket.created.0`, `ticket.updated.0`, `ticket.deleted.0`.
+      You can name the data core `flowcathon`, the flow-type `ingestion.0`, and the event-types: `ingestion.challenge-a-ingested.0,ingestion.challenge-b-ingested.0,ingestion.challenge-c-ingested.0`.
     :::
-
-
 
     This will generate a `flowcore.yaml`, file with the following content:
 
@@ -73,7 +71,7 @@ Ingestion is the process of collecting data from various sources and storing it 
       - the event-types: `ingestion.challenge-a-ingested.0,ingestion.challenge-b-ingested.0,ingestion.challenge-c-ingested.0`.
       - proxy endpoint: `https://flowcathon.customer.flowcore.io/api/transform/ingestion.0`
       - transformer secret name: `transformer-secret-flowcathon`
-      - generated transformer secret value: look in discord
+      - generated transformer secret value: **can be found in the dedicated [discord channel](https://discord.gg/b9c7dRjR) for the workshop**
     :::
 
     ```yaml
@@ -131,10 +129,10 @@ Ingestion is the process of collecting data from various sources and storing it 
 
     When asked if you want to create your data core, say yes. Afterwards you will be asked if you want to create your scenario, say yes again.
     Once the command is finished, your scaffoled project manifest will have been setup in [flowcore.io](https://flowcore.io), under your tenant.
-    Verify these resources have been created, please visit your tenant page, and the scenario page
+    Verify these resources have been created, please visit your [tenant page](/guides/organization/switch-between-organizations/), and the scenario page
 
     :::tip
-    To figure out if your scenario is ready and running, you can view the transformer logs from [here](https://docs.flowcore.io/guides/flowcore-cli/get-logs/):
+     To figure out if your scenario is ready and running, you can view the transformer logs from [here](/guides/flowcore-cli/get-logs/):
     :::
   </li>
   <li>
@@ -149,9 +147,9 @@ Ingestion is the process of collecting data from various sources and storing it 
       Remember to save the key, as it will not be shown again.
     :::
 
-    This key is used to ingest data into your tenant. Please copy the key, as you will need it in the next step. You can read more about the api keys [here](http://localhost:4321/guides/flowcore-cli/auth-management-cli/).
+    This key is used to ingest data into your tenant. Please copy the key, as you will need it in the next step. You can read more about the api keys [here](/flowcore-cli/auth-management-cli/).
 
-    Next, go to the [ingestion page](https://flowcore.io/f/ingestion-channels), and generate a webhook ingestion url, as shown [here](https://docs.flowcore.io/guides/ingestion/ingestion-options/).
+    Next, go to the [ingestion page](https://flowcore.io/f/ingestion-channels), and generate a webhook ingestion url, as shown [here](/guides/ingestion/ingestion-options/).
   </li>
 </ol>
 </Steps>
@@ -192,7 +190,7 @@ So, what you need to do is this:
 ```
 
 :::tip
-Flowcore also supports bulk ingestion, which means that you can ingest multiple events at once. You can read about it [here](https://docs.flowcore.io/guides/ingestion/bulk-ingestion/).
+Flowcore also supports bulk ingestion, which means that you can ingest multiple events at once. You can read about it [here](/guides/ingestion/ingestion-options/).
 :::
 
 </ProtectedContent>
