@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.55.5](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.4...v1.55.5) (2024-10-08)
+
+
+### Bug Fixes
+
+* **flowcathon:** :bug: fixed incorrect transformer secret example name ([f1b1d84](https://github.com/flowcore-io/astro-flowcore-docs/commit/f1b1d84037de12f7f99f4cb7a42f4e80f683fbc1))
+
 ## [1.55.4](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.3...v1.55.4) (2024-10-08)
 
 
