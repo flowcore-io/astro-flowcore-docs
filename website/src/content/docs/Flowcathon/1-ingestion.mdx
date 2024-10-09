@@ -186,13 +186,13 @@ Try sending some data to your `ingestion.challenge-b-ingested.0` event type. To 
 Now that you have figured out how to ingest data into multiple different event types. You now need to process a .csv file into yet another event type, called `ingestion.challenge-c-ingested.0`.
 
 So, what you need to do is this:
-1. Download the csv file from the [flowcathon mini app](https://flowcathon.customer.flowcore.io/challenges/2)
+1. Download the csv file from the [flowcathon mini app](https://flowcathon.customer.flowcore.io/challenges/1)
 2. Write a script (or use any method you like) to read the csv file
 3. Send the entries in the csv file to your `ingestion.challenge-c-ingested.0` event type in the format of a json array like this:
 
 ```json
 [
-  {"Name": <name>, "Age": <age>, "Email": <email>, "City": <city>, "Occupation": <occupation>, "Challenger": <your name/identifier>},
+  {"Name": <name>, "Age": <age>, "Email": <email>, "City": <city>, "Occupation": <occupation>, "Challenger": <your name>},
   ...
 ]
 ```
