@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.55.7](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.6...v1.55.7) (2024-10-10)
+
+
+### Bug Fixes
+
+* **cli:** :bug: timeouts are now noted correctly in milliseconds ([117a574](https://github.com/flowcore-io/astro-flowcore-docs/commit/117a57496227c3038bcb8db95d911b185a8734dd))
+
 ## [1.55.6](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.5...v1.55.6) (2024-10-09)
 
 
