@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.55.6](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.5...v1.55.6) (2024-10-09)
+
+
+### Bug Fixes
+
+* **flowcathon:** :bug: fixed links and naming in the ingestion and data core challenges ([bb47c4e](https://github.com/flowcore-io/astro-flowcore-docs/commit/bb47c4e03068618bd6e9df4a7855cda7287f1845))
+
 ## [1.55.5](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.4...v1.55.5) (2024-10-08)
 
 
