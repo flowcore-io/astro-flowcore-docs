@@ -21,6 +21,7 @@ flowcore component add library/predicate-redis
 
     ```typescript
     import type { TransformerSuccessHandler, WebhookPredicate } from "@flowcore/sdk-transformer-core"
+    import { redisFactory } from "@components/redis-factory"
     import Redis from "ioredis"
 
     /**
@@ -68,7 +69,7 @@ flowcore component add library/predicate-redis
     * @returns An object with a check function that checks the existence of the Redis key and a notify function that sets the Redis key.
     */
     export function predicateRedisFactory(options: RedisPredicateOptions) {
-      const redis = new Redis(options.redisUrl)
+      const redis = redisFactory(options.redisUrl)
 
       return {
         check: createPredicateRedisChecker(redis, options),

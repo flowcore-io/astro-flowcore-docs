@@ -1,0 +1,122 @@
+---
+title: Redis Factory
+description: Redis factory for generating redis connections from redis urls, both single and using sentinel
+---
+
+The Redis Factory is a library that allows you to generate redis connections from redis urls, both single and using sentinel.
+
+## Install the Redis Factory
+
+```bash
+flowcore component add library/redis-factory
+```
+
+<details>
+  <summary>Or install the Redis Factory manually</summary>
+
+You can install the Redis Factory by running the following command:
+
+```bash
+bun add ioredis
+```
+
+add the Redis Factory to your projects lib folder
+
+```typescript
+// lib/redis-factory.ts
+import Redis from "ioredis"
+
+/**
+ * Creates a Redis connection based on the provided Redis URL.
+ * Supports both single Redis instances and Redis Sentinel configurations.
+ * 
+ * @example
+ * const redis = redisFactory("redis://user:password@localhost:6379")
+ * const redisSentinel = redisFactory("redis+sentinel://user:password@localhost:26379/mymaster")
+ * 
+ * @param {string} redisUrl - The Redis URL to connect to. Can be a single Redis instance or a Redis Sentinel instance.
+ * @returns {Redis} A Redis connection instance.
+ */
+export const redisFactory = (redisUrl: string) => {
+  if (redisUrl.startsWith("redis+sentinel://")) {
+    const [credentialsAndHost, masterSet] = redisUrl.split("//")[1].split("/")
+    let credentials: string | undefined
+    let hostInfo: string | undefined
+    let port: string | undefined
+    if (credentialsAndHost.includes("@")) {
+      ;[credentials, hostInfo] = credentialsAndHost.split("@")
+    } else {
+      ;[hostInfo, port] = credentialsAndHost.split(":")
+    }
+
+    let username: string | undefined
+    let password: string | undefined
+    let host: string
+
+    if (credentials?.includes(":")) {
+      ;[username, password] = credentials.split(":")
+      ;[host, port] = hostInfo.split(":")
+    } else {
+      ;[host, port] = credentialsAndHost.split(":")
+    }
+
+    return redisSentinelFactory(host, Number.parseInt(port), username, password, masterSet)
+  }
+
+  return new Redis(redisUrl)
+}
+
+/**
+ * Creates a Redis connection using Sentinel configuration.
+ * 
+ * @param {string} sentinelUrl - The URL of the Sentinel instance.
+ * @param {number} [port] - The port number of the Sentinel instance. Defaults to 26379 if not provided.
+ * @param {string} [username] - The username for authentication.
+ * @param {string} [password] - The password for authentication.
+ * @param {string} [setName="mymaster"] - The name of the Sentinel set.
+ * @returns {Redis} A Redis connection instance configured with Sentinel.
+ */
+export const redisSentinelFactory = (
+  sentinelUrl: string,
+  port?: number,
+  username?: string,
+  password?: string,
+  setName = "mymaster",
+) => {
+  return new Redis({
+    sentinels: [{ host: sentinelUrl, port: port ?? 26379 }],
+    ...(password && { sentinelPassword: password }),
+    ...(password && { password }),
+    ...(username && { username }),
+    name: setName,
+  })
+}
+```
+
+</details>
+
+## Usage
+
+### Using a Single Redis Instance
+
+```typescript
+// src/index.ts
+import { redisFactory } from "@lib/redis-factory"
+
+const redis = redisFactory("redis://user:password@localhost:6379")
+
+redis.set("key", "value")
+redis.get("key")
+```
+
+### Using Sentinel
+
+```typescript
+// src/index.ts
+import { redisFactory } from "@lib/redis-factory"
+
+const redis = redisFactory("redis+sentinel://user:password@localhost:26379/mymaster")
+
+redis.set("key", "value")
+redis.get("key")
+```
