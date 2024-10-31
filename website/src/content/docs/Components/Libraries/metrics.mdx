@@ -107,6 +107,14 @@ flowcore component add library/metrics
       )
 
     /**
+     * Factory function to create an Elysia plugin with a pre-configured metrics registry
+     * @param metricsBuilder - A built metrics registry instance from MetricsBuilder
+     * @returns Elysia plugin decorated with the provided metrics registry
+     */
+    export const globalMetricsFactory = (metricsBuilder: ReturnType<typeof MetricsBuilder.prototype.build>) =>
+      new Elysia().decorate("registry", metricsBuilder)
+
+    /**
      * Creates an Elysia plugin that registers and retrieves a specific metric
      * @param metric - The Prometheus metric to register
      * @returns Elysia plugin that provides access to the metric
@@ -150,6 +158,7 @@ flowcore component add library/metrics
 
         throw new ApiInternalServerErrorException("Metrics registry not found")
       })
+
     ```
 </details>
 
@@ -203,4 +212,36 @@ export default new Elysia({ prefix: "/metrics" }).use(getRegistry()).get("/", as
     return "Error collecting metrics"
   }
 })
+```
+
+to create a metric registry that you can use outside of elysia, use the `globalMetricsFactory` function.
+
+```typescript
+// src/metrics.ts
+import { MetricsBuilder } from "./lib/metrics"
+
+export const metrics = new MetricsBuilder().withPrefix("app_").withoutDefaultMetrics(true).build()
+```
+
+register it in elysia.
+
+```typescript
+// src/server/index.ts
+import { globalMetricsFactory } from "@components/metrics"
+import { metrics } from "./metrics"
+import Elysia from "elysia"
+
+const server = new Elysia().use(globalMetricsFactory(metrics))
+```
+
+then you can use the metrics instance anywhere in your project as well as in the elysia context.
+
+```typescript
+// src/somewhere.ts
+import { metrics } from "./metrics"
+
+const counter = new Counter({ name: "test", help: "test" })
+metrics.registerMetrics(counter)
+
+counter.inc()
 ```
