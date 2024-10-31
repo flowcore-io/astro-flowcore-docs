@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.56.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.7...v1.56.0) (2024-10-31)
+
+
+### Features
+
+* **library:** :sparkles: added metrics library ([e44ed24](https://github.com/flowcore-io/astro-flowcore-docs/commit/e44ed24143fe63c5b9134d84945602160e2335e0))
+
 ## [1.55.7](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.6...v1.55.7) (2024-10-10)
 
 
