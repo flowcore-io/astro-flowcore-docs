@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.57.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.56.0...v1.57.0) (2024-10-31)
+
+
+### Features
+
+* **library:** :sparkles: added global factory documentation to the metrics library ([ffe544f](https://github.com/flowcore-io/astro-flowcore-docs/commit/ffe544f4d356e732fc5658fd05fb70f95114a7ce))
+
 ## [1.56.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.55.7...v1.56.0) (2024-10-31)
 
 
