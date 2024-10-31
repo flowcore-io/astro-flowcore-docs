@@ -1,0 +1,206 @@
+---
+title: Metrics
+sidebar:
+  badge: New
+description: A metrics library that is built on top of Prometheus
+---
+
+A metrics library that is built on top of Prometheus.
+
+## Install the Metrics
+
+```bash
+flowcore component add library/metrics
+```
+
+<details>
+  <summary>Or install the Metrics manually</summary>
+
+  Install the Prometheus client
+
+  ```bash
+  bun add prom-client
+  ```
+
+  This library uses the api exceptions, so you need to install it as well, or manually add it to your project.
+
+  ```bash
+  flowcore component add library/api-exceptions
+  ```
+
+  Create a `lib/metrics.ts` file in your project's lib folder, and add the following code:
+
+    ```typescript
+    import Elysia from "elysia"
+    import client, { type Metric } from "prom-client"
+    import { ApiInternalServerErrorException } from "@components/api-exceptions"
+
+    /**
+     * Builder class for creating and configuring Prometheus metrics
+     * 
+     * @example
+     * const metricsBuilder = new MetricsBuilder()
+     *   .withPrefix('myapp_')
+     *   .withoutDefaultMetrics(false)
+     *   .build()
+     */
+    export class MetricsBuilder {
+      private register: client.Registry
+      private prefix = "app_"
+      private defaultMetrics = true
+
+      constructor() {
+        this.register = new client.Registry()
+      }
+
+      /**
+       * Sets the prefix for all metrics
+       * @param prefix - The prefix to add to all metric names
+       * @returns The builder instance for method chaining
+       */
+      withPrefix(prefix: string) {
+        this.prefix = prefix
+        return this
+      }
+
+      /**
+       * Configures whether to collect default metrics
+       * @param defaultMetrics - If false, disables default metrics collection
+       * @returns The builder instance for method chaining
+       */
+      withoutDefaultMetrics(defaultMetrics: boolean) {
+        this.defaultMetrics = defaultMetrics
+        return this
+      }
+
+      /**
+       * Builds and returns the metrics registry with the configured settings
+       * @returns An object containing registry methods and properties
+       */
+      build() {
+        if (this.defaultMetrics) {
+          client.collectDefaultMetrics({
+            register: this.register,
+            prefix: this.prefix,
+          })
+        }
+
+        return {
+          contentType: this.register.contentType,
+          registerMetrics: this.register.registerMetric.bind(this.register),
+          metrics: this.register.metrics.bind(this.register),
+          getMetric: this.register.getSingleMetric.bind(this.register),
+        }
+      }
+    }
+
+    /**
+     * Factory function to create an Elysia plugin with metrics registry
+     * @param defaultMetrics - Whether to collect default metrics
+     * @param prefix - Prefix for metric names
+     * @returns Elysia plugin with configured metrics registry
+     */
+    export const metricsFactory = (defaultMetrics = true, prefix = "app_") =>
+      new Elysia().decorate(
+        "registry",
+        new MetricsBuilder().withPrefix(prefix).withoutDefaultMetrics(defaultMetrics).build(),
+      )
+
+    /**
+     * Creates an Elysia plugin that registers and retrieves a specific metric
+     * @param metric - The Prometheus metric to register
+     * @returns Elysia plugin that provides access to the metric
+     * @throws Error if metrics registry is not found
+     */
+    export const getMetric = <T extends Metric>(metric: T) =>
+      new Elysia().derive({ as: "scoped" }, async (context) => {
+        // biome-ignore lint/suspicious/noExplicitAny: Required for context type
+        const registry = (context as any).registry as ReturnType<typeof MetricsBuilder.prototype.build>
+        if (registry) {
+          const metricValue = await metric.get()
+
+          const registeredMetric = registry.getMetric(metricValue.name)
+
+          if (!registeredMetric) {
+            registry.registerMetrics(metric)
+          }
+
+          return {
+            [metricValue.name]: metric,
+          }
+        }
+
+        throw new ApiInternalServerErrorException("Metric registry not found")
+      })
+
+    /**
+     * Creates an Elysia plugin that provides access to the metrics registry
+     * @returns Elysia plugin with registry access
+     * @throws Error if metrics registry is not found
+     */
+    export const getRegistry = () =>
+      new Elysia().derive({ as: "scoped" }, async (context) => {
+        // biome-ignore lint/suspicious/noExplicitAny: Required for context type
+        const registry = (context as any).registry as ReturnType<typeof MetricsBuilder.prototype.build>
+        if (registry) {
+          return {
+            registry,
+          }
+        }
+
+        throw new ApiInternalServerErrorException("Metrics registry not found")
+      })
+    ```
+</details>
+
+## Usage
+
+To use the metrics, create a metrics instance using the `metricsFactory` function.
+
+```typescript
+// src/server/index.ts
+import { metricsFactory } from "@components/metrics"
+import metricsRoute from "@/server/routes/metrics"
+import Elysia from "elysia"
+
+const server = new Elysia()
+  .use(metricsFactory(true))
+  .use(metricsRoute)
+```
+
+Then register a metric using the `getMetric` function.
+
+```typescript
+import { getMetric } from "@/lib/metrics-builder"
+import Elysia from "elysia"
+import { Counter } from "prom-client"
+
+export default new Elysia({ prefix: "/test" })
+  .use(getMetric<Counter>(new Counter({ name: "test", help: "test" })))
+  .get("/", ({ test }) => {
+    test.inc()
+    return "ok"
+  })
+```
+
+Then add the metrics endpoint to your server.
+
+```typescript
+// src/server/routes/metrics.ts
+import { getRegistry } from "@/lib/metrics-builder"
+import Elysia from "elysia"
+
+export default new Elysia({ prefix: "/metrics" }).use(getRegistry()).get("/", async ({ set, registry }) => {
+  set.headers["Content-Type"] = registry.contentType
+
+  try {
+    // Collect and return all metrics
+    const metrics = await registry.metrics()
+    return metrics
+  } catch (error) {
+    console.error("Error collecting metrics:", error)
+    set.status = 500
+    return "Error collecting metrics"
+  }
+})
+```
