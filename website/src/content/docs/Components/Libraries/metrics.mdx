@@ -180,7 +180,7 @@ const server = new Elysia()
 Then register a metric using the `getMetric` function.
 
 ```typescript
-import { getMetric } from "@/lib/metrics-builder"
+import { getMetric } from "@/lib/metrics"
 import Elysia from "elysia"
 import { Counter } from "prom-client"
 
@@ -196,7 +196,7 @@ Then add the metrics endpoint to your server.
 
 ```typescript
 // src/server/routes/metrics.ts
-import { getRegistry } from "@/lib/metrics-builder"
+import { getRegistry } from "@/lib/metrics"
 import Elysia from "elysia"
 
 export default new Elysia({ prefix: "/metrics" }).use(getRegistry()).get("/", async ({ set, registry }) => {
