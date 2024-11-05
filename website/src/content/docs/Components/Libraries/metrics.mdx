@@ -31,13 +31,13 @@ flowcore component add library/metrics
   Create a `lib/metrics.ts` file in your project's lib folder, and add the following code:
 
     ```typescript
+    import { ApiInternalServerErrorException } from "@components/api-exceptions"
     import Elysia from "elysia"
     import client, { type Metric } from "prom-client"
-    import { ApiInternalServerErrorException } from "@components/api-exceptions"
 
     /**
      * Builder class for creating and configuring Prometheus metrics
-     * 
+     *
      * @example
      * const metricsBuilder = new MetricsBuilder()
      *   .withPrefix('myapp_')
@@ -68,8 +68,8 @@ flowcore component add library/metrics
        * @param defaultMetrics - If false, disables default metrics collection
        * @returns The builder instance for method chaining
        */
-      withoutDefaultMetrics(defaultMetrics: boolean) {
-        this.defaultMetrics = defaultMetrics
+      withDefaultMetrics(newVal: boolean) {
+        this.defaultMetrics = newVal
         return this
       }
 
@@ -103,7 +103,7 @@ flowcore component add library/metrics
     export const metricsFactory = (defaultMetrics = true, prefix = "app_") =>
       new Elysia().decorate(
         "registry",
-        new MetricsBuilder().withPrefix(prefix).withoutDefaultMetrics(defaultMetrics).build(),
+        new MetricsBuilder().withPrefix(prefix).withDefaultMetrics(defaultMetrics).build(),
       )
 
     /**
