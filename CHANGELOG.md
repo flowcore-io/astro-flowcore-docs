@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.58.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.57.0...v1.58.0) (2024-11-08)
+
+
+### Features
+
+* **ingestion:** :memo: added max event size to ingestion documentation ([17e1076](https://github.com/flowcore-io/astro-flowcore-docs/commit/17e1076cedc059663dab5b2bec89419348616d54))
+
+
+### Bug Fixes
+
+* **library:** :bug: fixed the global metrics imports from `metrics-builder` to `metrics` ([1a7d257](https://github.com/flowcore-io/astro-flowcore-docs/commit/1a7d257bf899e2593919d678dc62d946fe9f7b33))
+* **library:** :children_crossing: updated the bade for metrics to updated ([3c7d23c](https://github.com/flowcore-io/astro-flowcore-docs/commit/3c7d23cb342ebe3c24770ad2d6cb82d50299b911))
+* **library:** :technologist: updated the library for metrics to reflect latest version ([94e35c3](https://github.com/flowcore-io/astro-flowcore-docs/commit/94e35c39454ab18055f678e094c8c3e0f6689b95))
+
 ## [1.57.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.56.0...v1.57.0) (2024-10-31)
 
 
