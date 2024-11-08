@@ -1,0 +1,66 @@
+---
+title: Getting Started
+description: How to get started with Flowcore IAM
+sidebar:
+  order: 1
+---
+
+Identity and Access Management (IAM) is a core part of Flowcore. It is used to manage roles, and permissions that can be assigned to users, api keys and more.
+
+## IAM Primitives
+
+Flowcore's IAM system consists of several key primitives that work together to provide fine-grained access control:
+
+### FRN
+
+Flowcore uses a concept called FRNs (Flowcore Resource Names) to identify resources. FRNs are unique identifiers for resources in Flowcore, and are used to manage permissions.
+
+### Policies
+
+Policies are the fundamental building blocks of permissions in Flowcore. A policy defines:
+
+- What actions can be performed (e.g., `read`, `write`, `fetch`, `ingest`)
+- On which resources, can be a specific resource (FRN) or a wildcard (`frn::<tenant>:<resource-type>/<resource-id>`, `frn::<tenant>:<resource-type>/*`)
+- Principal (who is allowed to perform the action, this is a frn to another role, can be in the same tenant or a different tenant)
+
+For example, a policy might allow `fetch` access to all events in a specific tenant, data core, flow type or event type.
+
+### Roles 
+
+Roles are collections of policies that are grouped together to provide a specific set of permissions. Instead of assigning individual policies, you typically assign roles to users and keys. Roles make it easier to manage permissions at scale.
+
+Flowcore has a set of default roles that are created when a tenant is created. These include:
+- `Owner` - Full access to all resources
+- `Collaborator` - Read-only access to specific resources
+- `Ingestion` - Only access to ingest data, can be useful if you want to generate api keys that only have ingestion rights to a specific tenant, data core, flow type or event type.
+
+### Policy Bindings
+
+Policy bindings connect individual policies directly to:
+- Users
+- API Keys
+- Service Accounts (coming soon)
+
+This allows for granular permission assignment when needed, rather than using broader role-based access.
+
+### Role Bindings
+
+Role bindings associate roles with:
+- Users
+- API Keys
+- Service Accounts (coming soon)
+
+This is the most common way to assign permissions, as it's easier to manage than individual policy bindings.
+
+::tip
+  It's recommended to primarily use role bindings for permission management, and only use policy bindings for exceptional cases that require very specific permission sets.
+::
+
+## V2 Resources
+
+IAM resources are defined using the v2 schema and can be defined using individual yaml documents.
+
+see the following resources for more information:
+
+- [IAM CLI](/guides/flowcore-cli/create-resources-cli/#v2-resources)
+- [IAM Resources](/guides/iam/resources)

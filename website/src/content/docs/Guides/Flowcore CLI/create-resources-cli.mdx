@@ -443,3 +443,31 @@ This will set the timeout for the transformer.
     The `processingTimeout` is the maximum duration of the time it takes for the data pump to send an event to the transformer, and the transformer to process the data and respond with a status code.
   </p>
 :::
+
+## V2 Resources
+
+We are currently rolling out a new functionality of components, these components definitions are defined using the v2 schema and can be defined using individual yaml documents.
+
+currently only the IAM resources are supported, but more resources will be added in the future.
+
+To enable the IAM resources you need to install the `@flowcore/cli-plugin-iam` plugin:
+
+```sh
+flowcore plugin install @flowcore/cli-plugin-iam
+```
+
+see the following resources for more information on what v2 resources look like:
+
+- [IAM](/guides/iam/getting-started)
+
+You can create v2 resources using the `apply` command by adding the `--v2` flag:
+
+```sh
+flowcore apply -f manifest.yaml --v2
+```
+
+and delete v2 resources using the `delete` command:
+
+```sh
+flowcore delete -f manifest.yaml
+```

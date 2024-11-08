@@ -1,0 +1,43 @@
+---
+title: Roles
+description: How to manage roles in Flowcore
+sidebar:
+  order: 3
+---
+
+Roles are the fundamental building blocks of permissions in Flowcore. Roles are used to group policies and bind them to users or API keys.
+
+## Example Roles
+
+Here's an example of a role definition that groups the `all-resources-read-write` policy.
+
+```yaml
+apiVersion: iam.flowcore.io/v1
+kind: Role
+metadata:
+  name: full-access-role
+  tenant: my-tenant
+spec:
+  description: "Role for full access to all resources"
+  policies:
+    - all-resources-read-write
+```
+
+## Role Binding
+
+Here's an example of a role binding that binds the role to a user and an API key:
+
+```yaml
+apiVersion: iam.flowcore.io/v1
+kind: RoleBinding
+metadata:
+  name: full-access-role-binding
+  tenant: my-tenant
+spec:
+  role: "full-access-role" # References the role name above
+  subjects:
+    - type: user
+      id: "3468415e-937d-47ee-9006-76159cd7f33e"
+    - type: key
+      id: "4326343d-efd2-4098-a90d-1ccde7597b1d"
+```

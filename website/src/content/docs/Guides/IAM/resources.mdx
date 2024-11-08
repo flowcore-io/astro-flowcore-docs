@@ -1,0 +1,26 @@
+---
+title: Resources
+description: Resources in Flowcore that can be accessed by users and API keys
+sidebar:
+  order: 4
+---
+
+Below is a list of all the resources that can be accessed in Flowcore, this will help you understand the permissions you need to manage.
+
+### IAM Resources
+
+- [Roles](/guides/iam/roles/) - Define roles and attach policies to them `frn::<tenant>:role/<resource-id>`, `read, write`
+- [Policies](/guides/iam/policies) - Define permissions for resources `frn::<tenant>:policy/<resource-id>`, `read, write`
+
+### Data Resources
+
+- [Data Cores](/guides/architecture/primitives/#data-core) - Data core resources `frn::<tenant>:data-core/<resource-id>`, `read, write, fetch, ingest`
+- [Flow Types](/guides/architecture/primitives/#flow-type) - Flow type resources `frn::<tenant>:flow-type/<resource-id>`, `read, write, fetch, ingest`
+- [Event Types](/guides/architecture/primitives/#event-type) - Event type resources `frn::<tenant>:event-type/<resource-id>`, `read, write, fetch, ingest`
+
+
+:::note
+
+This list will grow over time as we add more resources to the platform that can be managed by IAM.
+
+:::

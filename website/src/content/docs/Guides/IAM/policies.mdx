@@ -1,0 +1,89 @@
+---
+title: Policies
+description: How to manage policies in Flowcore
+sidebar:
+  order: 2
+---
+
+Policies are the fundamental building blocks of permissions in Flowcore. A policy defines:
+
+- What actions can be performed (e.g., `read`, `write`, `fetch`, `ingest`)
+- On which resources, can be a specific resource (FRN) or a wildcard (`frn::<tenant>:<resource-type>/<resource-id>`, `frn::<tenant>:<resource-type>/*`)
+- Principal (who is allowed to perform the action, this is a frn to another role, can be in the same tenant or a different tenant)
+
+You can define a policy with the Flowcore CLI, or via the API.
+
+## Example Policy
+
+Here's an example of a policy that allows read and write access to all resources in a tenant:
+
+```yaml
+apiVersion: iam.flowcore.io/v1
+kind: Policy
+metadata:
+  name: all-resources-read-write
+  tenant: my-tenant
+spec:
+  version: "1.0.0"
+  description: "Allows read and write access to all resources"
+  policyDocuments:
+    - resource: "frn::my-tenant:*"
+      action: "*"
+```
+
+## Policy Binding
+
+Here's an example of a policy binding that binds the policy to a user and an API key:
+
+```yaml
+apiVersion: iam.flowcore.io/v1
+kind: PolicyBinding
+metadata:
+  name: developer-policy-binding
+  tenant: my-tenant
+spec:
+  policy: "all-resources-read-write" # References the policy name above
+  subjects:
+    - type: user
+      id: "3468415e-937d-47ee-9006-76159cd7f33e"
+    - type: key
+      id: "4326343d-efd2-4098-a90d-1ccde7597b1d"
+```
+
+## Specific Resource Access
+
+Here's an example of a policy that allows read access to a specific resource:
+
+```yaml
+apiVersion: iam.flowcore.io/v1
+kind: Policy
+metadata:
+  name: specific-resource-access
+  tenant: my-tenant
+spec:
+  version: "1.0.0"
+  description: "Allows read access to a specific resource"
+  policyDocuments:
+    - resource: "frn::my-tenant:data-core/5efa6713-d6dc-4574-9692-87096eca75f4"
+      action: "READ"
+```
+
+## Multi Resource Access
+
+Here's an example of a policy that allows read and fetch access to multiple resources:
+
+```yaml
+apiVersion: iam.flowcore.io/v1
+kind: Policy
+metadata:
+  name: multi-resource-policy
+  tenant: my-tenant
+spec:
+  version: "1.0.0"
+  description: "Complex policy with multiple permissions"
+  policyDocuments:
+    - resource: "frn::my-tenant:data-core/*"
+      action: ["READ", "FETCH"]
+    - resource: "frn::my-tenant:flow-core/*"
+      action: "FETCH"
+```
