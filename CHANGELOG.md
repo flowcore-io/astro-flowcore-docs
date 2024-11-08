@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.59.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.58.0...v1.59.0) (2024-11-08)
+
+
+### Features
+
+* **iam:** :sparkles: added documentation for IAM resources and V2 resource definitions ([848b6a4](https://github.com/flowcore-io/astro-flowcore-docs/commit/848b6a498ff833b9913edee82f4d20c4132e58e1))
+
 ## [1.58.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.57.0...v1.58.0) (2024-11-08)
 
 
