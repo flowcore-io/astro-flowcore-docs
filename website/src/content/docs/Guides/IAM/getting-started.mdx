@@ -9,7 +9,9 @@ Identity and Access Management (IAM) is a core part of Flowcore. It is used to m
 
 ## IAM Primitives
 
-Flowcore's IAM system consists of several key primitives that work together to provide fine-grained access control:
+Flowcore's IAM system consists of several key primitives that work together to provide fine-grained access control.
+
+Example resource notation: `frn::<tenant>:<resource>/<resource-id>`. Tenant is required, but the resource and resource id can be wildcards.
 
 ### FRN
 
@@ -52,9 +54,11 @@ Role bindings associate roles with:
 
 This is the most common way to assign permissions, as it's easier to manage than individual policy bindings.
 
-::tip
+:::tip
+
   It's recommended to primarily use role bindings for permission management, and only use policy bindings for exceptional cases that require very specific permission sets.
-::
+
+:::
 
 ## V2 Resources
 
