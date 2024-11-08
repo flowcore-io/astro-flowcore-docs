@@ -107,6 +107,10 @@ The payload should be an array of events.
 ]
 ```
 
+## Max Event Size
+
+The maximum size of an event is 64kb. If you need to send larger events, you can use the multipart file events, or split the event into multiple events.
+
 ## Multipart File Events
 
 It is also possible to send files and have them be converted to multipart events. This is useful if you want to also store files and images in Flowcore.
@@ -162,4 +166,3 @@ One way you can use this for example in a database is to have a `write queue` wh
   We are working on other ways to ingest data into Flowcore. Stay tuned for more
   updates.
 </Card>
-

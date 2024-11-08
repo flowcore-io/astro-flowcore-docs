@@ -6,6 +6,7 @@
 		"automation",
 		"manifests",
 		"fixture",
-		"flowcathon"
+		"flowcathon",
+		"ingestion"
 	]
 }
