@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.59.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.59.0...v1.59.1) (2024-11-08)
+
+
+### Bug Fixes
+
+* fixed some styling ([3b8308c](https://github.com/flowcore-io/astro-flowcore-docs/commit/3b8308c283921d1217e2b468778e7488e3bd1eff))
+
 ## [1.59.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.58.0...v1.59.0) (2024-11-08)
 
 
