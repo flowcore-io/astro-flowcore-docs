@@ -24,20 +24,52 @@ add the Redis Factory to your projects lib folder
 
 ```typescript
 // lib/redis-factory.ts
+import { createLogger } from "@/logger.builder"
 import Redis from "ioredis"
 
 /**
- * Creates a Redis connection based on the provided Redis URL.
- * Supports both single Redis instances and Redis Sentinel configurations.
- * 
- * @example
- * const redis = redisFactory("redis://user:password@localhost:6379")
- * const redisSentinel = redisFactory("redis+sentinel://user:password@localhost:26379/mymaster")
- * 
- * @param {string} redisUrl - The Redis URL to connect to. Can be a single Redis instance or a Redis Sentinel instance.
- * @returns {Redis} A Redis connection instance.
+ * Configuration options for Redis connection.
  */
-export const redisFactory = (redisUrl: string) => {
+export type RedisConfiguration = {
+  /** The Redis connection URL */
+  redisUrl: string
+  /** Optional name for the Redis instance (used for logging) */
+  name?: string
+  /** Maximum delay between retry attempts in milliseconds */
+  maxRetryDelay?: number
+  /** Maximum number of retry attempts */
+  maxRetries?: number
+  /** Connection timeout in milliseconds */
+  connectionTimeout?: number
+  /** Command execution timeout in milliseconds */
+  commandTimeout?: number
+}
+
+/**
+ * Creates a new Redis client instance based on the provided configuration.
+ * Supports both standard Redis and Redis Sentinel connections.
+ * 
+ * @param options - The Redis configuration options
+ * @param options.redisUrl - The Redis connection URL
+ * @param options.name - Optional name for the Redis instance
+ * @param options.maxRetryDelay - Maximum delay between retry attempts
+ * @param options.maxRetries - Maximum number of retry attempts
+ * @param options.connectionTimeout - Connection timeout
+ * @param options.commandTimeout - Command execution timeout
+ * @returns A configured Redis client instance
+ */
+export const redisFactory = ({
+  redisUrl,
+  name,
+  maxRetryDelay,
+  maxRetries,
+  connectionTimeout,
+  commandTimeout,
+}: RedisConfiguration): Redis => {
+  const logger = createLogger(name ?? "redis")
+
+  let redis: Redis
+
   if (redisUrl.startsWith("redis+sentinel://")) {
     const [credentialsAndHost, masterSet] = redisUrl.split("//")[1].split("/")
     let credentials: string | undefined
@@ -60,36 +92,197 @@ export const redisFactory = (redisUrl: string) => {
       ;[host, port] = credentialsAndHost.split(":")
     }
 
-    return redisSentinelFactory(host, Number.parseInt(port), username, password, masterSet)
+    redis = redisSentinelFactory({
+      sentinelUrl: host,
+      port: Number.parseInt(port),
+      username,
+      password,
+      setName: masterSet,
+      maxRetryDelay,
+      maxRetries,
+      connectionTimeout,
+      commandTimeout,
+    })
+  } else {
+    redis = new Redis(redisUrl, {
+      retryStrategy: (times) => {
+        if (times > (maxRetries ?? 10)) {
+          return null
+        }
+
+        const maxDelay = maxRetryDelay ?? 2000
+        const delay = Math.min(times * 50, maxDelay)
+        return delay
+      },
+      reconnectOnError: (err) => {
+        const targetError = "READONLY"
+        return err.message.includes(targetError)
+      },
+      maxRetriesPerRequest: maxRetries ?? 10,
+      connectTimeout: connectionTimeout ?? 20000,
+      commandTimeout: commandTimeout ?? 5000,
+    })
   }
 
-  return new Redis(redisUrl)
+  // Connection events
+  redis.on("connect", () => {
+    logger.info("Connected to Redis server")
+  })
+
+  redis.on("ready", () => {
+    logger.info("Redis client is ready to handle commands")
+  })
+
+  redis.on("error", (error) => {
+    logger.error(`Redis failed with ${error.message}`, { error })
+  })
+
+  redis.on("close", () => {
+    logger.info("Connection to Redis server was closed")
+  })
+
+  redis.on("reconnecting", (timeToReconnect: number) => {
+    logger.info(`Reconnecting to Redis in ${timeToReconnect}ms...`)
+  })
+
+  redis.on("end", () => {
+    logger.info("Redis client connection ended")
+  })
+
+  // Sentinel-specific events
+  redis.on("+node", (node) => {
+    logger.debug("New node discovered:", node)
+  })
+
+  redis.on("-node", (node) => {
+    logger.debug("Node removed:", node)
+  })
+
+  redis.on("+sdown", (node) => {
+    logger.warn("Node is subjectively down:", node)
+  })
+
+  redis.on("-sdown", (node) => {
+    logger.warn("Node is subjectively up:", node)
+  })
+
+  redis.on("+failover-start", () => {
+    logger.warn("Failover process has started")
+  })
+
+  redis.on("+failover-end", () => {
+    logger.warn("Failover process has completed")
+  })
+
+  return redis
 }
 
 /**
- * Creates a Redis connection using Sentinel configuration.
+ * Creates a Redis client configured for Sentinel mode.
  * 
- * @param {string} sentinelUrl - The URL of the Sentinel instance.
- * @param {number} [port] - The port number of the Sentinel instance. Defaults to 26379 if not provided.
- * @param {string} [username] - The username for authentication.
- * @param {string} [password] - The password for authentication.
- * @param {string} [setName="mymaster"] - The name of the Sentinel set.
- * @returns {Redis} A Redis connection instance configured with Sentinel.
+ * @param options - The Redis Sentinel configuration options
+ * @param options.sentinelUrl - The URL of the Sentinel server
+ * @param options.port - The port number for the Sentinel server
+ * @param options.username - Optional username for authentication
+ * @param options.password - Optional password for authentication
+ * @param options.setName - The name of the Sentinel set
+ * @param options.maxRetryDelay - Maximum delay between retry attempts
+ * @param options.maxRetries - Maximum number of retry attempts
+ * @param options.connectionTimeout - Connection timeout
+ * @param options.commandTimeout - Command execution timeout
+ * @returns A configured Redis client instance in Sentinel mode
  */
-export const redisSentinelFactory = (
-  sentinelUrl: string,
-  port?: number,
-  username?: string,
-  password?: string,
-  setName = "mymaster",
-) => {
+export const redisSentinelFactory = (options: {
+  sentinelUrl: string
+  port?: number
+  username?: string
+  password?: string
+  setName?: string
+  maxRetryDelay?: number
+  maxRetries?: number
+  connectionTimeout?: number
+  commandTimeout?: number
+}) => {
+  const configuration = {
+    ...options,
+    setName: options.setName ?? "mymaster",
+  }
   return new Redis({
-    sentinels: [{ host: sentinelUrl, port: port ?? 26379 }],
-    ...(password && { sentinelPassword: password }),
-    ...(password && { password }),
-    ...(username && { username }),
-    name: setName,
+    sentinels: [{ host: configuration.sentinelUrl, port: configuration.port ?? 26379 }],
+    retryStrategy: (times) => {
+      if (times > (configuration.maxRetries ?? 10)) {
+        return null
+      }
+
+      const maxDelay = configuration.maxRetryDelay ?? 2000
+      const delay = Math.min(times * 50, maxDelay)
+      return delay
+    },
+    reconnectOnError: (err) => {
+      const targetError = "READONLY"
+      return err.message.includes(targetError)
+    },
+    maxRetriesPerRequest: configuration.maxRetries ?? 10,
+    connectTimeout: configuration.connectionTimeout ?? 20000,
+    commandTimeout: configuration.commandTimeout ?? 5000,
+    ...(configuration.password && { sentinelPassword: configuration.password }),
+    ...(configuration.password && { password: configuration.password }),
+    ...(configuration.username && { username: configuration.username }),
+    name: configuration.setName,
   })
+}
+
+/**
+ * Stores Redis client instances for reuse
+ */
+const redisPool = new Map<string, Redis>()
+
+/**
+ * Stores Redis configurations for each connection URL
+ */
+const redisConfigurationCache = new Map<string, RedisConfiguration>()
+
+const poolLogger = createLogger("redis-pool-factory")
+
+/**
+ * Configures a Redis instance with the specified options.
+ * If an instance with the same URL already exists, it won't be reconfigured unless override is true.
+ * 
+ * @param options - The Redis configuration options
+ * @param override - Whether to override existing configuration
+ */
+export const configureRedisInstance = (options: RedisConfiguration, override?: boolean) => {
+  if (redisConfigurationCache.has(options.redisUrl) && !override) {
+    poolLogger.warn("Redis configuration already exists", { redisUrl: options.redisUrl })
+    return
+  }
+
+  redisConfigurationCache.set(options.redisUrl, options)
+}
+
+/**
+ * Retrieves a Redis instance for the specified URL.
+ * If an instance doesn't exist, it creates one using the cached configuration.
+ * 
+ * @param options - Object containing the Redis URL
+ * @param options.redisUrl - The Redis connection URL
+ * @returns A Redis client instance
+ * @throws Error if no configuration exists for the specified URL
+ */
+export const getRedisInstance = (options: { redisUrl: string }) => {
+  let redis = redisPool.get(options.redisUrl)
+  if (!redis) {
+    const configuration = redisConfigurationCache.get(options.redisUrl)
+    if (!configuration) {
+      poolLogger.error("Redis configuration not found", { redisUrl: options.redisUrl })
+      throw new Error("Redis configuration not found")
+    }
+
+    redis = redisFactory(configuration)
+    redisPool.set(options.redisUrl, redis)
+  }
+
+  return redis
 }
 ```
 
@@ -97,13 +290,31 @@ export const redisSentinelFactory = (
 
 ## Usage
 
+it is recommended to create builders in a separate file that you can import and use in your components
+
+```typescript
+// lib/redis-builder.ts
+import env from "./env"
+import { configureRedisInstance, getRedisInstance } from "./lib/redis-factory"
+
+// single instance
+const url = "redis://user:password@localhost:6379"
+configureRedisInstance({ redisUrl: url, name: "cold-storage" })
+export const getColdStorageRedisInstance = () => getRedisInstance({ redisUrl: url })
+
+// sentinel instance
+const sentinelUrl = "redis+sentinel://user:password@localhost:26379/mymaster"
+configureRedisInstance({ redisUrl: sentinelUrl, name: "hot-storage" })
+export const getHotStorageRedisInstance = () => getRedisInstance({ redisUrl: sentinelUrl })
+```
+
 ### Using a Single Redis Instance
 
 ```typescript
 // src/index.ts
-import { redisFactory } from "@lib/redis-factory"
+import { getColdStorageRedisInstance } from "@lib/redis-builder"
 
-const redis = redisFactory("redis://user:password@localhost:6379")
+const redis = getColdStorageRedisInstance()
 
 redis.set("key", "value")
 redis.get("key")
@@ -115,7 +326,7 @@ redis.get("key")
 // src/index.ts
 import { redisFactory } from "@lib/redis-factory"
 
-const redis = redisFactory("redis+sentinel://user:password@localhost:26379/mymaster")
+const redis = getHotStorageRedisInstance()
 
 redis.set("key", "value")
 redis.get("key")
