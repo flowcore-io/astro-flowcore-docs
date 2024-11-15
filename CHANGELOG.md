@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.60.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.60.0...v1.60.1) (2024-11-15)
+
+
+### Bug Fixes
+
+* **cli:** :bug: the page size incorrectly stated that it could only be set to 3 fixed values ([d30c015](https://github.com/flowcore-io/astro-flowcore-docs/commit/d30c015cd3d2720c62850c5da499465b43d394a2))
+
 ## [1.60.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.59.1...v1.60.0) (2024-11-14)
 
 
