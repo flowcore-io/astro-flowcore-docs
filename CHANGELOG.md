@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.60.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.59.1...v1.60.0) (2024-11-14)
+
+
+### Features
+
+* **library:** :memo: updated redis factory to latest version with instance pools ([9417871](https://github.com/flowcore-io/astro-flowcore-docs/commit/9417871b678d6910f8829d558ecc051ce84296f0))
+
 ## [1.59.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.59.0...v1.59.1) (2024-11-08)
 
 
