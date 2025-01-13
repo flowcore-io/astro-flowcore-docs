@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.61.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.60.1...v1.61.0) (2025-01-13)
+
+
+### Features
+
+* **cursor:** :sparkles: add .cursorrules and cursor documentation for AI-powered code editor ([20fb816](https://github.com/flowcore-io/astro-flowcore-docs/commit/20fb8161b2929cda27daf728b446f83fb7960133))
+
 ## [1.60.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.60.0...v1.60.1) (2024-11-15)
 
 
