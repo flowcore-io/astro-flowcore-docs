@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.62.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.61.0...v1.62.0) (2025-01-19)
+
+
+### Features
+
+* **cli:** add tip for prefixing transformer names in create-resources-cli documentation ([81c46b3](https://github.com/flowcore-io/astro-flowcore-docs/commit/81c46b3b3242314245e3a5d4c502a4e2fe79a8cf))
+
+
+### Bug Fixes
+
+* **cli:** update bun runtime version in create-resources-cli documentation ([895b984](https://github.com/flowcore-io/astro-flowcore-docs/commit/895b9848e3539d31c0ca31cdd79f3b2a18160bd5))
+* **cli:** update documentation to clarify prefixing transformer names in create-resources-cli ([e0f04dc](https://github.com/flowcore-io/astro-flowcore-docs/commit/e0f04dc3559635ae361aeb2fddecefe09cf802e3))
+
 ## [1.61.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.60.1...v1.61.0) (2025-01-13)
 
 
