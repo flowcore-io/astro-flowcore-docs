@@ -262,6 +262,21 @@ This will determine the number of replicas of the transformer.
   </p>
 :::
 
+## Scenario Transformer Prefixes
+
+You can set a prefix for the transformer name by adding the `prefix` field to the scenario in the manifest file.
+
+```yaml
+tenant: example-tenant
+scenario:
+  name: example-scenario
+  prefix: "example-"
+  transformers:
+    do-something:
+```
+
+the prefix will be added to the transformer name, so the transformer name will be `example-do-something`.
+
 ## Private Github Artifacts
 
 If you want to use a private Github artifact, you can add the following to the manifest file:
