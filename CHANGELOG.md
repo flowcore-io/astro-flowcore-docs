@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.63.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.62.1...v1.63.0) (2025-01-31)
+
+
+### Features
+
+* add migration guide for V2 platform changes ([1f2bc10](https://github.com/flowcore-io/astro-flowcore-docs/commit/1f2bc103d1185953dd68812fdca0f894e80720fd))
+
 ## [1.62.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.62.0...v1.62.1) (2025-01-30)
 
 
