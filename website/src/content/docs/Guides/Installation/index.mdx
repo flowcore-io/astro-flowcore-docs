@@ -1,0 +1,254 @@
+---
+title: Installation
+sidebar:
+  order: 1
+description: Installation
+---
+
+:::note
+This guide is for installing the Flowcore Platform on a dedicated Kubernetes cluster. It requires a dedicated cluster license, this can be purchased from the [AWS Marketplace](https://aws.amazon.com/marketplace/pp/prodview-pxk5sard7snla).
+:::
+
+To install the Flowcore Platform, you will first have to have a dedicated Kubernetes cluster.
+
+## Prerequisites
+
+- Kubernetes cluster version 1.28 or higher
+- A dedicated cluster license
+
+## Installation of Prerequisites
+
+1. Create a kubernetes cluster using your preferred method.
+
+    :::tip
+    We recommend using [EKS](https://aws.amazon.com/eks/) or [GKE](https://cloud.google.com/kubernetes-engine) for a dedicated cluster.
+    :::
+2. Once the cluster is ready, you will need to install the following services:
+    - [Cert-Manager](https://cert-manager.io/)
+    - [ArgoCD](https://argo-cd.readthedocs.io/en/stable/)
+    :::note
+    ArgoCD needs to be configured to have public access, this is required for GitHub to notify ArgoCD of changes, otherwise deployed changes will be delayed to the next sync cycle.
+    It is also recommended to setup a webhook to notify ArgoCD of changes to your repository.
+    :::
+    - [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/)
+    :::note
+    The Nginx Ingress Controller can be swapped out for any other ingress controller, such as [AWS ALB Ingress Controller](https://kubernetes.github.io/ingress-nginx/).
+    :::
+
+## Installation of Flowcore Platform
+
+To install the Flowcore Platform, you will need to use the [Flowcore Platform Helm Chart](https://github.com/flowcore-io/flowcore-helm-charts/blob/main/charts/flowcore-platform/README.md).
+
+### Base Credentials
+
+Create the following credentials in the `flowcore` namespace.
+
+1. Create a secret for the S3 Compatible Bucket.
+
+    ```bash
+    kubectl create secret generic flowcore-s3-credentials \
+      --from-literal=AWS_ACCESS_KEY_ID=<your-access-key-id> \
+      --from-literal=AWS_SECRET_ACCESS_KEY=<your-secret-access-key> \
+      --from-literal=AWS_REGION=<your-region> \
+      --from-literal=AWS_S3_BUCKET=<your-bucket-name> \
+      -n flowcore
+    ```
+
+:::tip
+You need to create a S3 Compatible Bucket, this can be done using your preferred method.
+:::
+
+2. Create a secret for the Cassandra database credentials.
+
+    ```bash
+    kubectl create secret generic platform-source-cassandra-user \
+      --from-literal=cassandra-password=<your-password> \
+      -n flowcore
+    ```
+
+3. Create a secret containing the Valkey HA Password.
+
+    ```bash
+    kubectl create secret generic platform-source-valkey-ha \
+      --from-literal=password=<your-password> \
+      -n flowcore
+    ```
+
+4. Create a secret containing the Valkey Single Password.
+
+    ```bash
+    kubectl create secret generic platform-source-valkey-single \
+      --from-literal=password=<your-password> \
+      -n flowcore
+    ```
+
+### Flowcore Tenant Credentials
+
+You will also need to create a few credentials for the Flowcore Tenant that will be tied to the dedicated cluster license.
+
+:::note
+You will have gotten your license key for the Flowcore Tenant when you purchased the dedicated cluster license, if you have not received this please contact support.
+:::
+
+First you will need to create an API key to use for the Flowcore Tenant.
+
+1. Create an API key using the Flowcore CLI.
+
+    ```bash
+    flowcore auth new key -t <tenant> dedicated-cluster
+    ```
+
+2. Create the following policies to be used by the API key.
+
+    ```yaml
+    // policy.yaml
+    apiVersion: iam.flowcore.io/v1
+    kind: Policy
+    metadata:
+      name: all-resources-read-write
+      tenant: my-tenant
+    spec:
+      version: "1.0.0"
+      description: "Allows read and write access to all resources"
+      policyDocuments:
+        - resource: "frn::my-tenant:*"
+          action: "*" 
+    ```
+
+    ```bash
+    flowcore apply -f policy.yaml --v2
+    ```
+
+3. Bind the policy to the API key.
+
+    ```yaml
+    // policy-binding.yaml
+    apiVersion: iam.flowcore.io/v1
+    kind: PolicyBinding
+    metadata:
+      name: developer-policy-binding
+      tenant: my-tenant
+    spec:
+      policy: "all-resources-read-write" # References the policy name above
+      subjects:
+        - type: key
+          id: <api-key-id>
+    ```
+
+    ```bash
+    flowcore apply -f policy-binding.yaml --v2
+    ```
+
+3. Create a secret containing the following:
+    - The API key
+    - The License Key
+    - The Tenant ID
+    - The Tenant Name
+
+    ```bash
+    kubectl create secret generic flowcore-tenant-credentials \
+      --from-literal=api-key=<your-api-key> \
+      --from-literal=license-key=<your-license-key> \
+      --from-literal=tenant-id=<your-tenant-id> \
+      --from-literal=tenant-name=<your-tenant-name> \
+      -n flowcore
+    ```
+
+### GitHub Credentials
+
+The Flowcore Platform Control Plane needs access to your GitHub repository to deploy your transformers. This is done by creating a GitHub App and adding the necessary permissions.
+
+1. Create a GitHub App [here](https://github.com/settings/apps/new).
+2. Add the following permissions:
+    - Read and Write Access to Metadata
+    - Read and Write Access to The Contents of Repositories
+3. Add the GitHub App to your repository.
+4. Create a secret containing the following:
+    - The GitHub App ID
+    - The GitHub App Installation ID
+    - The GitHub App Private Key
+    - The Github Repository URL
+
+    ```bash
+    kubectl create secret generic flowcore-github-credentials \
+      --from-literal=github-app-id=<your-github-app-id> \
+      --from-literal=github-app-installation-id=<your-github-app-installation-id> \
+      --from-literal=github-app-private-key=<your-github-app-private-key> \
+      --from-literal=github-repository-url=<your-github-repository-url> \
+      -n flowcore
+    ```
+
+## Install the Flowcore Platform
+
+Now that you have created the necessary credentials, you can install the Flowcore Platform.
+
+1. Install the Flowcore Platform using the Helm Chart.
+
+    ```bash
+    helm repo add flowcore https://flowcore-io.github.io/flowcore-helm-charts/
+    helm install flowcore-platform flowcore/flowcore-platform --namespace flowcore \
+      --set flowcore.ingestionUrl=<url you want to use for ingestion> \
+      --set flowcore.eventSourceUrl=<url you want to use for event source> \
+      --set flowcore.stateUrl=<url you want to use for fetching state>
+    ```
+
+2. Wait for the Flowcore Platform to be ready.
+
+    ```bash
+    kubectl get pods -n flowcore
+    ```
+
+:::note
+It can take up to 30 minutes for the Flowcore Platform to be ready. So grab a coffee and relax.
+:::
+
+3. Once the Flowcore Platform is ready, you should be able to access any data or state through the Flowcore Platform UI and CLI.
+
+:::tip
+The ingestion endpoint and event source endpoints are used by the Flowcore Platform control plane to route your requests to the correct Flowcore Tenant when fetching data, state or ingesting data.
+:::
+
+## Troubleshooting
+
+If you are experiencing issues with the Flowcore Platform, please contact support at support@flowcore.io.
+
+### Common Issues
+
+1. Flowcore Platform is not ready.
+
+    ```bash
+    kubectl get pods -n flowcore  
+    ```
+
+    If the Flowcore Platform is not ready, please check the logs of the pods in the `flowcore` namespace.
+
+2. Flowcore Platform is not ingesting data.
+
+    ```bash
+    kubectl get ingress -n flowcore
+    ```
+
+    Make sure the ingress resource is created and is accessible, also make sure the `flowcore.ingestionUrl` is correct.
+
+3. The Flowcore Platform UI or CLI is not fetching any logs from my transformers.
+
+    ```bash
+    kubectl get ingress -n flowcore
+    kubectl get pods -n flowcore
+    ```
+
+    Make sure the pods are running and are accessible, also make sure the `flowcore.stateUrl` is correct.
+
+    ```bash
+    kubectl get pods -n org-<your tenant>-config
+    ```
+
+    Make sure your transformers are running and are accessible.
+
+4. I have ingested data but the Flowcore Platform UI does not show any data in my data cores.
+
+    ```bash
+    kubectl get ingress -n flowcore
+    ```
+
+    Make sure the ingress resource is created and is accessible, also make sure the `flowcore.eventSourceUrl` is correct.
