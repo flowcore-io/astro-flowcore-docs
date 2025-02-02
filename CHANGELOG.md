@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.64.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.63.0...v1.64.0) (2025-02-02)
+
+
+### Features
+
+* **iam-validation:** :fire: replace Redis cache with local SQLite key-value store ([539c7d5](https://github.com/flowcore-io/astro-flowcore-docs/commit/539c7d59d218c0b8331fa8914925b98628306cbd))
+
+
+### Bug Fixes
+
+* **iam-validation:** Update library installation command to use bun-sqlite-key-value ([432a07f](https://github.com/flowcore-io/astro-flowcore-docs/commit/432a07f65c70fe3d258a300ca32484ede410416e))
+
 ## [1.63.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.62.1...v1.63.0) (2025-01-31)
 
 
