@@ -1,6 +1,8 @@
 ---
 title: IAM Validation
 description: A library for validating IAM permissions in your API, and adding flowcore guards to your endpoints
+sidebar:
+  badge: Updated
 ---
 
 IAM Validation is a library for validating IAM permissions in your API, and adding flowcore guards to your endpoints.
@@ -29,11 +31,10 @@ flowcore component add library/iam-validation
     ```typescript
     // lib/iam-validation.ts
     import { ApiException } from "@components/api-exceptions"
-    import type { FlowcoreAuthenticatedUser } from "@components/jwks-guard"
     import type { Logger } from "@components/logger"
     import type * as xxHash from "@jabr/xxhash64"
     import { type Static, Type } from "@sinclair/typebox"
-    import type { Redis } from "ioredis"
+    import { BunSqliteKeyValue } from "bun-sqlite-key-value"
 
     /**
      * Represents an API forbidden exception. This exception is thrown when the server refuses to authorize the request.
@@ -111,26 +112,18 @@ flowcore component add library/iam-validation
           validPolicies: { policyFrn: string; statementId: string }[]
         }
 
+    const HASH_KEY_TTL_IN_MS = 300_000
+
     export class IamValidateBuilder {
-      private redisClient: Redis | undefined
       private hash!: xxHash.Hasher
       private type: "users" | "keys" = "users"
       private mode: "tenant" | "organization" = "tenant"
-      private hashMap: Map<string, boolean> = new Map()
       private logger: Logger | undefined
+      private localCache: BunSqliteKeyValue = new BunSqliteKeyValue(":memory:", {
+        ttlMs: 300_000,
+      })
 
       constructor(private readonly iamApiUrl: string) {}
-
-      /**
-       * Sets the Redis client for caching.
-       *
-       * @param {Redis} redisClient - The Redis client instance.
-       * @returns {IamValidateBuilder} - This instance for method chaining.
-       */
-      public withRedisClient(redisClient: Redis): IamValidateBuilder {
-        this.redisClient = redisClient
-        return this
-      }
 
       /**
        * Sets the hash function for generating checksums.
@@ -188,16 +181,9 @@ flowcore component add library/iam-validation
         const checksum = this.hash.hash(JSON.stringify(requestedAccess), "hex").toString()
         return async ({ flowcoreUser }: { flowcoreUser: FlowcoreAuthenticatedUser }): Promise<void> => {
           const { id } = flowcoreUser
-          const localChecksum = this.hashMap.has(`${id}-${checksum}`)
-          if (localChecksum) {
-            const cacheKey = `iam:${this.type}-validation:${checksum}:${id}`
-
-            if (this.redisClient) {
-              const cached = await this.redisClient.get(cacheKey)
-              if (cached === "true") {
-                return
-              }
-            }
+          const localChecksum = this.localCache.get<boolean>(`${id}-${checksum}`)
+          if (localChecksum === true) {
+            return
           }
 
           const validation = await fetch(`${this.iamApiUrl}/api/v1/validate/${this.type}/${id}`, {
@@ -214,7 +200,7 @@ flowcore component add library/iam-validation
           const data = (await validation.json()) as IamValidationResponse
 
           if (data.valid) {
-            this.hashMap.set(`${id}-${data.checksum}`, true)
+            this.localCache.set(`${id}-${data.checksum}`, true, HASH_KEY_TTL_IN_MS)
             this.logger?.debug(`IAM validation passed for ${this.type} ${id} with checksum ${data.checksum}`)
           } else {
             this.logger?.error("IAM validation failed", data)
