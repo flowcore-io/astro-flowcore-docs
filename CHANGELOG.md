@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.63.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.62.1...v1.63.0) (2025-01-31)
+
+
+### Features
+
+* add migration guide for V2 platform changes ([1f2bc10](https://github.com/flowcore-io/astro-flowcore-docs/commit/1f2bc103d1185953dd68812fdca0f894e80720fd))
+
+## [1.62.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.62.0...v1.62.1) (2025-01-30)
+
+
+### Bug Fixes
+
+* **cli:** update default transformer start date description ([465f4f2](https://github.com/flowcore-io/astro-flowcore-docs/commit/465f4f29658c1809d78da8905fb01fdeed92b27e))
+* **cli:** update default transformer start date description to now() ([b646820](https://github.com/flowcore-io/astro-flowcore-docs/commit/b6468205ecce2829f51f2c080549b75aabe8868d))
+
 ## [1.62.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.62.0...v1.62.1) (2025-01-30)
 
 
