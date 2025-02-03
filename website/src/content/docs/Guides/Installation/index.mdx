@@ -2,6 +2,7 @@
 title: Installation
 sidebar:
   order: 1
+  badge: New
 description: Installation
 ---
 
@@ -105,14 +106,22 @@ First you will need to create an API key to use for the Flowcore Tenant.
     apiVersion: iam.flowcore.io/v1
     kind: Policy
     metadata:
-      name: all-resources-read-write
-      tenant: my-tenant
+      name: dedicated-cluster-policy
+      tenant: <tenant>
     spec:
       version: "1.0.0"
       description: "Allows read and write access to all resources"
       policyDocuments:
-        - resource: "frn::my-tenant:*"
-          action: "*" 
+        - resource: "frn::<tenant>:tenant/*"
+          action: [
+            "read",
+            "write"
+          ]
+        - resource: "frn::<tenant>:license/*"
+          action: [
+            "read",
+            "write"
+          ]
     ```
 
     ```bash
@@ -126,10 +135,10 @@ First you will need to create an API key to use for the Flowcore Tenant.
     apiVersion: iam.flowcore.io/v1
     kind: PolicyBinding
     metadata:
-      name: developer-policy-binding
-      tenant: my-tenant
+      name: dedicated-cluster-policy-binding
+      tenant: <tenant>
     spec:
-      policy: "all-resources-read-write" # References the policy name above
+      policy: "dedicated-cluster-policy" # References the policy name above
       subjects:
         - type: key
           id: <api-key-id>
