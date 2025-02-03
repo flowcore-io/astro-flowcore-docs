@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.64.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.64.0...v1.64.1) (2025-02-03)
+
+
+### Bug Fixes
+
+* **installation:** Update policy and policy binding examples with more specific configurations ([30c9cb7](https://github.com/flowcore-io/astro-flowcore-docs/commit/30c9cb761d0ed1909b1543a7a7ea4e71a444d7b3))
+
 ## [1.64.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.63.0...v1.64.0) (2025-02-02)
 
 
