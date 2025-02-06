@@ -83,6 +83,16 @@ You need to create a S3 Compatible Bucket, this can be done using your preferred
       -n flowcore
     ```
 
+5. Create a secret containing the PostgreSQL credentials.
+
+    ```bash
+    kubectl create secret generic postgresql-ha \
+      --from-literal=repmgr-password=<repmgr-password> \
+      --from-literal=password=<postgres-password> \
+      --from-literal=admin-password=<pgpool-password> \
+      -n flowcore
+    ```
+
 ### Flowcore Tenant Credentials
 
 You will also need to create a few credentials for the Flowcore Tenant that will be tied to the dedicated cluster license.
