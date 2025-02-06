@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.65.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.64.1...v1.65.0) (2025-02-06)
+
+
+### Features
+
+* **installation:** Add PostgreSQL credentials secret creation step to installation guide ([d01c5d8](https://github.com/flowcore-io/astro-flowcore-docs/commit/d01c5d81a63458b891288c5f15a1ed7d9386032f))
+
 ## [1.64.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.64.0...v1.64.1) (2025-02-03)
 
 
