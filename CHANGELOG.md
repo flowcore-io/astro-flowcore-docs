@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.66.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.65.0...v1.66.0) (2025-02-12)
+
+
+### Features
+
+* **sdk:** Add comprehensive Flowcore SDK documentation ([01672a4](https://github.com/flowcore-io/astro-flowcore-docs/commit/01672a4b166fc3ab37cbf0bc285e36b9cf4ddec6))
+
+
+### Bug Fixes
+
+* **sdk:** Update installation instructions with Bun package manager ([fa22c23](https://github.com/flowcore-io/astro-flowcore-docs/commit/fa22c23d265ce98ff2eae5800fe9ae94f8733772))
+
 ## [1.65.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.64.1...v1.65.0) (2025-02-06)
 
 
