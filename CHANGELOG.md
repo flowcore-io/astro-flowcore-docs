@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.66.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.66.0...v1.66.1) (2025-02-19)
+
+
+### Bug Fixes
+
+* Add dedicated cluster setup link to homepage and update support contact information ([17bcd83](https://github.com/flowcore-io/astro-flowcore-docs/commit/17bcd8320f8388dc316bd090e92645992fd4fa39))
+
 ## [1.66.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.65.0...v1.66.0) (2025-02-12)
 
 
