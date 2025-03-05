@@ -1,0 +1,91 @@
+---
+title: Testing
+sidebar: 
+    badge: New
+description: Generate test data from data streams.
+---
+
+You can generate test data from data streams using the Flowcore CLI.
+
+## Generate Test Data
+
+To generate test data, you can use the `flowcore generate test-set STREAM` command. This will generate a test set from the specified stream.
+
+```sh
+flowcore generate test-set <STREAM> --directory <DIRECTORY> 
+```
+
+The `--directory` flag specifies the directory where the test set will be saved.
+
+## Generate Test Data with a Specific Sample Size
+
+You can generate test data with a specific size using the `--sample-size` flag.
+
+```sh
+flowcore testing generate test-set <STREAM> --directory <DIRECTORY> --sample-size <SIZE>
+```
+The `--sample-size` flag specifies the size of the test set. The default sample size is 100.
+
+## Proccess Test Data with AI
+
+You can use the `--ai` flag to proccess the test set further with AI.
+
+```sh
+flowcore  generate test-set <STREAM> --directory <DIRECTORY> --ai
+```
+
+## Generate Test Data with Redacet Fields
+
+You can use the `--redact` flag to redact fields from the test set with a specified mask with `--redact-mask`.
+
+```sh
+flowcore  generate test-set <STREAM> --directory <DIRECTORY> --redact <FIELD> --redact-mask <MASK>
+```
+The `--redact` flag can be used multiple times to redact multiple fields.
+
+## Filtered Out Fields
+
+You can use the `--filter-out` flag to filter out fields from the test set by specifying the json path.
+
+```sh
+flowcore  generate test-set <STREAM> --directory <DIRECTORY> --filter-out <FIELD>
+```
+The `--filter-out` flag can be used multiple times to filter out multiple fields.
+
+## Filtered In Fields
+
+You can use the `--filter-in` flag to filter in fields from the test set by specifying the json path.
+
+```sh
+flowcore  generate test-set <STREAM> --directory <DIRECTORY> --filter-in <FIELD>
+```
+The `--filter-in` flag can be used multiple times to filter in multiple fields.
+
+
+## Filter Out Events and Filter In Events
+
+You can use the `--filter-out-events` and `--filter-in-events` flags to filter out and in events by specifying the json path in the format `<jsonPath>;<operator>;<value>`.
+
+```sh
+flowcore  generate test-set <STREAM> --directory <DIRECTORY> --filter-out-events <jsonPath>;<operator>;<value>
+```
+
+```sh
+flowcore  generate test-set <STREAM> --directory <DIRECTORY> --filter-in-events <jsonPath>;<operator>;<value>
+```
+The `--filter-out-events` and `--filter-in-events` flags can be used multiple times to filter out or filter in multiple events.
+
+
+## Generate Test Data with fake fields
+
+You can use the `--fake` flag to generate fake fields in the test set. The `--fake` flag can be uses along with the `--fake-properties` flag and the `--fake-type` flag.
+
+```sh
+flowcore  generate test-set <STREAM> --directory <DIRECTORY> --fake <FIELD> --fake-properties <PROPERTIES> --fake-type <TYPE>
+```
+The `--fake-properties` flag specifies the properties to use when faking fields "value,key=value,key=value" format, and is only applicable if `--fake-type` flag is used
+
+The `--fake-type` flag specifies the type of fake field to generate, and is only applicable if `--fake` flag is used. You can use most of the fakerjs api (https://fakerjs.dev/api/) by using the path to the method.
+
+The flags need to be in the same order as the `--fake` flag and can be used multiple times.
+
