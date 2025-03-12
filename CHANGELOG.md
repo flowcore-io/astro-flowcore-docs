@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.67.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.66.1...v1.67.0) (2025-03-12)
+
+
+### Features
+
+* **Flowcore MCP Server:** :sparkles: Add configuration guides for Claude Desktop and Cursor ([b9fa6e7](https://github.com/flowcore-io/astro-flowcore-docs/commit/b9fa6e74cbb90492d943a5fe63f62ffb093a2bfe))
+
+
+### Bug Fixes
+
+* **Flowcore MCP Server:** :memo: Add recommendation for enabling `yolo` mode in cursor configuration ([4d0ca69](https://github.com/flowcore-io/astro-flowcore-docs/commit/4d0ca691ebe7c8f48dd63a9341ca8fff2d5653a1))
+* **Flowcore MCP Server:** :memo: Refine file-based MCP Server configuration and remove redundant sections ([04502b1](https://github.com/flowcore-io/astro-flowcore-docs/commit/04502b1593d58d94286e0857ebe53ccda8d2dfa0))
+* **Flowcore MCP Server:** :memo: Update file-based MCP Server configuration instructions and add global configuration note ([cb3b80e](https://github.com/flowcore-io/astro-flowcore-docs/commit/cb3b80e7fd4cc3e1332bd3af1f6ffbc50b8ae2ee))
+
 ## [1.66.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.66.0...v1.66.1) (2025-02-19)
 
 
