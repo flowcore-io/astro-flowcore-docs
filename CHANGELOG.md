@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.0...v1.67.1) (2025-03-12)
+
+
+### Bug Fixes
+
+* **Flowcore MCP Server:** :memo: Add ingestion configuration instructions for specific projects ([5408f91](https://github.com/flowcore-io/astro-flowcore-docs/commit/5408f9185c893839c96628829b40e6189720c0ca))
+
 ## [1.67.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.66.1...v1.67.0) (2025-03-12)
 
 
