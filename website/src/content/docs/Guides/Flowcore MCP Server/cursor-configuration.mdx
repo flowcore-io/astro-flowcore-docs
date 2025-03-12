@@ -89,3 +89,35 @@ You should now see the Flowcore MCP Server in the list of MCP Servers, something
 
 </ol>
 </Steps>
+
+## Enabling Ingestion for a specific project
+
+To enable ingestion through the MCP Server for a specific project, you can follow the steps below.
+
+you need to use this configuration in the project's `mcp.json` file:
+
+```json
+{
+  "mcpServers": {
+    "flowcore": {
+      "name": "Flowcore MCP Server",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@flowcore/platform-mcp-server@latest",
+        "--serviceAccountId",
+        "<your-service-account-id>",
+        "--serviceAccountKey",
+        "<your-service-account-key>",
+        "--apiKey",
+        "<your-api-key>"
+      ]
+    }
+  }
+}
+```
+
+You can also use this in the global `mcp.json` file to enable ingestion for all projects, but it will be limited to the tenant you have created the api key for.
+
+
+
