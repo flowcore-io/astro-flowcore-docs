@@ -47,16 +47,20 @@ Create the following credentials in the `flowcore` namespace.
 1. Create a secret for the S3 Compatible Bucket.
 
     ```bash
-    kubectl create secret generic flowcore-s3-credentials \
-      --from-literal=AWS_ACCESS_KEY_ID=<your-access-key-id> \
-      --from-literal=AWS_SECRET_ACCESS_KEY=<your-secret-access-key> \
-      --from-literal=AWS_REGION=<your-region> \
-      --from-literal=AWS_S3_BUCKET=<your-bucket-name> \
+    kubectl create secret generic aws-credentials \
+      --from-literal=aws-access-key-id=<your-access-key-id> \
+      --from-literal=aws-secret-access-key=<your-secret-access-key> \
+      --from-literal=aws-region=eu-west-1 \
+      --from-literal=aws-s3-bucket=flowcore-archive \
       -n flowcore
     ```
 
 :::tip
 You need to create a S3 Compatible Bucket, this can be done using your preferred method.
+:::
+
+:::note
+The region and bucket name are configured in the helm chart, if you need to change them you can do so by editing the `values.yaml` file and overriding the values in the deployments.
 :::
 
 2. Create a secret for the Cassandra database credentials.
@@ -86,10 +90,19 @@ You need to create a S3 Compatible Bucket, this can be done using your preferred
 5. Create a secret containing the PostgreSQL credentials.
 
     ```bash
-    kubectl create secret generic postgresql-ha \
+    kubectl create secret generic platform-source-postgresql-ha \
       --from-literal=repmgr-password=<repmgr-password> \
       --from-literal=password=<postgres-password> \
       --from-literal=admin-password=<pgpool-password> \
+      -n flowcore
+    ```
+
+6. Create a secret containing the ArangoDB credentials.
+
+    ```bash
+    kubectl create secret generic platform-source-arangodb-root \
+      --from-literal=username=<arangodb-username> \
+      --from-literal=password=<arangodb-password> \
       -n flowcore
     ```
 
@@ -206,10 +219,21 @@ Now that you have created the necessary credentials, you can install the Flowcor
     ```bash
     helm repo add flowcore https://flowcore-io.github.io/flowcore-helm-charts/
     helm install flowcore-platform flowcore/flowcore-platform --namespace flowcore \
-      --set flowcore.ingestionUrl=<url you want to use for ingestion> \
-      --set flowcore.eventSourceUrl=<url you want to use for event source> \
-      --set flowcore.stateUrl=<url you want to use for fetching state>
+      --set flowcore.domain=<domain you want to use for the platform> \
+      --set flowcore.tlsSecret=<tls-secret-name> \
+      --set flowcore.configurationRepository=<configuration-repository-url> \
+      --set flowcore.tenant=<tenant-name>
     ```
+
+:::note
+The `flowcore.domain` is the domain you want to use for the platform, this will be used to generate the urls for the services that are accessible from the internet. for example with a domain of `example.com` the ingestion url will be `https://event-source.example.com`.
+
+You can override the subdomains in with values for each service.
+:::
+
+:::caution
+The `flowcore.domain` must be a valid domain that you have access to and have a mechanism for generating certificates for as all services are exposed over HTTPS.
+:::
 
 2. Wait for the Flowcore Platform to be ready.
 
@@ -229,7 +253,7 @@ The ingestion endpoint and event source endpoints are used by the Flowcore Platf
 
 ## Troubleshooting
 
-If you are experiencing issues with the Flowcore Platform, please contact support at support@flowcore.io.
+If you are experiencing issues with the Flowcore Platform, please contact support at support@flowcore.com.
 
 ### Common Issues
 
