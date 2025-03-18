@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.67.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.1...v1.67.2) (2025-03-13)
+
+
+### Bug Fixes
+
+* **Flowcore MCP Server:** :memo: Add example prompt for enabling Yolo mode in cursor configuration ([ba5975e](https://github.com/flowcore-io/astro-flowcore-docs/commit/ba5975eb25df20b380b6e60670bdc2c1030744d4))
+* **Flowcore MCP Server:** :memo: Refactor and reorder file-based MCP Server configuration instructions ([1557889](https://github.com/flowcore-io/astro-flowcore-docs/commit/1557889d4e09e74aed43d60fe17aecaa446e5b01))
+* **Flowcore MCP Server:** :memo: Remove redundant opening brace in cursor configuration example ([31437d1](https://github.com/flowcore-io/astro-flowcore-docs/commit/31437d18d3bf700296ac19d1a5e29065bb2b87b2))
+
 ## [1.67.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.0...v1.67.1) (2025-03-12)
 
 
