@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.2...v1.67.3) (2025-03-18)
+
+
+### Bug Fixes
+
+* **Flowcore MCP Server:** :memo: Update configuration instructions to include Flowcore Personal Access Token details ([0728150](https://github.com/flowcore-io/astro-flowcore-docs/commit/0728150903da6e328760131f29416cd46ee32b67))
+
 ## [1.67.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.1...v1.67.2) (2025-03-13)
 
 
