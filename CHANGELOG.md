@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.4](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.3...v1.67.4) (2025-03-18)
+
+
+### Bug Fixes
+
+* **Flowcore MCP Server:** :memo: Add caution note for Windows users regarding node installation ([6137c0f](https://github.com/flowcore-io/astro-flowcore-docs/commit/6137c0fbcb62f408f7413cde7e7b990349d4149c))
+
 ## [1.67.3](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.2...v1.67.3) (2025-03-18)
 
 
