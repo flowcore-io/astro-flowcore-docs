@@ -13,6 +13,37 @@ import CursorFlowcoreMCP from "../../../../assets/guides/flowcore-mcp-server/cur
 import CursorMCPServers from "../../../../assets/guides/flowcore-mcp-server/cursor-mcp-servers.png";
 import CursorSettings from "../../../../assets/guides/flowcore-mcp-server/cursor-settings.png";
 
+## MCP Server Prerequisites
+
+Before you can configure Cursor to use the Flowcore MCP Server, you need to have the following prerequisites:
+
+- A Flowcore Personal Access Token (PAT)
+- A Flowcore API Key (for MCP ingestion, this is optional but recommended)
+
+## Flowcore Personal Access Token (PAT)
+
+To create a Flowcore Personal Access Token (PAT), you can run the following CLI command:
+
+```bash
+flowcore auth new pat <name you want to give to the token>
+```
+
+:::caution
+You need to save the token somewhere safe as it will not be shown again.
+:::
+
+## Flowcore API Key
+
+To create a Flowcore API Key, you can run the following CLI command:
+
+```bash
+flowcore auth new key -t <tenant> <name you want to give to the api key>
+```
+
+:::caution
+You need to save the api key somewhere safe as it will not be shown again.
+:::
+
 ## File based MCP Server configuration
 
 To configure the Flowcore MCP Server via a file based configuration, you can create the following `.cursor/mcp.json` file for a specific project or globally at `~/.cursor/mcp.json` for all projects:
@@ -85,16 +116,6 @@ To configure Cursor to use the Flowcore MCP Server you can follow the steps belo
 
 <Steps>
 <ol>
-
-<li>
-  First you need to create a Flowcore Personal Access Token. by running the following CLI command:
-  ```bash
-  flowcore auth new pat <name you want to give to the token>
-  ```
-  :::caution
-  You need to save the token somewhere safe as it will not be shown again.
-  :::
-</li>
 
 <li>
 Go to Cursor Settings, and Click on the MCP Server tab:
