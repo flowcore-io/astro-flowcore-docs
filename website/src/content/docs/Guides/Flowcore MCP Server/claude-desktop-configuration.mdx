@@ -12,22 +12,43 @@ import ClaudeDesktopConfig from "../../../../assets/guides/flowcore-mcp-server/c
 import ClaudeDeveloper from "../../../../assets/guides/flowcore-mcp-server/claude-developer.png";
 import ClaudeSettings from "../../../../assets/guides/flowcore-mcp-server/claude-settings.png";
 
+## MCP Server Prerequisites
+
+Before you can configure Cursor to use the Flowcore MCP Server, you need to have the following prerequisites:
+
+- A Flowcore Personal Access Token (PAT)
+- A Flowcore API Key (for MCP ingestion, this is optional but recommended)
+
+## Flowcore Personal Access Token (PAT)
+
+To create a Flowcore Personal Access Token (PAT), you can run the following CLI command:
+
+```bash
+flowcore auth new pat <name you want to give to the token>
+```
+
+:::caution
+You need to save the token somewhere safe as it will not be shown again.
+:::
+
+## Flowcore API Key
+
+To create a Flowcore API Key, you can run the following CLI command:
+
+```bash
+flowcore auth new key -t <tenant> <name you want to give to the api key>
+```
+
+:::caution
+You need to save the api key somewhere safe as it will not be shown again.
+:::
+
 ## Claude Desktop
 
 To configure Claude Desktop to use the Flowcore MCP Server you can follow the steps below.
 
 <Steps>
 <ol>
-
-<li>
-  First you need to create a Flowcore Personal Access Token. by running the following CLI command:
-  ```bash
-  flowcore auth new pat <name you want to give to the token>
-  ```
-  :::caution
-  You need to save the token somewhere safe as it will not be shown again.
-  :::
-</li>
 
 <li>
 Go to Claude Desktop Settings, and Click on the "Developer" tab:
