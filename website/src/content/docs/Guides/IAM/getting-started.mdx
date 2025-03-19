@@ -25,7 +25,7 @@ Policies are the fundamental building blocks of permissions in Flowcore. A polic
 - On which resources, can be a specific resource (FRN) or a wildcard (`frn::<tenant>:<resource-type>/<resource-id>`, `frn::<tenant>:<resource-type>/*`)
 - Principal (who is allowed to perform the action, this is a frn to another role, can be in the same tenant or a different tenant)
 
-For example, a policy might allow `fetch` access to all events in a specific tenant, data core, Flow Type or event type.
+For example, a policy might allow `fetch` access to all events in a specific tenant, data core, Flow Type or Event Type.
 
 ### Roles 
 
@@ -34,7 +34,7 @@ Roles are collections of policies that are grouped together to provide a specifi
 Flowcore has a set of default roles that are created when a tenant is created. These include:
 - `Owner` - Full access to all resources
 - `Collaborator` - Read-only access to specific resources
-- `Ingestion` - Only access to ingest data, can be useful if you want to generate api keys that only have ingestion rights to a specific tenant, data core, Flow Type or event type.
+- `Ingestion` - Only access to ingest data, can be useful if you want to generate api keys that only have ingestion rights to a specific tenant, data core, Flow Type or Event Type.
 
 ### Policy Bindings
 

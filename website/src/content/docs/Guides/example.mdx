@@ -174,10 +174,10 @@ If you are using the **Free Tier** you will only be able to create public data c
 
 Within the data core, you can organize your data further by creating groups and subgroups. This is done by creating **Flowtypes** from within the data core.
 
-To simplify the concept of flowtypes, you can imagine that the aggregator is a drawer and the event types are little storage boxes within the drawer. This gives you the ability to roughly organize your data without having to be too thorough.
+To simplify the concept of flowtypes, you can imagine that the aggregator is a drawer and the Event Types are little storage boxes within the drawer. This gives you the ability to roughly organize your data without having to be too thorough.
 Allowing you to group up multiple related data sets into one data core.
 
-To create a flowtype, click the **Create Flowtype** button within your data core’s page. Here you will be able to define the aggregator, write a description and list your event types.
+To create a flowtype, click the **Create Flowtype** button within your data core’s page. Here you will be able to define the aggregator, write a description and list your Event Types.
 
 <div style="display:flex; justify-content:center">
     ![Create flowtype](../../../assets/getting-started-assets/create-flowtype_flowcore-io.png)
@@ -204,7 +204,7 @@ Currently, Flowcore supports webhooks, with plans to introduce MQTT and "bring y
 ![Webhook window](../../../assets/getting-started-assets/webhooks_flowcore-io.png) 
 </div>
 
-Here you can choose which organization, data core, flowtype and event type to use. This will generate a webhook, which is a URL you can call. However, to complete the webhook, you will need to generate an API key for authentication.
+Here you can choose which organization, data core, flowtype and Event Type to use. This will generate a webhook, which is a URL you can call. However, to complete the webhook, you will need to generate an API key for authentication.
 
 <div style="display:flex; justify-content:center">
 ![Webhook ingestion](../../../assets/getting-started-assets/Webhook-ingestion_flowcore-io.png) 
@@ -250,7 +250,7 @@ Once the API key is generated and added to the webhook URL, it is time to send d
 
 The whole structure of the data is defined by the data you send in, so it is completely schema-less.
 
-To send data to a different event type, you can either generate a new webhook as you did before, or you can manually simply the name in the webhook URL.
+To send data to a different Event Type, you can either generate a new webhook as you did before, or you can manually simply the name in the webhook URL.
 > **Note**: that you can reuse the api key as much as you want, but for security and flexibility we recommend generate new ones accordingly.
 > Having multiple keys, gives you the option for cutting off access to specific keys, without having to revoke access to all of them.
 
@@ -396,7 +396,7 @@ Adapters play a crucial role in data transformation. They allow you to modify th
 ![Select a Data Source](../../../assets/getting-started-assets/selecting-data-source.png)
 </div>
 
-You can choose the event type, language (Flowcore supports various languages like TypeScript and Python, with more to come in the future), and even create custom transformations as needed. More information regarding transforming data can be found in the next section of this guide.
+You can choose the Event Type, language (Flowcore supports various languages like TypeScript and Python, with more to come in the future), and even create custom transformations as needed. More information regarding transforming data can be found in the next section of this guide.
 
 If you leave all the settings as they are, it will just allow the data to flow, untransformed, from the datacore to your read model.
 
@@ -452,13 +452,13 @@ After deployment, your data will be transformed and transferred to the specified
 ![Additional adapters](../../../assets/getting-started-assets/creating-more-adapters.png)
 </div>
 
-If you want to transfer data from other event types within your data core into the same read model, you can do so easily by just repeating the same process. Create a new adapter, select the other event type and then pipe it into the same read model, but under a different table name. Save and deploy.
+If you want to transfer data from other Event Types within your data core into the same read model, you can do so easily by just repeating the same process. Create a new adapter, select the other Event Type and then pipe it into the same read model, but under a different table name. Save and deploy.
 
 <div style="display:flex; justify-content:center">
 ![Deleting adapters](../../../assets/getting-started-assets/deleting-adapters.png)
 </div>
 
-Lastly, you can also delete adapters whenever you want, in case you don't need the data from the event type anymore. Simply select them, delete, save and deploy. You can even recreate them later if you change your mind again.
+Lastly, you can also delete adapters whenever you want, in case you don't need the data from the Event Type anymore. Simply select them, delete, save and deploy. You can even recreate them later if you change your mind again.
 
 ## Transforming Data it Before Reaches the Read Model
 
@@ -474,7 +474,7 @@ The main difference between transfering and transforming data is the steps taken
 ![New adapter node](../../../assets/getting-started-assets/creating-a-new-adapter-node.png)
 </div>
 
-First, we need to create a new adapter node and select the relevant event type.
+First, we need to create a new adapter node and select the relevant Event Type.
 
 <div style="display:flex; justify-content:center">
 ![Adapter type](../../../assets/getting-started-assets/typescript-adapter-type.png)
