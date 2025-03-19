@@ -21,13 +21,13 @@ Please, follow this [guide](https://docs.flowcore.io/guides/flowcore-cli/stream-
 
 ## Challenge B
 
-Update your data core and scenario with a new flow type and event type.
+Update your data core and scenario with a new Flow Type and event type.
 
 <Steps>
 <ol>
   <li>
-    #### Add a new flow type, dedicated to the stream challenge
-    Go to your existing `flowcore.yaml` file, and add an additional flow type
+    #### Add a new Flow Type, dedicated to the stream challenge
+    Go to your existing `flowcore.yaml` file, and add an additional Flow Type
 
     ```yaml
     # flowcore.yaml
@@ -56,7 +56,7 @@ Update your data core and scenario with a new flow type and event type.
               description: Collecting ingestions for the ingestion challenge B
             ingestion.challenge-c-ingested.0:
               description: Collecting ingestions for the ingestion challenge C
-        # V- Add this flow type -V
+        # V- Add this Flow Type -V
         stream.0:
           description: Contains the data for the stream challenge
           eventTypes:
@@ -151,7 +151,7 @@ Update your data core and scenario with a new flow type and event type.
 
 Now that you have confirmed that you are able to stream data from your data core, lets try something a bit more challenging, [here](https://flowcore.io/flowcathon/flowcathon-mini-public#stream.0) is a public data core that you can stream from. Your challenge is to find a unique event (the needle) in this haystack of events. Then you will need to send that event id back to us.
 
-Then you can post your event back to the `stream.challenge-b-solved.0` event type in the `stream.0` flow type in your own data core. The data needs to be in the following format:
+Then you can post your event back to the `stream.challenge-b-solved.0` event type in the `stream.0` Flow Type in your own data core. The data needs to be in the following format:
 
 ```json
 {

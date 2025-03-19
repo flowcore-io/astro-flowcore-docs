@@ -426,7 +426,7 @@ import { FlowTypeCreateCommand, FlowcoreClient } from "@flowcore/sdk"
 const command = new FlowTypeCreateCommand({
   dataCoreId: "your-data-core-id",
   name: "my-flow-type",
-  description: "My awesome flow type"
+  description: "My awesome Flow Type"
 })
 
 const result = await client.execute(command)
@@ -682,7 +682,7 @@ const client = new NotificationClient(
   {
     tenant: "your-tenant-name",
     dataCore: "your-data-core-name",
-    flowType: "your-flow-type-name",     // Optional: Subscribe to specific flow type
+    flowType: "your-flow-type-name",     // Optional: Subscribe to specific Flow Type
     eventType: "your-event-type-name"    // Optional: Subscribe to specific event type
   },
   {
@@ -717,7 +717,7 @@ You can narrow down your notification subscription by specifying:
 
 - **tenant**: Required - The tenant name
 - **dataCore**: Required - The data core name
-- **flowType**: Optional - Specific flow type to monitor
+- **flowType**: Optional - Specific Flow Type to monitor
 - **eventType**: Optional - Specific event type to monitor (requires flowType to be specified)
 
 :::caution[Important]
