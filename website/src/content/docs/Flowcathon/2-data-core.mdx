@@ -2,7 +2,7 @@
 title: 2. Stream
 sidebar:
   order: 3
-description: The data core challenge shows you how to stream data from a data core in the Flowcore Platform.
+description: The Data Core challenge shows you how to stream data from a Data Core in the Flowcore Platform.
 ---
 
 import { Steps } from "@astrojs/starlight/components";
@@ -10,10 +10,10 @@ import ProtectedContent from '../../../components/ProtectedContent.astro';
 
 <ProtectedContent>
 
-The data core challenge shows you how to stream data from a data core in the Flowcore Platform. But first we need to setup the platform for the challenges.
+The Data Core challenge shows you how to stream data from a Data Core in the Flowcore Platform. But first we need to setup the platform for the challenges.
 
 ## Challenge A
-Now that you have ingested some data into your data core.
+Now that you have ingested some data into your Data Core.
 
 We can try to stream the data back onto your machine. This requires you to both find the stream url, as well as stream the data onto your machine.
 
@@ -21,7 +21,7 @@ Please, follow this [guide](https://docs.flowcore.io/guides/flowcore-cli/stream-
 
 ## Challenge B
 
-Update your data core and scenario with a new Flow Type and Event Type.
+Update your Data Core and scenario with a new Flow Type and Event Type.
 
 <Steps>
 <ol>
@@ -38,14 +38,14 @@ Update your data core and scenario with a new Flow Type and Event Type.
               description: Collecting stream data for the stream challenge B
     ```
 
-    So that the data core manifest section can look like this:
+    So that the Data Core manifest section can look like this:
     ```yaml
     # flowcore.yaml
     dataCore:
       name: flowcathon
       deleteProtection: true
       isPublic: false
-      description: This data core contains the data for the Application Flowcathon application
+      description: This Data Core contains the data for the Application Flowcathon application
       flowTypes:
         ingestion.0:
           description: Contains the data for the ingesdtion challenge
@@ -149,9 +149,9 @@ Update your data core and scenario with a new Flow Type and Event Type.
 
 </Steps>
 
-Now that you have confirmed that you are able to stream data from your data core, lets try something a bit more challenging, [here](https://flowcore.io/flowcathon/flowcathon-mini-public#stream.0) is a public data core that you can stream from. Your challenge is to find a unique event (the needle) in this haystack of events. Then you will need to send that event id back to us.
+Now that you have confirmed that you are able to stream data from your Data Core, lets try something a bit more challenging, [here](https://flowcore.io/flowcathon/flowcathon-mini-public#stream.0) is a public Data Core that you can stream from. Your challenge is to find a unique event (the needle) in this haystack of events. Then you will need to send that event id back to us.
 
-Then you can post your event back to the `stream.challenge-b-solved.0` Event Type in the `stream.0` Flow Type in your own data core. The data needs to be in the following format:
+Then you can post your event back to the `stream.challenge-b-solved.0` Event Type in the `stream.0` Flow Type in your own Data Core. The data needs to be in the following format:
 
 ```json
 {

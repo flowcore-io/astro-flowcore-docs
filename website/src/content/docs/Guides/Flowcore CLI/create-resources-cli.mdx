@@ -11,13 +11,13 @@ resources at once, or for creating resources in a CI/CD pipeline.
 
 ## Data Cores
 
-To create a data core, you can use the `apply` command with a manifest file. The manifest file should be in YAML format.
+To create a Data Core, you can use the `apply` command with a manifest file. The manifest file should be in YAML format.
 
 ```yaml
 tenant: example-tenant
 dataCore:
   name: example-data-core
-  description: "An example data core"
+  description: "An example Data Core"
   flowTypes:
     example:
       description: "An example Flow Type"
@@ -38,12 +38,12 @@ this will generate a `flowcore.yaml` file, then run the following command to app
 flowcore data-core apply -f flowcore.yaml
 ```
 
-this will create a plan to create the data core, and then apply the plan to create the data core.
+this will create a plan to create the Data Core, and then apply the plan to create the Data Core.
 
 :::note[Overwrite]
     <p>
-        If a data core already exists in the manifest file, you will be prompted to overwrite the existing data core.
-        pass the `--overwrite` flag to overwrite the existing data core without being prompted.
+        If a Data Core already exists in the manifest file, you will be prompted to overwrite the existing Data Core.
+        pass the `--overwrite` flag to overwrite the existing Data Core without being prompted.
     </p>
 :::
 
@@ -113,7 +113,7 @@ flowcore apply -f manifest.yaml
 
 ## Delete Protection
 
-By default, data cores are created without delete protection enabled. You can enable delete protection by setting
+By default, Data Cores are created without delete protection enabled. You can enable delete protection by setting
 `deleteProtection` to `true` for each resource in the manifest file.
 
 ```yaml
@@ -195,7 +195,7 @@ scenario:
 
 :::note[Available values]
     <p>
-      The page size determines how many records the transformer will pull from the data core at a time the minimum value is `5`.
+      The page size determines how many records the transformer will pull from the Data Core at a time the minimum value is `5`.
     </p>
 :::
 
@@ -327,7 +327,7 @@ scenario:
           eventType: some-event-type
 ```
 
-This will set up an endpoint for the transformer that will send data returned from the transformer to the specified data core.
+This will set up an endpoint for the transformer that will send data returned from the transformer to the specified Data Core.
 
 To create a read model endpoint, you can add the following to the manifest file:
 

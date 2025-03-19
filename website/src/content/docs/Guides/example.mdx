@@ -95,7 +95,7 @@ From here you can customize your organization, by pressing the **Settings** butt
 Flowcore offers different tiers of service, with varying features and pricing. These plans include:
 
 - **Free Tier:** Suitable for solo users or researchers, who want to explore and share public data.
-- **Pro Tier:** Geared towards solo users or companies, providing private data cores for exclusive data access.
+- **Pro Tier:** Geared towards solo users or companies, providing private Data Cores for exclusive data access.
 - **Team Tier:** Ideal for collaborative teams, allowing multiple contributors to participate.
 - **Custom Tier:** Tailored for large organizations, offering dedicated support and resources.
 
@@ -129,28 +129,28 @@ To create a new organization, simply navigate back to the list of organizations 
 
 <YouTube id="https://www.youtube.com/watch?v=IdPruN6Zyic" />
 
-Here we will provide an overview of data cores, explaining how they function and guiding you through the process of creating them. Additionally, we'll explore how to load data into these data cores using webhooks.
+Here we will provide an overview of Data Cores, explaining how they function and guiding you through the process of creating them. Additionally, we'll explore how to load data into these Data Cores using webhooks.
 
-A data core in Flowcore is essentially a container for unstructured data. You have the flexibility to send in any dataset you desire, and it doesn't need to be predefined. This approach is incredibly useful for scenarios where you have vast amounts of data, and you're uncertain about what specific pieces you'll need. You can load it all into the data core and decide later which data is relevant to your needs.
+A Data Core in Flowcore is essentially a container for unstructured data. You have the flexibility to send in any dataset you desire, and it doesn't need to be predefined. This approach is incredibly useful for scenarios where you have vast amounts of data, and you're uncertain about what specific pieces you'll need. You can load it all into the Data Core and decide later which data is relevant to your needs.
 
-To create a data core, navigate to your organization and press the **Create Datacore** button, located on the right-hand side.
+To create a Data Core, navigate to your organization and press the **Create Datacore** button, located on the right-hand side.
 
 <div style="display:flex; justify-content:center">
     ![Organization button highlighted](../../../assets/getting-started-assets/organization-page.png)
 </div>
 
 <div style="display:flex; justify-content:center">
-    ![Create data core](../../../assets/getting-started-assets/create-data-core_flowcore-io.png)
+    ![Create Data Core](../../../assets/getting-started-assets/create-data-core_flowcore-io.png)
 </div>
 
-Give your data core a name, relevant to the data you will be assigning to it, and give a brief description of what it is.
+Give your Data Core a name, relevant to the data you will be assigning to it, and give a brief description of what it is.
 
 
 <div style="display:flex; justify-content:center">
 ![Data core window](../../../assets/getting-started-assets/create-data-core-window_flowcore-io.png) 
 </div>
 
-Public data cores are ideal for:
+Public Data Cores are ideal for:
 
 - Data that you don't mind being public; such as some irrelevant test data.
 - Data that you would like to be accessible to the world to utilise; such as:
@@ -159,25 +159,25 @@ Public data cores are ideal for:
   - High-scores.
   - e.t.c.
 
-Private data cores are ideal for:
+Private Data Cores are ideal for:
 
 - Internal Company data; such as user, or financial information
 - Personal data; such as financial data, or my acne status
 
 :::note
-If you are using the **Free Tier** you will only be able to create public data cores. To create private data cores, you have to upgrade to **Pro** or higher
+If you are using the **Free Tier** you will only be able to create public Data Cores. To create private Data Cores, you have to upgrade to **Pro** or higher
 :::
 
 <div style="display:flex; justify-content:center">
     ![Create flowtype](../../../assets/getting-started-assets/data-core-page.png)
 </div>
 
-Within the data core, you can organize your data further by creating groups and subgroups. This is done by creating **Flowtypes** from within the data core.
+Within the Data Core, you can organize your data further by creating groups and subgroups. This is done by creating **Flowtypes** from within the Data Core.
 
 To simplify the concept of flowtypes, you can imagine that the aggregator is a drawer and the Event Types are little storage boxes within the drawer. This gives you the ability to roughly organize your data without having to be too thorough.
-Allowing you to group up multiple related data sets into one data core.
+Allowing you to group up multiple related data sets into one Data Core.
 
-To create a flowtype, click the **Create Flowtype** button within your data core’s page. Here you will be able to define the aggregator, write a description and list your Event Types.
+To create a flowtype, click the **Create Flowtype** button within your Data Core’s page. Here you will be able to define the aggregator, write a description and list your Event Types.
 
 <div style="display:flex; justify-content:center">
     ![Create flowtype](../../../assets/getting-started-assets/create-flowtype_flowcore-io.png)
@@ -192,7 +192,7 @@ Generating the following outcome:
 
 ### Connecting to a Data Core
 
-Next, we explore how to send data into a data core through ingestion channels. This can be found in the panel on the left-hand side.
+Next, we explore how to send data into a Data Core through ingestion channels. This can be found in the panel on the left-hand side.
 
 <div style="display:flex; justify-content:center">
 ![Ingestion channels](../../../assets/getting-started-assets/ingestion-channels-highlighted_flowcore-io.png) 
@@ -204,7 +204,7 @@ Currently, Flowcore supports webhooks, with plans to introduce MQTT and "bring y
 ![Webhook window](../../../assets/getting-started-assets/webhooks_flowcore-io.png) 
 </div>
 
-Here you can choose which organization, data core, flowtype and Event Type to use. This will generate a webhook, which is a URL you can call. However, to complete the webhook, you will need to generate an API key for authentication.
+Here you can choose which organization, Data Core, flowtype and Event Type to use. This will generate a webhook, which is a URL you can call. However, to complete the webhook, you will need to generate an API key for authentication.
 
 <div style="display:flex; justify-content:center">
 ![Webhook ingestion](../../../assets/getting-started-assets/Webhook-ingestion_flowcore-io.png) 
@@ -222,7 +222,7 @@ Give the key a name, which makes sense to you and your project, and it will gene
 ![Generate API key](../../../assets/getting-started-assets/create-api-key_flowcore-io.png) 
 </div>
 
-The benefit to using these API keys is the ease to delete them at will, in case you should choose to revoke access to your data core. And there is less authenticative management on your part
+The benefit to using these API keys is the ease to delete them at will, in case you should choose to revoke access to your Data Core. And there is less authenticative management on your part
 
 Now return to the ingestion channel and paste the API key into the webhook URL, so it ultimately looks like this:
 
@@ -232,7 +232,7 @@ Now return to the ingestion channel and paste the API key into the webhook URL, 
 
 ### Sending Data to a Data Core
 
-Once the API key is generated and added to the webhook URL, it is time to send data to the data core. For sending the data, you can use different tools; we will be using [**Insomnia**](https://insomnia.rest/).
+Once the API key is generated and added to the webhook URL, it is time to send data to the Data Core. For sending the data, you can use different tools; we will be using [**Insomnia**](https://insomnia.rest/).
 
 1. Open Insomnia
 2. Create a new HTTP request and set it to `POST`
@@ -328,7 +328,7 @@ Once these details are entered, the read model is created and ready for data tra
 
 <YouTube id="https://youtu.be/qiOyu9YeJCQ" />
 
-We'll delve into the process of transferring data from a data core to a read model within the context of Flowcore. Flowcore simplifies the data transformation process, allowing you to seamlessly transfer data from a data core into an external database, such as PlanetScale.
+We'll delve into the process of transferring data from a Data Core to a read model within the context of Flowcore. Flowcore simplifies the data transformation process, allowing you to seamlessly transfer data from a Data Core into an external database, such as PlanetScale.
 
 ### Connecting a database viewer to PlanetScale
 
@@ -374,23 +374,23 @@ In Flowcore, the next step is to create a scenario. You can find the **Scenario*
 ![Creating a scenario](../../../assets/getting-started-assets/select-organization.png)
 </div>
 
-When creating a new scenario, you are asked to select an organization. This will reflect which data cores and read models you are able to access within your scenario. However, if you have subscribed to a public data core, then you are also able to select those data cores. 
+When creating a new scenario, you are asked to select an organization. This will reflect which Data Cores and read models you are able to access within your scenario. However, if you have subscribed to a public Data Core, then you are also able to select those Data Cores. 
 
-:::tip[Subscribing to public data cores]
-You can subscribe to a public data core by going to **Organizations**, choosing the organization which has the data core you want to subscribe to, selecting a data core in the **Data cores** list and simply click the **+Subscribe** button at the top of the page. 
+:::tip[Subscribing to public Data Cores]
+You can subscribe to a public Data Core by going to **Organizations**, choosing the organization which has the Data Core you want to subscribe to, selecting a Data Core in the **Data cores** list and simply click the **+Subscribe** button at the top of the page. 
 :::
 
 <div style="display:flex; justify-content:center">
 ![Scenario node](../../../assets/getting-started-assets/data-core-node.png)
 </div>
 
-When you have chosen a data core, it will show up in your **Scenario**. On the right side of the data core node, is a small purple nub. This is the **Node Connection**. Clicking that will drag out a line to create a new node. This is how you create an adapter.
+When you have chosen a Data Core, it will show up in your **Scenario**. On the right side of the Data Core node, is a small purple nub. This is the **Node Connection**. Clicking that will drag out a line to create a new node. This is how you create an adapter.
 
 <div style="display:flex; justify-content:center">
 ![Create Adapter](../../../assets/getting-started-assets/creating-adapter.png)
 </div>
 
-Adapters play a crucial role in data transformation. They allow you to modify the data as it flows from the data core to your external database.
+Adapters play a crucial role in data transformation. They allow you to modify the data as it flows from the Data Core to your external database.
 
 <div style="display:flex; justify-content:center">
 ![Select a Data Source](../../../assets/getting-started-assets/selecting-data-source.png)
@@ -404,13 +404,13 @@ If you leave all the settings as they are, it will just allow the data to flow, 
 ![Scenario nodes](../../../assets/getting-started-assets/data-core-and-adapter-nodes.png)
 </div>
 
-You can now create a new node from the adapter to pipe the data into another data core or a read model. Simply create a new **Node Connection** from your adapter node.
+You can now create a new node from the adapter to pipe the data into another Data Core or a read model. Simply create a new **Node Connection** from your adapter node.
 
 <div style="display:flex; justify-content:center">
 ![Piping options](../../../assets/getting-started-assets/pipe-options.png)
 </div>
 
-With Flowcore, you have the flexibility to transfer data to a read model or another data core. This is particularly useful if you need to correct or version data before moving it to the final destination. In our demonstration, we focus on the read model option, where data is pushed directly into an external database.
+With Flowcore, you have the flexibility to transfer data to a read model or another Data Core. This is particularly useful if you need to correct or version data before moving it to the final destination. In our demonstration, we focus on the read model option, where data is pushed directly into an external database.
 
 <div style="display:flex; justify-content:center">
 ![Selecting a read model](../../../assets/getting-started-assets/select-read-model.png)
@@ -452,7 +452,7 @@ After deployment, your data will be transformed and transferred to the specified
 ![Additional adapters](../../../assets/getting-started-assets/creating-more-adapters.png)
 </div>
 
-If you want to transfer data from other Event Types within your data core into the same read model, you can do so easily by just repeating the same process. Create a new adapter, select the other Event Type and then pipe it into the same read model, but under a different table name. Save and deploy.
+If you want to transfer data from other Event Types within your Data Core into the same read model, you can do so easily by just repeating the same process. Create a new adapter, select the other Event Type and then pipe it into the same read model, but under a different table name. Save and deploy.
 
 <div style="display:flex; justify-content:center">
 ![Deleting adapters](../../../assets/getting-started-assets/deleting-adapters.png)
@@ -464,11 +464,11 @@ Lastly, you can also delete adapters whenever you want, in case you don't need t
 
 <YouTube id="https://youtu.be/NA7EqhaJpRI" />
 
-The objective of this section is getting data from a data core, put into the adapter and restructuring that data. Then we push it into the external source, which in this case is a PlanetScale database.
+The objective of this section is getting data from a Data Core, put into the adapter and restructuring that data. Then we push it into the external source, which in this case is a PlanetScale database.
 
-To begin, let's recap the previous stage, where we transferred data from a data core into an adapter without any modifications. This time, we will follow a different approach. We'll take data from the data core and pass it through an adapter, where we'll transform the data by adding additional properties to the data before exporting it into the database.
+To begin, let's recap the previous stage, where we transferred data from a Data Core into an adapter without any modifications. This time, we will follow a different approach. We'll take data from the Data Core and pass it through an adapter, where we'll transform the data by adding additional properties to the data before exporting it into the database.
 
-The main difference between transfering and transforming data is the steps taken within the adapter node. The data core and read model nodes are handled in the exact same way.
+The main difference between transfering and transforming data is the steps taken within the adapter node. The Data Core and read model nodes are handled in the exact same way.
 
 <div style="display:flex; justify-content:center">
 ![New adapter node](../../../assets/getting-started-assets/creating-a-new-adapter-node.png)
@@ -524,7 +524,7 @@ To create your own repository, you can follow this [README file](https://github.
 Once you've created your own repository based on the template we provided. Make sure to navigate to your repository and press the `.` key on your keyboard to open the live editor in GitHub.
 Then proceed to navigate to the file `src/functions/transformer.entrypoint.ts`.
 
-For the purpose of this guide, we will demonstrate calculating the difference between the temperature data from the data core and the optimal heating temperature within a building. The transformed data will include this calculated value.
+For the purpose of this guide, we will demonstrate calculating the difference between the temperature data from the Data Core and the optimal heating temperature within a building. The transformed data will include this calculated value.
 
 So the final code in the `transformer.entrypoint.ts` file looks like this:
 
@@ -565,7 +565,7 @@ export default async function (input: Input<Payload>) {
 ```
 
 What you need to take away from this code is:
-- that `input` parameter passed into the function is the unstructured data from the data core
+- that `input` parameter passed into the function is the unstructured data from the Data Core
 - the `return` value of the function is the data that is sent to the read model
 
 Everything else in between there is just the transformation code.
@@ -654,7 +654,7 @@ In our case the read model table definition looks like this in the end:
 
 <br/>
 
-The transformation code is now integrated into Flowcore, and as data flows from the data core through the adapter, it undergoes the defined transformation process. The transformed data is pushed into the read model, which, in this example, is a database on PlanetScale.
+The transformation code is now integrated into Flowcore, and as data flows from the Data Core through the adapter, it undergoes the defined transformation process. The transformed data is pushed into the read model, which, in this example, is a database on PlanetScale.
 
 The flexibility of this approach allows you to iterate through the process, making changes to your transformation code or data mapping as needed to achieve the desired outcome. You can add or remove fields, adjust calculations, or even incorporate external data sources into the transformation process.
 
