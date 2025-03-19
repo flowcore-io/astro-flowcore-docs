@@ -14,19 +14,19 @@ The Flowcore CLI allows you to stream data from Flowcore. You can extend the CLI
 
 ## Add a new plugin
 
-To create a new plugin you can use the flowcore cli
+To create a new plugin you can use the Flowcore CLI
 
 ```sh
 flowcore new plugin <plugin-name>
 ```
 
-then you can link the plugin to the flowcore cli to test it
+Then you can link the plugin to the Flowcore CLI to test it
 
 ```sh
 flowcore plugins link <path to plugin directory>
 ```
 
-rename the topic to the topic you want to create a command for, for example `stream`.
+Rename the topic to the one you want to create a command for, for example `stream`.
 
 :::tip[Locations]
 
@@ -34,7 +34,7 @@ The commands are located in the `src/commands/<topic>/<command-name>.ts` directo
 
 :::
 
-if you run `flowcore --help` you should see your new command in the list.
+If you run `flowcore --help` you should see your new command in the list.
 
 ## Stream
 
@@ -53,7 +53,7 @@ To create a new stream output you need to add the `@flowcore/cli-plugin-core` pa
   </TabItem>
 </Tabs>
 
-then you can create a new command under the `src/commands/stream` directory.
+Then you can create a new command under the `src/commands/stream` directory.
 
 <Tabs>
   <TabItem label="src/services/emoji.service.ts">
@@ -151,13 +151,13 @@ then you can create a new command under the `src/commands/stream` directory.
   </TabItem>
 </Tabs>
 
-then you can run the command
+Then you can run the command
 
 ```sh
 flowcore stream emojify <STREAM URL> --no-live
 ```
 
-and you should see the output logged to the console with the 😎 emoji in each event, and a done message at the end.
+And you should see the output logged to the console with the 😎 emoji in each event, and a done message at the end.
 
 :::note[SourceEvent]
   The SourceEvent interface is used to define the structure of the event that is passed to the output processor.
@@ -185,5 +185,5 @@ export interface SourceEvent<TYourType> {
 :::
 
 :::caution[Important]
-  The assumption is that you are familiar with the oclif framework and the flowcore cli. If you are not, we suggest you read the [oclif documentation](https://oclif.io/docs/introduction.html) and the [flowcore cli documentation](/guides/flowcore-cli/4stream-cli/).
+  The assumption is that you are familiar with the oclif framework and the Flowcore CLI. If you are not, we suggest you read the [oclif documentation](https://oclif.io/docs/introduction.html) and the [Flowcore CLI documentation](/guides/flowcore-cli/4stream-cli/).
 :::
