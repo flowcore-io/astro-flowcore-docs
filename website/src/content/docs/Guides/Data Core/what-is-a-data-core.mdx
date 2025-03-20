@@ -3,7 +3,7 @@ title: What is a Data Core?
 sidebar:
   order: 1
   hidden: true
-description: A description of what a data core is
+description: A description of what a Data Core is
 ---
 import { Image } from "astro:assets";
 
@@ -11,31 +11,31 @@ import DataCorePage from "../../../../assets/guides/data-core/what-is-a-data-cor
 import FlowTypesAndEventTypes from "../../../../assets/guides/data-core/what-is-a-data-core/flow-types-and-event-types.png";
 
 <Image src={DataCorePage} alt="A Data Core Page" />
-A data core is essentially a log book for unstructured data. Meaning that you can send data to a data core without having to decide the exact model for your data. Instead you send in any and all information that could be relevant, and the data core will store it for you.
-Notice the mention of a __log book__. This is because a data core is a chronological log of all the data that has been sent to it. This means that you can send in data at any time, and it will be stored in the data core in the order it was received.
+A Data Core is essentially a log book for unstructured data. Meaning that you can send data to a Data Core without having to decide the exact model for your data. Instead you send in any and all information that could be relevant, and the Data Core will store it for you.
+Notice the mention of a __log book__. This is because a Data Core is a chronological log of all the data that has been sent to it. This means that you can send in data at any time, and it will be stored in the Data Core in the order it was received.
 
-With these two strengths, asyou are able to send in any data, and then decide at an unspecified time, what you wish to use the data for, and what specific data you need. This is done by pulling data from a data core into an [Adapter](todo).
-> Bear in mind that __the data is never altered__, meaning that you always have a full history of the data inserted into a data core. When you pull the data out using an Adapter, you are still not altering the data, but rather copying it.
+With these two strengths, asyou are able to send in any data, and then decide at an unspecified time, what you wish to use the data for, and what specific data you need. This is done by pulling data from a Data Core into an [Adapter](todo).
+> Bear in mind that __the data is never altered__, meaning that you always have a full history of the data inserted into a Data Core. When you pull the data out using an Adapter, you are still not altering the data, but rather copying it.
 
-To send data to a data core, you use an [ingestion channel](todo).
+To send data to a Data Core, you use an [ingestion channel](todo).
 
-Within the data core, you can organize your data further by creating groups and subgroups. This is done by creating Flow Types from within the data core, and Event Types within the Flow Type.
+Within the Data Core, you can organize your data further by creating groups and subgroups. This is done by creating Flow Types from within the Data Core, and Event Types within the Flow Type.
 <Image src={FlowTypesAndEventTypes} alt="Flow Types and Event Types in a Data Core" />
 
 ## What are Flow Types & Event Types?
-To simplify the concept of flow types, you can imagine that the aggregator is a drawer and the event types are little storage boxes within the drawer. This gives you the ability to roughly organize your data without having to be too thorough. Allowing you to group up multiple related data sets into one data core.
+To simplify the concept of Flow Types, you can imagine that the aggregator is a drawer and the Event Types are little storage boxes within the drawer. This gives you the ability to roughly organize your data without having to be too thorough. Allowing you to group up multiple related data sets into one Data Core.
 
 
 ## Access availability
-There are two access availabilities for data cores:
+There are two access availabilities for Data Cores:
 - `Public`
-  - Anyone using flowcore can subscribe to your public data cores and access the data within it. __They cannot send data to your data core without an [API Key](todo) that you have granted them__
+  - Anyone using flowcore can subscribe to your public Data Cores and access the data within it. __They cannot send data to your Data Core without an [API Key](todo) that you have granted them__
 - `Private`
-  - Any collaborators you [invite to your organization](/guides/2-organization/3invite-user-to-organization) can access your private data cores. __They cannot send data to your data core without an [API Key](todo) that you have granted them__
+  - Any collaborators you [invite to your organization](/guides/2-organization/3invite-user-to-organization) can access your private Data Cores. __They cannot send data to your Data Core without an [API Key](todo) that you have granted them__
 
-There is no limit to how many public data cores you can create. However, you are required to buy private data cores.
+There is no limit to how many public Data Cores you can create. However, you are required to buy private Data Cores.
 
-### Public data cores are ideal for:
+### Public Data Cores are ideal for:
 - Data that you don't mind being public, such as:
   - some irrelevant test data
 - Data that you would like to be accessible to the world to utilise, such as:
@@ -44,7 +44,7 @@ There is no limit to how many public data cores you can create. However, you are
   - High-scores
   - etc
 
-### Private data cores are ideal for:
+### Private Data Cores are ideal for:
 - Internal Company data, such as
   - user
   - or financial information

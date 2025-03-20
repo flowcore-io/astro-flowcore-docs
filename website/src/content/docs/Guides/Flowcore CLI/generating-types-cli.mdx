@@ -21,14 +21,14 @@ You can generate a JSON Schema from your Flowcore streams using the `flowcore ty
 flowcore types <STREAM> --last <N> --directory <DIRECTORY>
 ```
 
-This command will generate a JSON Schema from a collection of events from a stream prioritzing more recent events over older events.
+This command will generate a JSON Schema from a collection of events from a stream prioritizing more recent events over older events.
 
 :::note
   The `N` is the number of events to use to generate the types.
 :::
 
 :::note
-  The `DIRECTORY` is the directory to output the types to, the file will be named based on the event type.
+  The `DIRECTORY` is the directory to output the types to, the file will be named based on the Event Type.
 :::
 
 ## TypeScript Types
@@ -41,5 +41,5 @@ You can generate TypeScript types for your Flowcore streams using the `flowcore 
 
 
 :::caution[Single Stream]
-  This command only supports a single event type stream, not a collection of event types streams.
+  This command only supports a single Event Type stream, not a collection of Event Types streams.
 :::
