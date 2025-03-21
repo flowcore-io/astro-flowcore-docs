@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.67.5](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.4...v1.67.5) (2025-03-20)
+
+
+### Bug Fixes
+
+* capitalize Flowcore ([b8c1bc7](https://github.com/flowcore-io/astro-flowcore-docs/commit/b8c1bc7179b0a8fc9068149e69607870f197741c))
+* change to Create an Organization ([0e89c8d](https://github.com/flowcore-io/astro-flowcore-docs/commit/0e89c8dd0d203a2d9d36b7668e0be376f45f5898))
+* data core to Data Core ([9b48ae6](https://github.com/flowcore-io/astro-flowcore-docs/commit/9b48ae6c7a7e7b1ee7416b03b72388ed083f843a))
+* event type to Event Type ([ff5993f](https://github.com/flowcore-io/astro-flowcore-docs/commit/ff5993f7086e58836d27bd4e7ebac57693f9c0f8))
+* flow type to Flow Type ([eccf27f](https://github.com/flowcore-io/astro-flowcore-docs/commit/eccf27f0ad09589658214382df7c8024b5cfafee))
+* flowcore cli to Flowcore CLI ([6a07613](https://github.com/flowcore-io/astro-flowcore-docs/commit/6a076135b585ba158c05112ea008f169618f3ce5))
+* **Flowcore MCP Server:** :memo: Add prerequisites and instructions for creating Flowcore Personal Access Token and API Key ([ff54d5f](https://github.com/flowcore-io/astro-flowcore-docs/commit/ff54d5f212d61fd9512314f0a70ad7ef322e95d3))
+* **Flowcore MCP Server:** :memo: Add prerequisites for configuring Flowcore MCP Server and instructions for creating API Key ([2fd6b5f](https://github.com/flowcore-io/astro-flowcore-docs/commit/2fd6b5f301bc98cdde6cc55d7ae1d5f2dec6b134))
+* login to log in ([c87ca69](https://github.com/flowcore-io/astro-flowcore-docs/commit/c87ca6997bd84b8c29f0b54c043fb40debcdb9bf))
+* make sentence clearer ([e5c3d23](https://github.com/flowcore-io/astro-flowcore-docs/commit/e5c3d23bedf7be8f81e594293e9734491c17c43c))
+* NPM to npm for consistency ([2893f90](https://github.com/flowcore-io/astro-flowcore-docs/commit/2893f90cac6bf9f985bbbc46f3280923ad757e87))
+* organisation to organization ([3ec1050](https://github.com/flowcore-io/astro-flowcore-docs/commit/3ec105068a4062504b60049a68b2b5237b926311))
+* organizations to organization ([dd8972d](https://github.com/flowcore-io/astro-flowcore-docs/commit/dd8972da6bc56800f544e58ac9ae69a91f2b6f9d))
+* prioritzing to prioritizing ([db440a1](https://github.com/flowcore-io/astro-flowcore-docs/commit/db440a195749538285989a5b87c51764ef01ae72))
+* Proccess to Process ([2a593d7](https://github.com/flowcore-io/astro-flowcore-docs/commit/2a593d7da4cde9d97bceddb6ac2b49d758112060))
+* Redacet to Redact ([f5bbf44](https://github.com/flowcore-io/astro-flowcore-docs/commit/f5bbf447d531936ea6906eb7fd6dcc154a8b18b6))
+* remove comma ([36cd483](https://github.com/flowcore-io/astro-flowcore-docs/commit/36cd4832a24c50e8b3f9e1e8f027609f76314c45))
+* remove duplicate Get Resources ([572bb3e](https://github.com/flowcore-io/astro-flowcore-docs/commit/572bb3e44470eddb0a474a250cace293a10e9f7b))
+* remove redundant Flowcore Platform Primitives and looming you ([37ee654](https://github.com/flowcore-io/astro-flowcore-docs/commit/37ee654291643618dbbce05df9b8c0cf727c0313))
+* services to service ([a9ae70e](https://github.com/flowcore-io/astro-flowcore-docs/commit/a9ae70ec63fb116f55722947c835d74960f108a5))
+* solutionss to solution ([0852efd](https://github.com/flowcore-io/astro-flowcore-docs/commit/0852efd1e7b087bb6dd754a188bc9b5b0d71fec3))
+* this to This ([d32256b](https://github.com/flowcore-io/astro-flowcore-docs/commit/d32256b04acb69742f2415ec730caf3fff23ef07))
+* uses to used ([9927c2d](https://github.com/flowcore-io/astro-flowcore-docs/commit/9927c2db458749b4242d7a08b075ad13f9f73316))
+
 ## [1.67.4](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.3...v1.67.4) (2025-03-18)
 
 
