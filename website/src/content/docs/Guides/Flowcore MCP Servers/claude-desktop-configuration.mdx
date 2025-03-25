@@ -2,7 +2,7 @@
 title: Claude Desktop Configuration
 sidebar:
   order: 3
-description: Configure Claude Desktop to use the Flowcore MCP Server
+description: Configure Claude Desktop to use the Flowcore MCP Servers
 ---
 
 import { Card, Steps } from '@astrojs/starlight/components';
@@ -14,7 +14,7 @@ import ClaudeSettings from "../../../../assets/guides/flowcore-mcp-server/claude
 
 ## MCP Server Prerequisites
 
-Before you can configure Cursor to use the Flowcore MCP Server, you need to have the following prerequisites:
+Before you can configure Claude Desktop to use the Flowcore MCP Servers, you need to have the following prerequisites:
 
 - A Flowcore Personal Access Token (PAT)
 - A Flowcore API Key (for MCP ingestion, this is optional but recommended)
@@ -91,9 +91,35 @@ Open the "claude_desktop_config.json" file and add the following configuration:
 
 </li>
 
+<li>
+For the Flowcore Read Model MCP Server, you can add the following configuration:
+
+  ```json
+  {
+    "mcpServers": {
+      "flowcore": {
+        "name": "Flowcore MCP Server",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@flowcore/@flowcore/local-read-model-mcp-server@latest",
+          "--username",
+          "<your-flowcore-username>",
+          "--pat",
+          "<your-flowcore-personal-access-token>"
+        ]
+      }
+    }
+  }
+  ```
+
+</li>
+
 </ol>
 </Steps>
 
 :::caution
 If you are using Windows, you might need to restart your computer after installing node and configuring Claude Desktop.
 :::
+
+##

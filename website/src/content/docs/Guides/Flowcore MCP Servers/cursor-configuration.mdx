@@ -2,7 +2,7 @@
 title: Cursor Configuration
 sidebar:
   order: 2
-description: Configure Cursor to use the Flowcore MCP Server
+description: Configure Cursor to use the Flowcore MCP Servers
 ---
 
 import { Card, Steps } from '@astrojs/starlight/components';
@@ -44,9 +44,9 @@ flowcore auth new key -t <tenant> <name you want to give to the api key>
 You need to save the api key somewhere safe as it will not be shown again.
 :::
 
-## File based MCP Server configuration
+## Flowcore Platform MCP Server configuration
 
-To configure the Flowcore MCP Server via a file based configuration, you can create the following `.cursor/mcp.json` file for a specific project or globally at `~/.cursor/mcp.json` for all projects:
+To configure the Flowcore Platform MCP Server via a file based configuration, you can create the following `.cursor/mcp.json` file for a specific project or globally at `~/.cursor/mcp.json` for all projects:
 
 ```json
 {
@@ -70,6 +70,29 @@ To configure the Flowcore MCP Server via a file based configuration, you can cre
 :::note
 The global configuration only works for cursor version 0.47.x and above.
 :::
+
+## Flowcore Read Model MCP Server configuration
+
+To configure the Flowcore Read Model MCP Server via a file based configuration, you can create the following `.cursor/mcp.json` file for a specific project or globally at `~/.cursor/mcp.json` for all projects:
+
+```json
+{
+  "mcpServers": {
+    "flowcore": {
+      "name": "Flowcore MCP Server",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@flowcore/local-read-model-mcp-server@latest",
+        "--username",
+        "<your-flowcore-username>",
+        "--pat",
+        "<your-flowcore-personal-access-token>",
+      ]
+    }
+  }
+}
+```
 
 :::tip
 For cursor it is recommended to enable `yolo` mode as that will streamline the process of calling MCP commands. Just keep in mind to instruct cursor what is allowed to be run automatically. in order to avoid running malicious commands.
@@ -109,49 +132,3 @@ you need to use this configuration in the project's `mcp.json` file:
 ```
 
 You can also use this in the global `mcp.json` file to enable ingestion for all projects, but it will be limited to the tenant you have created the api key for.
-
-## UI Based Cursor Configuration (Cursor 0.46.x and below)
-
-To configure Cursor to use the Flowcore MCP Server you can follow the steps below.
-
-<Steps>
-<ol>
-
-<li>
-Go to Cursor Settings, and Click on the MCP Server tab:
-  <Image src={CursorSettings} alt="Cursor Settings" />
-</li>
-
-<li>
-Click on "Add new MCP server" button:
-  <Image src={CursorMCPServers} alt="Cursor MCP Servers" />
-</li>
-
-<li>
-Fill in the details for the MCP Server like the name and the command to run the MCP Server:
-  <Image src={CursorConfigureMCPServer} alt="Cursor Configure MCP Server" />
-  The command to add in the command field is:
-  ```bash
-  npx -y @flowcore/platform-mcp-server@latest --username <your-flowcore-username> --pat <your-flowcore-personal-access-token> --apiKey <your-api-key>
-  ```
-
-  :::note
-  You don't have to add the `--apiKey` flag, this is purely for enabling MCP ingestion for a specific tenant.
-  :::
-</li>
-
-<li>
-Click on the "Save" button to save the MCP Server configuration.
-</li>
-
-<li>
-You should now see the Flowcore MCP Server in the list of MCP Servers, something like this:
-  <Image src={CursorFlowcoreMCP} alt="Cursor Flowcore MCP" />
-
-  :::tip
-  If it is not enabled, you can enable it by clicking on the "Enable" button. You can click on refresh button to refresh the MCP server status.
-  :::
-</li>
-
-</ol>
-</Steps>
