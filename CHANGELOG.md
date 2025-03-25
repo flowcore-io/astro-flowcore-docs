@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.7](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.6...v1.67.7) (2025-03-25)
+
+
+### Bug Fixes
+
+* **cursor-configuration:** :art: Update MCP Server name to "Flowcore Local Read Model MCP Server" ([7aae5cb](https://github.com/flowcore-io/astro-flowcore-docs/commit/7aae5cb2c2441b4391e5b602d0cc9a1bd03b40a7))
+
 ## [1.67.6](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.5...v1.67.6) (2025-03-25)
 
 
