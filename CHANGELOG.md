@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.6](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.5...v1.67.6) (2025-03-25)
+
+
+### Bug Fixes
+
+* **Flowcore MCP Server:** :fire: Delete outdated Flowcore MCP Server guide and add new guides for Cursor and Claude Desktop configuration ([70db106](https://github.com/flowcore-io/astro-flowcore-docs/commit/70db1068083e68e516b78030a8d2f45fca65d920))
+
 ## [1.67.5](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.4...v1.67.5) (2025-03-20)
 
 
