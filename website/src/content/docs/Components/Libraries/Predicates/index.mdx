@@ -7,7 +7,7 @@ import PredicateCheckFlowDark from "@/assets/components/libraries/predicate-chec
 import PredicateCheckFlowLight from "@/assets/components/libraries/predicate-checks/flowcore-predicate-check-flow-light.svg";
 import SVGDiagram from "@/components/svg-diagram.astro";
 
-An inherent challenge with Flowcore, is that we our primary ingestion method is webhooks. Webhooks are asynchronous by nature. 
+An inherent challenge with Flowcore, is that our primary ingestion method is webhooks. Webhooks are asynchronous by nature. 
 This means that you cannot know if the webhook was successful or not. This is where **predicate checks** come in.
 
 Using a predicate, you can check if a condition is met. If the condition is met, the webhook is considered <span style={{ color: "green", fontWeight: "bold" }}>successful</span>. If the condition is not met, the webhook is considered <span style={{ color: "red", fontWeight: "bold" }}>failed</span>.

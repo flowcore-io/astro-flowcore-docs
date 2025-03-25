@@ -317,7 +317,7 @@ import { DataCoreCreateCommand, FlowcoreClient } from "@flowcore/sdk"
 const command = new DataCoreCreateCommand({
   tenantId: "your-tenant-id",
   name: "my-data-core",
-  description: "My awesome data core",
+  description: "My awesome Data Core",
   accessControl: "private",
   deleteProtection: true
 })
@@ -426,7 +426,7 @@ import { FlowTypeCreateCommand, FlowcoreClient } from "@flowcore/sdk"
 const command = new FlowTypeCreateCommand({
   dataCoreId: "your-data-core-id",
   name: "my-flow-type",
-  description: "My awesome flow type"
+  description: "My awesome Flow Type"
 })
 
 const result = await client.execute(command)
@@ -533,7 +533,7 @@ import { EventTypeCreateCommand, FlowcoreClient } from "@flowcore/sdk"
 const command = new EventTypeCreateCommand({
   flowTypeId: "your-flow-type-id",
   name: "my-event-type",
-  description: "My awesome event type"
+  description: "My awesome Event Type"
 })
 
 const result = await client.execute(command)
@@ -646,7 +646,7 @@ Event Type deletion and truncation operations require bearer token authenticatio
 
 ### Notifications
 
-The NotificationClient allows you to receive real-time notifications when events are ingested into an event type. The notifications follow the hierarchical structure: Data Core → Flow Type → Event Type.
+The NotificationClient allows you to receive real-time notifications when events are ingested into an Event Type. The notifications follow the hierarchical structure: Data Core → Flow Type → Event Type.
 
 #### Setting up Notifications
 
@@ -682,8 +682,8 @@ const client = new NotificationClient(
   {
     tenant: "your-tenant-name",
     dataCore: "your-data-core-name",
-    flowType: "your-flow-type-name",     // Optional: Subscribe to specific flow type
-    eventType: "your-event-type-name"    // Optional: Subscribe to specific event type
+    flowType: "your-flow-type-name",     // Optional: Subscribe to specific Flow Type
+    eventType: "your-event-type-name"    // Optional: Subscribe to specific Event Type
   },
   {
     reconnectInterval: 1000,             // Optional: Milliseconds between reconnection attempts
@@ -716,9 +716,9 @@ The NotificationClient uses WebSocket connections to receive real-time updates.
 You can narrow down your notification subscription by specifying:
 
 - **tenant**: Required - The tenant name
-- **dataCore**: Required - The data core name
-- **flowType**: Optional - Specific flow type to monitor
-- **eventType**: Optional - Specific event type to monitor (requires flowType to be specified)
+- **dataCore**: Required - The Data Core name
+- **flowType**: Optional - Specific Flow Type to monitor
+- **eventType**: Optional - Specific Event Type to monitor (requires flowType to be specified)
 
 :::caution[Important]
 The NotificationClient requires OIDC authentication. Make sure your OIDC client implements the required `getToken()` method that returns a Promise with an `accessToken`.

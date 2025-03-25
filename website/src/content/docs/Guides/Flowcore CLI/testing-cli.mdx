@@ -26,15 +26,15 @@ flowcore testing generate test-set <STREAM> --directory <DIRECTORY> --sample-siz
 ```
 The `--sample-size` flag specifies the size of the test set. The default sample size is 100.
 
-## Proccess Test Data with AI
+## Process Test Data with AI
 
-You can use the `--ai` flag to proccess the test set further with AI.
+You can use the `--ai` flag to process the test set further with AI.
 
 ```sh
 flowcore  generate test-set <STREAM> --directory <DIRECTORY> --ai
 ```
 
-## Generate Test Data with Redacet Fields
+## Generate Test Data with Redact Fields
 
 You can use the `--redact` flag to redact fields from the test set with a specified mask with `--redact-mask`.
 
@@ -78,7 +78,7 @@ The `--filter-out-events` and `--filter-in-events` flags can be used multiple ti
 
 ## Generate Test Data with fake fields
 
-You can use the `--fake` flag to generate fake fields in the test set. The `--fake` flag can be uses along with the `--fake-properties` flag and the `--fake-type` flag.
+You can use the `--fake` flag to generate fake fields in the test set. The `--fake` flag can be used along with the `--fake-properties` flag and the `--fake-type` flag.
 
 ```sh
 flowcore  generate test-set <STREAM> --directory <DIRECTORY> --fake <FIELD> --fake-properties <PROPERTIES> --fake-type <TYPE>

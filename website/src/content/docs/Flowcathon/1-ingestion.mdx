@@ -9,10 +9,10 @@ import ProtectedContent from '../../../components/ProtectedContent.astro';
 
 <ProtectedContent>
 
-Ingestion is the process of sending data to Flowcore, where it is stored in a data core.
+Ingestion is the process of sending data to Flowcore, where it is stored in a Data Core.
 The data can essentially come from any source, but in this case we will be focusing on data that it is ingested from your local machine.
 
-    Before we can start to ingest data into Flowcore, we first need to create a data core. 
+    Before we can start to ingest data into Flowcore, we first need to create a Data Core. 
     
     Likewise, for the purpose of this workshop, we need to output the data to the [Flowcathon mini app](https://flowcathon.customer.flowcore.io/challenges/1), using a scenario. That way we can see the ingested data live within the app.
     :::note
@@ -29,7 +29,7 @@ The data can essentially come from any source, but in this case we will be focus
     ::: 
   </li>
   <li>
-    #### Scaffold your data core and scenario
+    #### Scaffold your Data Core and scenario
     create a `flowcore.yaml` file somewhere on your machine, with the following content:
 
     ```yaml
@@ -110,18 +110,18 @@ The data can essentially come from any source, but in this case we will be focus
   </li>
 
   <li>
-    #### Deploy your manifest (resulting in the creation of a data core and scenario on Flowcore.io)
+    #### Deploy your manifest (resulting in the creation of a Data Core and scenario on Flowcore.io)
     Now that you have scaffolded your entire project, you can deploy your manifest with:
 
     ```sh
     flowcore apply -f flowcore.yaml
     ```
 
-    When asked if you want to create your data core, say yes. Afterwards you will be asked if you want to create your scenario, say yes again.
+    When asked if you want to create your Data Core, say yes. Afterwards you will be asked if you want to create your scenario, say yes again.
    
     Once the command is finished, your scaffolded project manifest will have been setup in [flowcore.io](https://flowcore.io), under your tenant.
     Verify these resources have been created by:
-    - viewing your data core under your [tenant page](/guides/organization/switch-between-organizations/), 
+    - viewing your Data Core under your [tenant page](/guides/organization/switch-between-organizations/), 
     - and viewing the scenario on the scenario page. *(which you can visit by pressing the scenario button on the left hand side)*
 
     :::tip
@@ -175,20 +175,20 @@ For example:
 </Tabs>
 
 :::note
-  You can also verify that the data is ingested, by viewing your data core on [flowcore.io](https://flowcore.io).
+  You can also verify that the data is ingested, by viewing your Data Core on [flowcore.io](https://flowcore.io).
 :::
 
 ### Challenge B
-Now that you have confirmed that you are able to ingest data, lets try to ingest data into a separate event type.
-Try sending some data to your `ingestion.challenge-b-ingested.0` event type. To do so, please refer to Challenge A, as well as the prerequisites.
+Now that you have confirmed that you are able to ingest data, lets try to ingest data into a separate Event Type.
+Try sending some data to your `ingestion.challenge-b-ingested.0` Event Type. To do so, please refer to Challenge A, as well as the prerequisites.
 
 ### Challenge C
-Now that you have figured out how to ingest data into multiple different event types. You now need to process a .csv file into yet another event type, called `ingestion.challenge-c-ingested.0`.
+Now that you have figured out how to ingest data into multiple different Event Types. You now need to process a .csv file into yet another Event Type, called `ingestion.challenge-c-ingested.0`.
 
 So, what you need to do is this:
 1. Download the csv file from the [flowcathon mini app](https://flowcathon.customer.flowcore.io/challenges/1)
 2. Write a script (or use any method you like) to read the csv file
-3. Send the entries in the csv file to your `ingestion.challenge-c-ingested.0` event type in the format of a json array like this:
+3. Send the entries in the csv file to your `ingestion.challenge-c-ingested.0` Event Type in the format of a json array like this:
 
 ```json
 [

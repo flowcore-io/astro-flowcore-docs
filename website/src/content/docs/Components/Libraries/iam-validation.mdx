@@ -299,10 +299,10 @@ export class RequestedAccessService {
   constructor(private readonly flowcoreUser: FlowcoreAuthenticatedUser) {}
 
   /**
-   * Adds a data core access request to the list of requested accesses.
-   * @param {FrnAction | FrnAction[]} action - The action(s) to be performed on the data core.
+   * Adds a Data Core access request to the list of requested accesses.
+   * @param {FrnAction | FrnAction[]} action - The action(s) to be performed on the Data Core.
    * @param {string} organizationId - The ID of the organization.
-   * @param {string} [id] - The ID of the specific data core. If not provided, defaults to "*" (all data cores).
+   * @param {string} [id] - The ID of the specific Data Core. If not provided, defaults to "*" (all Data Cores).
    * @returns {this} The current instance for method chaining.
    */
   onDataCore(action: FrnAction | FrnAction[], organizationId: string, id?: string): this {
