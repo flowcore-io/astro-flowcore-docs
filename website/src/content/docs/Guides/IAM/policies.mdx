@@ -87,3 +87,22 @@ spec:
     - resource: "frn::my-tenant:flow-core/*"
       action: "FETCH"
 ```
+
+## Policy with Principal
+
+Here's an example of a policy that adds a principal:
+
+```yaml
+apiVersion: iam.flowcore.io/v1
+kind: Policy
+metadata:
+  name: policy-with-principal
+  tenant: my-tenant
+spec:
+  version: "1.0.0"
+  description: "Policy with Principal"
+  principal: "frn::other-tenant:role/6dbc8512-4990-46ab-8c56-1ffdbda83c8e"
+  policyDocuments:
+    - resource: "frn::my-tenant:data-core/*"
+      action: ["READ", "FETCH"]
+```
