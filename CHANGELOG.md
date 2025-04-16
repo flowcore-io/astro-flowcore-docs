@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.67.9](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.8...v1.67.9) (2025-04-16)
+
+
+### Bug Fixes
+
+* change EventTypeTruncateRequestCommand to EventTypeRequestTruncateCommand ([66236ee](https://github.com/flowcore-io/astro-flowcore-docs/commit/66236eeed4d6ae181fe03b0583dc74e77011c7b3))
+
 ## [1.67.8](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.7...v1.67.8) (2025-03-26)
 
 
