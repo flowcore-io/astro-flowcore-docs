@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.68.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.9...v1.68.0) (2025-04-29)
+
+
+### Features
+
+* **docs:** :sparkles: Add PII guides and images for event type management ([c9cc9cf](https://github.com/flowcore-io/astro-flowcore-docs/commit/c9cc9cf1cd6ee66c8859e1f21c7649eb81098bae))
+* **PII:** :sparkles: Add PII configuration and masking schema details ([d5f71b3](https://github.com/flowcore-io/astro-flowcore-docs/commit/d5f71b3f441b6362f9ec4af08ca6f26c151e9e88))
+
 ## [1.67.9](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.8...v1.67.9) (2025-04-16)
 
 
