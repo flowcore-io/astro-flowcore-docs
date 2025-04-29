@@ -47,6 +47,66 @@ this will create a plan to create the Data Core, and then apply the plan to crea
     </p>
 :::
 
+### PII Configuration
+
+Event Types can be configured with PII (Personally Identifiable Information) handling by setting the following properties in the manifest file:
+
+```yaml
+tenant: example-tenant
+dataCore:
+  name: example-data-core
+  description: "An example Data Core"
+  flowTypes:
+    users:
+      description: "User data flow type"
+      eventTypes:
+        user.created.0:
+          description: "User created event"
+          piiEnabled: true
+          piiKey: ".userId"
+          piiSchema: |
+            {
+              "firstName": {
+                "faker": "person.firstName"
+              },
+              "lastName": {
+                "faker": "person.lastName"
+              },
+              "email": {
+                "faker": "internet.email"
+              },
+              "address": {
+                "faker": "location.streetAddress"
+              },
+              "phoneNumber": {
+                "type": "string",
+                "pattern": "[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              },
+              "ssn": {
+                "type": "string",
+                "redact": {
+                  "char": "*",
+                  "length": 9
+                }
+              }
+            }
+```
+
+The PII configuration consists of three main properties:
+
+- `piiEnabled`: Set to `true` to enable PII handling for the event type
+- `piiKey`: The JSON path to the field that identifies the entity (e.g., `.userId`)
+- `piiSchema`: The masking schema that defines how PII fields should be scrambled
+
+The PII schema supports various formats and options for generating masked data, including:
+
+- Using `faker` methods to create realistic-looking fake data
+- Defining patterns for structured data like phone numbers
+- Setting redaction rules for complete masking
+- Configuring detailed options for numbers, strings, arrays, and objects
+
+For more information on PII handling, including detailed schema options and examples, see the [PII Concept documentation](/guides/pii/concept).
+
 ## Scenarios
 
 To create a scenario, you can use the `apply` command with a manifest file. The manifest file should be in YAML format.

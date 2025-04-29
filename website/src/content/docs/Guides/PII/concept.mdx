@@ -52,3 +52,612 @@ When PII masking is enabled for an event type, you'll see a shield icon next to 
 :::tip
   If you hover over the shield icon, you can see the schema that is used to scramble the data for that event type.
 :::
+
+## PII Masking Schema
+
+The PII masking schema is a complex schema that is used to scramble the data for that event type. It is a JSON schema that is used to define the structure of the data that is being scrambled.
+
+The schema is used to ensure that the scrambled data match the original data in structure to ensure that systems using it do not break.
+
+The PII masking schema supports various formats and options to define how PII data should be scrambled. Here are the supported formats:
+
+| Format | Description | Example |
+|--------|-------------|---------|
+| Boolean shorthand | Simple flag to scramble as random string | `"name": true` |
+| Type shorthand | Simple type declaration | `"email": "string"` |
+| Detailed object | Full control with additional options | `{"type": "string", "faker": "internet.email"}` |
+| Nested objects | Define complex hierarchical structures | `"address": { "street": "string" }` |
+
+For detailed field configuration, the following options are available:
+
+| Option | Applies To | Description | Example |
+|--------|------------|-------------|---------|
+| type | All | Data type for the scrambled field ("string", "number", "boolean", "object", "array") | `"type": "string"` |
+| faker | String | Faker.js method for generating realistic fake data | `"faker": "internet.email"` |
+| args | String | Arguments to pass to the faker method | `"args": ["@example.com"]` (used with `faker: "internet.email"`) |
+| length | String | Fixed length for the generated string | `"length": 12` |
+| pattern | String | Regex-like pattern for generating matching strings (uses Faker's simplified regex syntax) | `"pattern": "[0-9]{5}"` (e.g., "12345") |
+| min | Number | Minimum value for generated numbers | `"min": 18` |
+| max | Number | Maximum value for generated numbers | `"max": 65` |
+| precision | Number | Decimal precision for generated numbers | `"precision": 0.01` (e.g., 12.34) |
+| count | Array | Number of items to generate in an array | `"count": 3` |
+| items | Array | Type definition for array items (can be any format) | `"items": "string"` or `"items": {"type": "number", "min": 1, "max": 10}` |
+| properties | Object | Property definitions for a nested object | `"properties": {"id": "string", "status": "boolean"}` |
+| redact | String | Mask string with fixed characters | `"redact": {"char": "X", "length": 9}` (e.g., "XXXXXXXXX") |
+
+Here's a comprehensive example of a PII mask schema:
+
+```json
+{
+  "key": "user",
+  "schema": {
+    "name": true,
+    "email": "string",
+    "age": "number",
+    "isActive": "boolean",
+    "address": {
+      "street": {
+        "type": "string",
+        "faker": "address.streetAddress"
+      },
+      "city": "string",
+      "zipCode": {
+        "type": "string",
+        "pattern": "[0-9]{5}"
+      }
+    },
+    "phoneNumbers": {
+      "type": "array",
+      "count": 2,
+      "items": "string"
+    },
+    "preferences": {
+      "type": "object",
+      "properties": {
+        "theme": "string",
+        "notifications": "boolean"
+      }
+    }
+  }
+}
+```
+
+## Example PII Schemas by Format
+
+### Boolean Shorthand
+
+The simplest form of PII masking is using a boolean value. This generates a random string for the field.
+
+```json
+{
+  "key": "userId",
+  "schema": {
+    "fullName": true,
+    "ssn": true
+  }
+}
+```
+
+**Before scrambling:**
+```json
+{
+  "userId": "12345",
+  "fullName": "John Smith",
+  "ssn": "123-45-6789"
+}
+```
+
+**After scrambling:**
+```json
+{
+  "userId": "12345",
+  "fullName": "FpQxsALd",
+  "ssn": "KtmRzBvH"
+}
+```
+
+The `userId` field is not scrambled because it is used as the key field to identify the entity. The `fullName` and `ssn` fields are scrambled as random strings.
+
+### Type Shorthand
+
+Using basic type declarations gives more control over the kind of data generated.
+
+```json
+{
+  "key": "customerId",
+  "schema": {
+    "email": "string",
+    "age": "number",
+    "isActive": "boolean"
+  }
+}
+```
+
+**Before scrambling:**
+```json
+{
+  "customerId": "C-7890",
+  "email": "john.smith@example.com",
+  "age": 34,
+  "isActive": true
+}
+```
+
+**After scrambling:**
+```json
+{
+  "customerId": "C-7890",
+  "email": "YhFgvQpR",
+  "age": 42,
+  "isActive": false
+}
+```
+
+Fields are scrambled according to their specified type: `email` becomes a random string, `age` becomes a random number, and `isActive` becomes a random boolean.
+
+### Detailed Object Format
+
+The detailed object format provides fine-grained control over how data is scrambled, including using realistic fake data via Faker.js.
+
+```json
+{
+  "key": "patientId",
+  "schema": {
+    "emailAddress": {
+      "type": "string",
+      "faker": "internet.email"
+    },
+    "dateOfBirth": {
+      "type": "string",
+      "faker": "date.past",
+      "args": [50]
+    },
+    "creditScore": {
+      "type": "number",
+      "min": 300,
+      "max": 850
+    },
+    "accountNumber": {
+      "type": "string",
+      "redact": {
+        "char": "*",
+        "length": 8
+      }
+    },
+    "postalCode": {
+      "type": "string",
+      "pattern": "[0-9]{5}"
+    }
+  }
+}
+```
+
+**Before scrambling:**
+```json
+{
+  "patientId": "P-12345",
+  "emailAddress": "patient@hospital.com",
+  "dateOfBirth": "1980-05-15",
+  "creditScore": 720,
+  "accountNumber": "AC8976543",
+  "postalCode": "90210"
+}
+```
+
+**After scrambling:**
+```json
+{
+  "patientId": "P-12345",
+  "emailAddress": "jane.doe@fakeemail.net",
+  "dateOfBirth": "1985-11-23",
+  "creditScore": 684,
+  "accountNumber": "********",
+  "postalCode": "45678"
+}
+```
+
+In this example:
+- `emailAddress` is replaced with a realistic-looking fake email
+- `dateOfBirth` is replaced with a random date from the past 50 years
+- `creditScore` is replaced with a random number between 300 and 850
+- `accountNumber` is completely redacted with asterisks
+- `postalCode` is replaced with a 5-digit number matching the pattern
+
+### Nested Objects and Arrays
+
+For complex data structures, you can define nested masking schemas that maintain the original structure.
+
+```json
+{
+  "key": "employeeId",
+  "schema": {
+    "personalInfo": {
+      "type": "object",
+      "properties": {
+        "firstName": "string",
+        "lastName": "string",
+        "birthdate": {
+          "type": "string",
+          "faker": "date.past"
+        }
+      }
+    },
+    "contactDetails": {
+      "type": "object",
+      "properties": {
+        "primaryEmail": {
+          "type": "string",
+          "faker": "internet.email"
+        },
+        "addresses": {
+          "type": "array",
+          "count": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "street": {
+                "type": "string",
+                "faker": "address.streetAddress"
+              },
+              "city": "string",
+              "state": {
+                "type": "string",
+                "length": 2
+              },
+              "zipCode": {
+                "type": "string",
+                "pattern": "[0-9]{5}"
+              }
+            }
+          }
+        },
+        "phoneNumbers": {
+          "type": "array",
+          "count": 2,
+          "items": {
+            "type": "string",
+            "pattern": "[0-9]{3}-[0-9]{3}-[0-9]{4}"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Before scrambling:**
+```json
+{
+  "employeeId": "E-001",
+  "personalInfo": {
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "birthdate": "1990-03-25"
+  },
+  "contactDetails": {
+    "primaryEmail": "alice.j@company.com",
+    "addresses": [
+      {
+        "street": "123 Main St",
+        "city": "San Francisco",
+        "state": "CA",
+        "zipCode": "94103"
+      },
+      {
+        "street": "456 Park Ave",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10022"
+      }
+    ],
+    "phoneNumbers": [
+      "415-555-1234",
+      "212-555-6789"
+    ]
+  }
+}
+```
+
+**After scrambling:**
+```json
+{
+  "employeeId": "E-001",
+  "personalInfo": {
+    "firstName": "DgzBfLqK",
+    "lastName": "MrPvTjWx",
+    "birthdate": "1988-09-14"
+  },
+  "contactDetails": {
+    "primaryEmail": "robert.smith@fakeemail.org",
+    "addresses": [
+      {
+        "street": "8274 Sunset Boulevard",
+        "city": "XtRqOpYs",
+        "state": "WA",
+        "zipCode": "12345"
+      },
+      {
+        "street": "9512 Ocean Drive",
+        "city": "AbCdEfGh",
+        "state": "TX",
+        "zipCode": "67890"
+      }
+    ],
+    "phoneNumbers": [
+      "123-456-7890",
+      "987-654-3210"
+    ]
+  }
+}
+```
+
+This example demonstrates:
+- Nesting objects within objects
+- Array handling with consistent item structure
+- Combining various masking types in a complex hierarchy
+- Maintaining the original data structure while completely replacing sensitive information
+
+## Using Options for Fine-Grained Control
+
+### String Formatting Examples
+
+```json
+{
+  "key": "userId",
+  "schema": {
+    "basicString": "string",
+    "fixedLengthString": {
+      "type": "string",
+      "length": 10
+    },
+    "fakerEmail": {
+      "type": "string",
+      "faker": "internet.email"
+    },
+    "fakerWithArgs": {
+      "type": "string",
+      "faker": "internet.email",
+      "args": ["example.org"]
+    },
+    "patternString": {
+      "type": "string",
+      "pattern": "[A-Z]{2}-[0-9]{4}"
+    },
+    "redactedString": {
+      "type": "string",
+      "redact": {
+        "char": "X",
+        "length": 6
+      }
+    }
+  }
+}
+```
+
+### Number Formatting Examples
+
+```json
+{
+  "key": "accountId",
+  "schema": {
+    "basicNumber": "number",
+    "rangeNumber": {
+      "type": "number",
+      "min": 1000,
+      "max": 9999
+    },
+    "preciseNumber": {
+      "type": "number",
+      "min": 0,
+      "max": 100,
+      "precision": 0.01
+    }
+  }
+}
+```
+
+### Array Examples
+
+```json
+{
+  "key": "groupId",
+  "schema": {
+    "simpleStringArray": {
+      "type": "array",
+      "count": 3,
+      "items": "string"
+    },
+    "numbersArray": {
+      "type": "array",
+      "count": 5,
+      "items": {
+        "type": "number",
+        "min": 1,
+        "max": 10
+      }
+    },
+    "complexObjectsArray": {
+      "type": "array",
+      "count": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "ID-[0-9]{4}"
+          },
+          "value": {
+            "type": "number",
+            "min": 0,
+            "max": 100
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Using Faker.js for Realistic Data Masking
+
+The `faker` property in PII schemas allows you to generate realistic-looking fake data using the [Faker.js library](https://fakerjs.dev/api/). This helps maintain application functionality while properly protecting sensitive information.
+
+### Faker.js with Arguments
+
+When using Faker.js functions, you can provide additional arguments to customize the generated data using the `args` property:
+
+```json
+{
+  "key": "userId",
+  "schema": {
+    "email": {
+      "type": "string",
+      "faker": "internet.email",
+      "args": ["example.com"]
+    }
+  }
+}
+```
+
+In this example, the `args` parameter influences the domain part of the generated email address.
+
+You can also pass objects as arguments when the Faker method requires complex options:
+
+```json
+{
+  "key": "userId",
+  "schema": {
+    "password": {
+      "type": "string",
+      "faker": "internet.password",
+      "args": [{ 
+        "length": 12, 
+        "memorable": true,
+        "prefix": "Secret-"
+      }]
+    }
+  }
+}
+```
+
+### Common Faker.js Modules and Functions
+
+Here are some useful Faker.js modules and functions for PII masking based on the [latest Faker.js API (v9+)](https://fakerjs.dev/api/):
+
+| Category | Faker Function | Description | Example With Args |
+|----------|---------------|-------------|-------------------|
+| Person | `person.fullName` | Generates a full name | `{"faker": "person.fullName", "args": [{ "sex": "female" }]}` |
+| Internet | `internet.email` | Generates an email address | `{"faker": "internet.email", "args": ["jane", "doe", "example.com"]}` |
+| Internet | `internet.userName` | Generates a username | `{"faker": "internet.userName", "args": ["Jane", "Doe"]}` |
+| Internet | `internet.password` | Generates a password | `{"faker": "internet.password", "args": [{ "length": 10, "memorable": true }]}` |
+| Phone | `phone.number` | Generates a phone number | `{"faker": "phone.number", "args": ["###-###-####"]}` |
+| Date | `date.past` | Generates a date in the past | `{"faker": "date.past", "args": [{ "years": 10 }]}` |
+| Finance | `finance.accountNumber` | Generates account number | `{"faker": "finance.accountNumber", "args": [10]}` |
+| Location | `location.zipCode` | Generates a zip code | `{"faker": "location.zipCode", "args": ["###-###"]}` |
+| Image | `image.avatar` | Generates avatar URL | `{"faker": "image.avatar"}` |
+| Location | `location.streetAddress` | Generates street address | `{"faker": "location.streetAddress", "args": [{ "useFullAddress": true }]}` |
+
+### Example with Different Arguments
+
+Here's an example showing how arguments affect the generated values:
+
+```json
+{
+  "key": "customerId",
+  "schema": {
+    "basicEmail": {
+      "type": "string",
+      "faker": "internet.email"
+    },
+    "companyEmail": {
+      "type": "string",
+      "faker": "internet.email",
+      "args": ["example.org"]
+    },
+    "specificEmail": {
+      "type": "string",
+      "faker": "internet.email",
+      "args": ["john", "smith", "company.com"]
+    },
+    "recentDate": {
+      "type": "string",
+      "faker": "date.recent",
+      "args": [{ "days": 5 }]
+    },
+    "futureDate": {
+      "type": "string",
+      "faker": "date.future",
+      "args": [{ "years": 2 }]
+    },
+    "phoneWithFormat": {
+      "type": "string",
+      "faker": "phone.number",
+      "args": ["(###) ###-####"]
+    },
+    "formattedAddress": {
+      "type": "string",
+      "faker": "location.streetAddress",
+      "args": [{ "useFullAddress": true }]
+    },
+    "securePassword": {
+      "type": "string",
+      "faker": "internet.password",
+      "args": [{ 
+        "length": 14,
+        "memorable": true,
+        "pattern": "[A-Z]"
+      }]
+    }
+  }
+}
+```
+
+**Output examples:**
+- `basicEmail`: "alice_smith43@gmail.com"
+- `companyEmail`: "robert.johnson@example.org"
+- `specificEmail`: "john.smith@company.com"
+- `recentDate`: "2023-06-12T14:32:18.543Z" (within last 5 days)
+- `futureDate`: "2025-03-07T11:45:03.246Z" (within next 2 years)
+- `phoneWithFormat`: "(555) 123-4567"
+- `formattedAddress`: "9512 Ocean Drive, West Michaelfort, Montana 12345-6789"
+- `securePassword`: "ReallySecurePass14"
+
+For a complete list of available faker functions and their arguments, refer to the [Faker.js API documentation](https://fakerjs.dev/api/).
+
+### Pattern Syntax in PII Masking
+
+When using the `pattern` option for string generation, it's important to understand that Faker.js uses a simplified regex-like syntax that has some limitations compared to full regular expressions:
+
+```json
+{
+  "key": "userId",
+  "schema": {
+    "zipCode": {
+      "type": "string",
+      "pattern": "[0-9]{5}"
+    },
+    "productCode": {
+      "type": "string",
+      "pattern": "[A-Z]{3}-[0-9]{2}"
+    }
+  }
+}
+```
+
+**Important pattern syntax notes:**
+
+1. Use character classes like `[0-9]` instead of shorthand notations like `\d`
+2. Use `[a-z]` for lowercase letters and `[A-Z]` for uppercase letters
+3. Use exact quantifiers like `{5}` to specify repetition
+4. Range patterns like `[4-9]` are supported for generating a random digit in that range
+
+For more advanced pattern needs, Faker.js offers the `fromRegExp` helper that provides additional capabilities. See the [Faker.js fromRegExp documentation](https://fakerjs.dev/api/helpers.html#fromregexp) for details on this feature.
+
+:::tip
+When using Faker.js in production, test how the generated data appears in your application to ensure it maintains a realistic appearance while properly masking the sensitive information.
+:::
+
+:::tip
+When creating PII masking schemas with patterns, always test the generated output to ensure it meets your requirements for realistic data masking.
+:::
+
