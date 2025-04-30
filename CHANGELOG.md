@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.69.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.68.0...v1.69.0) (2025-04-30)
+
+
+### Features
+
+* **PII:** :sparkles: Add section on PII scrambled data and metadata fields ([bb8166a](https://github.com/flowcore-io/astro-flowcore-docs/commit/bb8166aa5553d40047eed6e92b591b231ca18b52))
+
+
+### Bug Fixes
+
+* **PII:** :bug: Correct metadata field name for PII scrambled data ([713982e](https://github.com/flowcore-io/astro-flowcore-docs/commit/713982e16c97ed95dd34165068c4e497b0720ba8))
+
 ## [1.68.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.67.9...v1.68.0) (2025-04-29)
 
 
