@@ -3,6 +3,7 @@ title: PII (Personally Identifiable Information) Concept in Flowcore
 description: A description of how to handle PII in Flowcore
 sidebar:
   order: 1
+  badge: "New"
 ---
 
 import { Image } from "astro:assets";
@@ -661,3 +662,6 @@ When using Faker.js in production, test how the generated data appears in your a
 When creating PII masking schemas with patterns, always test the generated output to ensure it meets your requirements for realistic data masking.
 :::
 
+## PII Scrambled Data
+
+When PII data is scrambled, it is scrambled using the PII masking schema. A `pii/scrambled` metadata field is added to the event to indicate that the data has been scrambled. as well as a `pii/masking_schema` metadata field to indicate the schema that was used to scramble the data.
