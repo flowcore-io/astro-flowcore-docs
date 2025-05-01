@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.69.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.69.0...v1.69.1) (2025-05-01)
+
+
+### Bug Fixes
+
+* **PII:** :fire: Delete outdated PII guide images and related documentation ([c7c3d03](https://github.com/flowcore-io/astro-flowcore-docs/commit/c7c3d03a31184df8b6b44878d9ff3a3bc0baa1fb))
+
 ## [1.69.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.68.0...v1.69.0) (2025-04-30)
 
 
