@@ -1,66 +1,68 @@
 ---
-title: PII (Personally Identifiable Information) Concept in Flowcore
-description: A description of how to handle PII in Flowcore
+title: Sensitive Data Concept in Flowcore
+description: A description of how to handle Sensitive Data in Flowcore
 sidebar:
   order: 1
   badge: "New"
 ---
 
 import { Image } from "astro:assets";
-import PIIPlatformConcept from "../../../../assets/guides/pii/pii-platform-concept.png";
-import EventTypeListPIIImage from "../../../../assets/guides/pii/event-type-list-pii.png";
+import SensitiveDataPlatformConcept from "../../../../assets/guides/sensitive-data/sensitive-data-platform-concept.png";
+import EventTypeListSensitiveDataImage from "../../../../assets/guides/sensitive-data/event-type-list-sensitive-data.png";
 
-As Flowcore is a platform for building event sourced systems, it is important to understand how to handle PII in a secure and compliant way.
+As Flowcore is a platform for building event sourced systems, it is important to understand how to handle Sensitive Data in a secure and compliant way.
 
 :::note
-  PII is a feature that the tenant has to enable in order to use it, and it is disabled by default.
+  Sensitive Data is a feature that the tenant has to enable in order to use it, and it is disabled by default.
 :::
 
-## PII in Flowcore
+## Sensitive Data in Flowcore
 
-Event Types can be marked as containing PII data when it is created or after it has been created and data has been ingested.
+Event Types can be marked as containing Sensitive Data when it is created or after it has been created and data has been ingested.
 
-The key features of the PII handling are:
+The key features of the Sensitive Data handling are:
 
-- PII Key path
+- Sensitive Data Key path
   The JSON path to the field that identifies the entity that this event is related to. This is used to mark an entity as needing to be removed or scrambled.
-- PII Mask
-  The schema to use when scrambling PII fields, this is a complex schema that can be used to ensure that the scrambled data match the original data in structure to ensure that systems using it do not break.
-- PII Activation
-  A system can mark an entity as needing to be removed or scrambled by using the `PII Activation` feature through the Flowcore SDK.
-- PII Permissions
-  the `pii-access` permission can be used to control access to PII data, this is explicitly required for any api key or user that needs to access PII data, otherwise it will be scrambled upon access. This is regardless of whether the entity has been marked as removed or not.
+- Sensitive Data Mask
+  The schema to use when scrambling Sensitive Data fields, this is a complex schema that can be used to ensure that the scrambled data match the original data in structure to ensure that systems using it do not break.
+- Sensitive Data Removal
+  A system can mark an entity as needing to be removed or permenantly scrambled by using the `Sensitive Data Removal` feature through the Flowcore SDK.
+- Sensitive Data Permissions
+  the `sensitive-data-access` permission can be used to control access to Sensitive Data, this is explicitly required for any api key or user that needs to access Sensitive Data, otherwise it will be scrambled upon access. This is regardless of whether the entity has been marked as removed or not.
 
 :::danger
-  When an entity is marked as removed or scrambled, it will be scrambled upon access regardless of the permissions. This is not reversible.
+  When an entity is marked as removed or permenantly scrambled, it will be scrambled upon access regardless of the permissions. This is not reversible.
+
+  This is typically used for removal of Personally Identifiable Information (PII) data to be GDPR compliant, but can be used for any Sensitive Data.
 :::
 
-## PII Platform Concept
+## Sensitive Data Platform Concept
 
 Flowcore ingests data as-is and automatically manages both cold and hot storage. When data is accessed or extracted:
-- If the entity has been activated, PII fields are removed or scrambled.
-- If the caller lacks the `pii-access` permission, all PII fields are scrambled.
-- Otherwise, original PII data is returned.
+- If the entity has been activated, Sensitive Data fields are removed or scrambled.
+- If the caller lacks the `sensitive-data-access` permission, all Sensitive Data fields are scrambled.
+- Otherwise, original Sensitive Data data is returned.
 
-<Image src={PIIPlatformConcept} alt="PII Platform Concept Diagram" />
+<Image src={SensitiveDataPlatformConcept} alt="Sensitive Data Platform Concept Diagram" />
 
-## Viewing PII-enabled Event Types
+## Viewing Sensitive Data-enabled Event Types
 
-When PII masking is enabled for an event type, you'll see a shield icon next to its name in the list:
+When Sensitive Data masking is enabled for an event type, you'll see a shield icon next to its name in the list:
 
-<Image src={EventTypeListPIIImage} alt="Event type list view showing PII-enabled event types" />
+<Image src={EventTypeListSensitiveDataImage} alt="Event type list view showing Sensitive Data-enabled event types" />
 
 :::tip
   If you hover over the shield icon, you can see the schema that is used to scramble the data for that event type.
 :::
 
-## PII Masking Schema
+## Sensitive Data Masking Schema
 
-The PII masking schema is a complex schema that is used to scramble the data for that event type. It is a JSON schema that is used to define the structure of the data that is being scrambled.
+The Sensitive Data masking schema is a complex schema that is used to scramble the data for that event type. It is a JSON schema that is used to define the structure of the data that is being scrambled.
 
 The schema is used to ensure that the scrambled data match the original data in structure to ensure that systems using it do not break.
 
-The PII masking schema supports various formats and options to define how PII data should be scrambled. Here are the supported formats:
+The Sensitive Data masking schema supports various formats and options to define how Sensitive Data should be scrambled. Here are the supported formats:
 
 | Format | Description | Example |
 |--------|-------------|---------|
@@ -86,7 +88,7 @@ For detailed field configuration, the following options are available:
 | properties | Object | Property definitions for a nested object | `"properties": {"id": "string", "status": "boolean"}` |
 | redact | String | Mask string with fixed characters | `"redact": {"char": "X", "length": 9}` (e.g., "XXXXXXXXX") |
 
-Here's a comprehensive example of a PII mask schema:
+Here's a comprehensive example of a Sensitive Data mask schema:
 
 ```json
 {
@@ -123,11 +125,11 @@ Here's a comprehensive example of a PII mask schema:
 }
 ```
 
-## Example PII Schemas by Format
+## Example Sensitive Data Schemas by Format
 
 ### Boolean Shorthand
 
-The simplest form of PII masking is using a boolean value. This generates a random string for the field.
+The simplest form of Sensitive Data masking is using a boolean value. This generates a random string for the field.
 
 ```json
 {
@@ -501,7 +503,7 @@ This example demonstrates:
 
 ## Using Faker.js for Realistic Data Masking
 
-The `faker` property in PII schemas allows you to generate realistic-looking fake data using the [Faker.js library](https://fakerjs.dev/api/). This helps maintain application functionality while properly protecting sensitive information.
+The `faker` property in Sensitive Data schemas allows you to generate realistic-looking fake data using the [Faker.js library](https://fakerjs.dev/api/). This helps maintain application functionality while properly protecting sensitive information.
 
 ### Faker.js with Arguments
 
@@ -659,9 +661,9 @@ When using Faker.js in production, test how the generated data appears in your a
 :::
 
 :::tip
-When creating PII masking schemas with patterns, always test the generated output to ensure it meets your requirements for realistic data masking.
+When creating Sensitive Data masking schemas with patterns, always test the generated output to ensure it meets your requirements for realistic data masking.
 :::
 
-## PII Scrambled Data
+## Sensitive Data Scrambled Data
 
-When PII data is scrambled, it is scrambled using the PII masking schema. A `pii/scrambled` metadata field is added to the event to indicate that the data has been scrambled. as well as a `pii/masking-schema` metadata field to indicate the schema that was used to scramble the data.
+When Sensitive Data is scrambled, it is scrambled using the Sensitive Data masking schema. A `sensitive-data/scrambled` metadata field is added to the event to indicate that the data has been scrambled. as well as a `sensitive-data/masking-schema` metadata field to indicate the schema that was used to scramble the data.

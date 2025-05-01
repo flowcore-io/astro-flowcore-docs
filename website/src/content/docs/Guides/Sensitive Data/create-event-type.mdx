@@ -1,0 +1,33 @@
+---
+title: Create an Event Type
+description: A description of how to create an event type in Flowcore with Sensitive Data
+sidebar:
+  order: 3
+  badge: "New"
+---
+
+import { Image } from "astro:assets";
+import CreateEventTypeScreen1 from "../../../../assets/guides/sensitive-data/create-event-type-screen1.png";
+import CreateEventTypeScreen2 from "../../../../assets/guides/sensitive-data/create-event-type-screen2.png";
+import CreateEventTypeScreen3 from "../../../../assets/guides/sensitive-data/create-event-type-screen3.png";
+
+1. In the Flowcore Console, navigate to the **Flow Type** you want to create an Event Type for.
+
+2. Click on **Create Event Type**.
+<Image src={CreateEventTypeScreen1} alt="Basic Information tab of Create Event Type dialog" />
+
+3. Fill out the **Basic Information**:
+   - **Name**: Enter the name of your event.
+   - **Description**: (Optional) Provide additional context.
+   - **Enable Sensitive Data**: Select **Yes** to enable Sensitive Data.
+   - **Sensitive Data Key Path**: Enter the JSONPath to your Sensitive Data identity field (e.g., `$.id`).
+
+4. Switch to the **Sensitive Data Configuration** tab to define your masking schema.
+<Image src={CreateEventTypeScreen2} alt="Sensitive Data Configuration tab for setting up masking schema" />
+
+5. In **Schema Definition**, enter your Sensitive Data masking schema in JSON.
+6. Click **Generate Mock Data** to preview both your mock data and scrambled data.
+<Image src={CreateEventTypeScreen3} alt="Mock Data and Scrambled Data Preview" />
+
+7. Click **Create Event Type** to save your new event type with Sensitive Data enabled.
+

@@ -1,0 +1,27 @@
+---
+title: Activate Sensitive Data Feature
+description: A description of how to activate Sensitive Data in Flowcore
+sidebar:
+  order: 2
+  badge: "New"
+---
+
+import { Image } from "astro:assets";
+import TenantSettingsImage from "../../../../assets/guides/sensitive-data/tenant-settings.png";
+import TenantEnableSensitiveDataImage from "../../../../assets/guides/sensitive-data/tenant-enable-sensitive-data.png";
+
+1. In the Flowcore Console, navigate to the tenant you want to activate Sensitive Data for and click on the **Settings** tab.
+<Image src={TenantSettingsImage} alt="Tenant Settings page showing Features section" />
+
+2. Scroll down to the **Features** section and locate **Sensitive Data**.
+<Image src={TenantEnableSensitiveDataImage} alt="Enable Sensitive Data toggle in tenant settings" />
+
+3. Toggle the switch to **On** to enable Sensitive Data for your tenant.
+
+4. Click **Save Changes** at the bottom of the page to apply your settings.
+
+Once Sensitive Data is enabled, you can mark event types or activate Sensitive Data on entities using the Flowcore SDK.
+
+:::note
+  Sensitive Data is disabled by default, so you need to enable it in the tenant settings before you can use it.
+:::

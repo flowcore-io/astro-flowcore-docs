@@ -1,0 +1,59 @@
+---
+title: Example DPO Policy
+description: An example of a DPO (Data Protection Officer) policy in Flowcore
+sidebar:
+  order: 5
+  badge: "New"
+---
+
+This example DPO policy is a simple policy that allows a DPO to view all data in the organization, created from the flowcore cli. (See [IAM](/guides/iam/getting-started) for more information on how to create a policy)
+
+```yaml
+# dpo-policy.yaml
+apiVersion: iam.flowcore.io/v1
+kind: Policy
+metadata:
+  name: dpo-access-policy
+  tenant: <tenant-name>
+spec:
+  version: "1.0.0"
+  description: "Data Protection Officer access to the <tenant-name> tenant"
+  policyDocuments:
+    - resource: "frn::<tenant-name>:*"
+      action: 
+        - "sensitive-data-fetch"
+
+---
+apiVersion: iam.flowcore.io/v1
+kind: RoleBinding
+metadata:
+  name: dpo-access-policy-binding
+  tenant: <tenant-name>
+spec:
+  role: dpo-role
+  subjects:
+    - type: user
+      id: <user-id>
+
+---
+apiVersion: iam.flowcore.io/v1
+kind: Role
+metadata:
+  name: dpo-role
+  tenant: <tenant-name>
+spec:
+  version: "1.0.0"
+  description: "Role to PII access to the DPO to the <tenant-name> tenant"
+  policies: 
+    - dpo-access-policy
+```
+
+then run the following command to create the policy:
+
+```sh
+flowcore apply -f dpo-policy.yaml --v2
+```
+
+
+
+
