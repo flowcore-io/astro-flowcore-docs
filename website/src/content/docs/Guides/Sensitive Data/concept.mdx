@@ -92,34 +92,31 @@ Here's a comprehensive example of a Sensitive Data mask schema:
 
 ```json
 {
-  "key": "user",
-  "schema": {
-    "name": true,
-    "email": "string",
-    "age": "number",
-    "isActive": "boolean",
-    "address": {
-      "street": {
-        "type": "string",
-        "faker": "address.streetAddress"
-      },
-      "city": "string",
-      "zipCode": {
-        "type": "string",
-        "pattern": "[0-9]{5}"
-      }
+  "name": true,
+  "email": "string",
+  "age": "number",
+  "isActive": "boolean",
+  "address": {
+    "street": {
+      "type": "string",
+      "faker": "address.streetAddress"
     },
-    "phoneNumbers": {
-      "type": "array",
-      "count": 2,
-      "items": "string"
-    },
-    "preferences": {
-      "type": "object",
-      "properties": {
-        "theme": "string",
-        "notifications": "boolean"
-      }
+    "city": "string",
+    "zipCode": {
+      "type": "string",
+      "pattern": "[0-9]{5}"
+    }
+  },
+  "phoneNumbers": {
+    "type": "array",
+    "count": 2,
+    "items": "string"
+  },
+  "preferences": {
+    "type": "object",
+    "properties": {
+      "theme": "string",
+      "notifications": "boolean"
     }
   }
 }
@@ -133,11 +130,8 @@ The simplest form of Sensitive Data masking is using a boolean value. This gener
 
 ```json
 {
-  "key": "userId",
-  "schema": {
-    "fullName": true,
-    "ssn": true
-  }
+  "fullName": true,
+  "ssn": true
 }
 ```
 
@@ -167,12 +161,9 @@ Using basic type declarations gives more control over the kind of data generated
 
 ```json
 {
-  "key": "customerId",
-  "schema": {
-    "email": "string",
-    "age": "number",
-    "isActive": "boolean"
-  }
+  "email": "string",
+  "age": "number",
+  "isActive": "boolean"
 }
 ```
 
@@ -204,33 +195,30 @@ The detailed object format provides fine-grained control over how data is scramb
 
 ```json
 {
-  "key": "patientId",
-  "schema": {
-    "emailAddress": {
-      "type": "string",
-      "faker": "internet.email"
-    },
-    "dateOfBirth": {
-      "type": "string",
-      "faker": "date.past",
-      "args": [50]
-    },
-    "creditScore": {
-      "type": "number",
-      "min": 300,
-      "max": 850
-    },
-    "accountNumber": {
-      "type": "string",
-      "redact": {
-        "char": "*",
-        "length": 8
-      }
-    },
-    "postalCode": {
-      "type": "string",
-      "pattern": "[0-9]{5}"
+  "emailAddress": {
+    "type": "string",
+    "faker": "internet.email"
+  },
+  "dateOfBirth": {
+    "type": "string",
+    "faker": "date.past",
+    "args": [50]
+  },
+  "creditScore": {
+    "type": "number",
+    "min": 300,
+    "max": 850
+  },
+  "accountNumber": {
+    "type": "string",
+    "redact": {
+      "char": "*",
+      "length": 8
     }
+  },
+  "postalCode": {
+    "type": "string",
+    "pattern": "[0-9]{5}"
   }
 }
 ```
@@ -272,55 +260,52 @@ For complex data structures, you can define nested masking schemas that maintain
 
 ```json
 {
-  "key": "employeeId",
-  "schema": {
-    "personalInfo": {
-      "type": "object",
-      "properties": {
-        "firstName": "string",
-        "lastName": "string",
-        "birthdate": {
-          "type": "string",
-          "faker": "date.past"
-        }
+  "personalInfo": {
+    "type": "object",
+    "properties": {
+      "firstName": "string",
+      "lastName": "string",
+      "birthdate": {
+        "type": "string",
+        "faker": "date.past"
       }
-    },
-    "contactDetails": {
-      "type": "object",
-      "properties": {
-        "primaryEmail": {
-          "type": "string",
-          "faker": "internet.email"
-        },
-        "addresses": {
-          "type": "array",
-          "count": 2,
-          "items": {
-            "type": "object",
-            "properties": {
-              "street": {
-                "type": "string",
-                "faker": "address.streetAddress"
-              },
-              "city": "string",
-              "state": {
-                "type": "string",
-                "length": 2
-              },
-              "zipCode": {
-                "type": "string",
-                "pattern": "[0-9]{5}"
-              }
+    }
+  },
+  "contactDetails": {
+    "type": "object",
+    "properties": {
+      "primaryEmail": {
+        "type": "string",
+        "faker": "internet.email"
+      },
+      "addresses": {
+        "type": "array",
+        "count": 2,
+        "items": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "type": "string",
+              "faker": "address.streetAddress"
+            },
+            "city": "string",
+            "state": {
+              "type": "string",
+              "length": 2
+            },
+            "zipCode": {
+              "type": "string",
+              "pattern": "[0-9]{5}"
             }
           }
-        },
-        "phoneNumbers": {
-          "type": "array",
-          "count": 2,
-          "items": {
-            "type": "string",
-            "pattern": "[0-9]{3}-[0-9]{3}-[0-9]{4}"
-          }
+        }
+      },
+      "phoneNumbers": {
+        "type": "array",
+        "count": 2,
+        "items": {
+          "type": "string",
+          "pattern": "[0-9]{3}-[0-9]{3}-[0-9]{4}"
         }
       }
     }
@@ -406,32 +391,29 @@ This example demonstrates:
 
 ```json
 {
-  "key": "userId",
-  "schema": {
-    "basicString": "string",
-    "fixedLengthString": {
-      "type": "string",
-      "length": 10
-    },
-    "fakerEmail": {
-      "type": "string",
-      "faker": "internet.email"
-    },
-    "fakerWithArgs": {
-      "type": "string",
-      "faker": "internet.email",
-      "args": ["example.org"]
-    },
-    "patternString": {
-      "type": "string",
-      "pattern": "[A-Z]{2}-[0-9]{4}"
-    },
-    "redactedString": {
-      "type": "string",
-      "redact": {
-        "char": "X",
-        "length": 6
-      }
+  "basicString": "string",
+  "fixedLengthString": {
+    "type": "string",
+    "length": 10
+  },
+  "fakerEmail": {
+    "type": "string",
+    "faker": "internet.email"
+  },
+  "fakerWithArgs": {
+    "type": "string",
+    "faker": "internet.email",
+    "args": ["example.org"]
+  },
+  "patternString": {
+    "type": "string",
+    "pattern": "[A-Z]{2}-[0-9]{4}"
+  },
+  "redactedString": {
+    "type": "string",
+    "redact": {
+      "char": "X",
+      "length": 6
     }
   }
 }
@@ -441,20 +423,17 @@ This example demonstrates:
 
 ```json
 {
-  "key": "accountId",
-  "schema": {
-    "basicNumber": "number",
-    "rangeNumber": {
-      "type": "number",
-      "min": 1000,
-      "max": 9999
-    },
-    "preciseNumber": {
-      "type": "number",
-      "min": 0,
-      "max": 100,
-      "precision": 0.01
-    }
+  "basicNumber": "number",
+  "rangeNumber": {
+    "type": "number",
+    "min": 1000,
+    "max": 9999
+  },
+  "preciseNumber": {
+    "type": "number",
+    "min": 0,
+    "max": 100,
+    "precision": 0.01
   }
 }
 ```
@@ -463,37 +442,34 @@ This example demonstrates:
 
 ```json
 {
-  "key": "groupId",
-  "schema": {
-    "simpleStringArray": {
-      "type": "array",
-      "count": 3,
-      "items": "string"
-    },
-    "numbersArray": {
-      "type": "array",
-      "count": 5,
-      "items": {
-        "type": "number",
-        "min": 1,
-        "max": 10
-      }
-    },
-    "complexObjectsArray": {
-      "type": "array",
-      "count": 2,
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "ID-[0-9]{4}"
-          },
-          "value": {
-            "type": "number",
-            "min": 0,
-            "max": 100
-          }
+  "simpleStringArray": {
+    "type": "array",
+    "count": 3,
+    "items": "string"
+  },
+  "numbersArray": {
+    "type": "array",
+    "count": 5,
+    "items": {
+      "type": "number",
+      "min": 1,
+      "max": 10
+    }
+  },
+  "complexObjectsArray": {
+    "type": "array",
+    "count": 2,
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "ID-[0-9]{4}"
+        },
+        "value": {
+          "type": "number",
+          "min": 0,
+          "max": 100
         }
       }
     }
@@ -511,13 +487,10 @@ When using Faker.js functions, you can provide additional arguments to customize
 
 ```json
 {
-  "key": "userId",
-  "schema": {
-    "email": {
-      "type": "string",
-      "faker": "internet.email",
-      "args": ["example.com"]
-    }
+  "email": {
+    "type": "string",
+    "faker": "internet.email",
+    "args": ["example.com"]
   }
 }
 ```
@@ -528,17 +501,14 @@ You can also pass objects as arguments when the Faker method requires complex op
 
 ```json
 {
-  "key": "userId",
-  "schema": {
-    "password": {
-      "type": "string",
-      "faker": "internet.password",
-      "args": [{ 
-        "length": 12, 
-        "memorable": true,
-        "prefix": "Secret-"
-      }]
-    }
+  "password": {
+    "type": "string",
+    "faker": "internet.password",
+    "args": [{ 
+      "length": 12, 
+      "memorable": true,
+      "prefix": "Secret-"
+    }]
   }
 }
 ```
@@ -566,51 +536,48 @@ Here's an example showing how arguments affect the generated values:
 
 ```json
 {
-  "key": "customerId",
-  "schema": {
-    "basicEmail": {
-      "type": "string",
-      "faker": "internet.email"
-    },
-    "companyEmail": {
-      "type": "string",
-      "faker": "internet.email",
-      "args": ["example.org"]
-    },
-    "specificEmail": {
-      "type": "string",
-      "faker": "internet.email",
-      "args": ["john", "smith", "company.com"]
-    },
-    "recentDate": {
-      "type": "string",
-      "faker": "date.recent",
-      "args": [{ "days": 5 }]
-    },
-    "futureDate": {
-      "type": "string",
-      "faker": "date.future",
-      "args": [{ "years": 2 }]
-    },
-    "phoneWithFormat": {
-      "type": "string",
-      "faker": "phone.number",
-      "args": ["(###) ###-####"]
-    },
-    "formattedAddress": {
-      "type": "string",
-      "faker": "location.streetAddress",
-      "args": [{ "useFullAddress": true }]
-    },
-    "securePassword": {
-      "type": "string",
-      "faker": "internet.password",
-      "args": [{ 
-        "length": 14,
-        "memorable": true,
-        "pattern": "[A-Z]"
-      }]
-    }
+  "basicEmail": {
+    "type": "string",
+    "faker": "internet.email"
+  },
+  "companyEmail": {
+    "type": "string",
+    "faker": "internet.email",
+    "args": ["example.org"]
+  },
+  "specificEmail": {
+    "type": "string",
+    "faker": "internet.email",
+    "args": ["john", "smith", "company.com"]
+  },
+  "recentDate": {
+    "type": "string",
+    "faker": "date.recent",
+    "args": [{ "days": 5 }]
+  },
+  "futureDate": {
+    "type": "string",
+    "faker": "date.future",
+    "args": [{ "years": 2 }]
+  },
+  "phoneWithFormat": {
+    "type": "string",
+    "faker": "phone.number",
+    "args": ["(###) ###-####"]
+  },
+  "formattedAddress": {
+    "type": "string",
+    "faker": "location.streetAddress",
+    "args": [{ "useFullAddress": true }]
+  },
+  "securePassword": {
+    "type": "string",
+    "faker": "internet.password",
+    "args": [{ 
+      "length": 14,
+      "memorable": true,
+      "pattern": "[A-Z]"
+    }]
   }
 }
 ```
@@ -633,16 +600,13 @@ When using the `pattern` option for string generation, it's important to underst
 
 ```json
 {
-  "key": "userId",
-  "schema": {
-    "zipCode": {
-      "type": "string",
-      "pattern": "[0-9]{5}"
-    },
-    "productCode": {
-      "type": "string",
-      "pattern": "[A-Z]{3}-[0-9]{2}"
-    }
+  "zipCode": {
+    "type": "string",
+    "pattern": "[0-9]{5}"
+  },
+  "productCode": {
+    "type": "string",
+    "pattern": "[A-Z]{3}-[0-9]{2}"
   }
 }
 ```
