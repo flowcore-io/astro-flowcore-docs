@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.69.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.69.1...v1.69.2) (2025-05-22)
+
+
+### Bug Fixes
+
+* **Sensitive Data:** :art: Refactor JSON schema examples for clarity and consistency ([654a6e8](https://github.com/flowcore-io/astro-flowcore-docs/commit/654a6e8e9faaf45c66304c25ca7537d39ed27442))
+
 ## [1.69.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.69.0...v1.69.1) (2025-05-01)
 
 
