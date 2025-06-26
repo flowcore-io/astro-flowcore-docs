@@ -5,14 +5,365 @@ sidebar:
 description: A 5 minute tutorial on how to get started with Flowcore
 ---
 
-Flowcore shatters the idea that event sourcing must be complex:
-instead of juggling Kafka topics,
-CQRS layers and Domain Driven Design,
-we record every action as an immutable event in a single stream per type,
-we use proxy endpoints for real-time fan-out,
-and we let you replay those events to rebuild or create new read models on demand.
+Flowcore shatters the idea that event sourcing must be complex: instead of juggling Kafka topics, CQRS layers and Domain Driven Design, we record every action as an immutable event in a single stream per type, we use proxy endpoints for real-time fan-out, and we let you replay those events to rebuild or create new read models on demand.
 
-## Prerequisites
+## Prerequisites for tutorial
 
 -   [Flowcore Platform account](https://flowcore.io)
 -   [Flowcore CLI](https://docs.flowcore.io/guides/flowcore-cli/install-cli/)
+-   [Bun](https://bun.sh) runtime installed
+-   [Docker](https://docker.com) for running PostgreSQL
+
+## Step 1: Initialize the Project
+
+Create a new directory and initialize a Bun project:
+
+```bash
+mkdir flowcore-todo-tutorial
+cd flowcore-todo-tutorial
+bun init -y
+```
+
+Install the required dependencies:
+
+```bash
+bun add @flowcore/pathways zod postgres
+```
+
+## Step 2: Define Your Event Architecture
+
+Create a `flowcore.yaml` file to define your event architecture:
+
+```yaml
+version: 1
+tenant: YOUR_TENANT_NAME # Replace with your Flowcore tenant name
+dataCore:
+    name: todo-app
+    flowTypes:
+        todo-items:
+            eventTypes:
+                todo-item-created:
+                    description: "A todo item was created"
+                todo-item-updated:
+                    description: "A todo item was updated"
+                todo-item-deleted:
+                    description: "A todo item was deleted"
+
+# if you want to deploy proxyEndpoints/transformers to production you can use this snippet.
+# "flowcore scenario apply -f flowcore.yaml"
+scenario:
+    name: example-scenario
+    description: "An example scenario"
+    transformers:
+        example-transformer:
+            description: "An example transformer"
+            dataCore: example-data-core
+            flowType: example
+            events:
+                - example.event.0
+            parameters:
+                - name: PROXY_ENDPOINT
+                  type: manual
+                  value: "https://example.com"
+            blueprint:
+                artifactUrl: "https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.1.0.zip"
+```
+
+### Understanding Flowcore Concepts
+
+-   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
+-   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related events
+-   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
+    -   In traditional event sourcing: You have streams per aggregate instance (e.g., one stream per Order with events like `OrderCreated`, `OrderUpdated`)
+    -   In Flowcore: You have **one stream per domain event type**. Instead of `Order` instances, you have `order-created`, `order-updated`, `order-archived` as separate Event Types (streams)
+    -   Each Event Type is an append-only, immutable event log
+
+Apply this configuration to create the Flowcore primitives:
+
+```bash
+flowcore data-core apply -f flowcore.yaml
+```
+
+## Step 3: Set Up Local Development
+
+Create this `flowcore.local.yaml` file for local development:
+
+```yaml
+development:
+    proxyEndpoints:
+        todo-app:
+            dataCore: todo-app
+            flowType: todo-items
+            events:
+                - todo-item-created
+                - todo-item-updated
+                - todo-item-deleted
+            endpoints:
+                - ""
+```
+
+This configures Flowcore to fan out events to your local endpoint in real-time.
+
+## Step 4: Database Setup
+
+Create a `docker-compose.yaml` file to run PostgreSQL:
+
+```yaml
+version: "3.8"
+services:
+    postgres:
+        container_name: todo-app-postgres
+        image: postgres:15
+        environment:
+            POSTGRES_DB: pathway_db
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        ports:
+            - "5433:5432"
+        volumes:
+            - ./init-db:/docker-entrypoint-initdb.d
+```
+
+**Why PostgreSQL?** We need a database for two purposes:
+
+1. **Application data**: Store our todo items
+2. **Pathway state**: Flowcore uses this to track the state of the `.write()` -> `.handle()` flow, ensuring events make it from the write side to your event handlers
+
+Create the todo table:
+
+```sql
+CREATE TABLE IF NOT EXISTS todo (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title VARCHAR(255) NOT NULL,
+  description VARCHAR(1000),
+  done BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMP DEFAULT NOW() NOT NULL
+);
+```
+
+Start the database:
+
+```bash
+docker-compose up -d
+```
+
+## Step 5: Define Your Event Schema
+
+Create `src/schemas.ts` to define the structure of your events:
+
+```typescript
+import { z } from "zod";
+
+export const todoSchema = z.object({
+    id: z.string(),
+    title: z.string(),
+    description: z.string().optional(),
+    done: z.boolean(),
+});
+```
+
+## Step 6: Set Up Flowcore Pathways
+
+### Create an API Key
+
+Generate an API key for your application to authenticate with Flowcore:
+
+```bash
+flowcore auth new key --tenant YOUR_TENANT_NAME todo-app-key
+```
+
+This will create a new API key that you'll use in your application code.
+
+In the future you need to save this securely. For now we'll add it directly to the code.
+
+### Configure Pathways
+
+Create `src/pathways.ts` to configure Flowcore:
+
+```typescript
+import {
+    PathwayRouter,
+    PathwaysBuilder,
+    createPostgresPathwayState,
+} from "@flowcore/pathways";
+import { todoSchema } from "./schemas";
+
+const apiKey = "YOUR_API_KEY"; // Replace with your Flowcore API key
+export const postgresUrl =
+    "postgresql://postgres:postgres@localhost:5433/pathway_db";
+
+export const pathways = new PathwaysBuilder({
+    baseUrl: "https://webhook.api.flowcore.io",
+    tenant: "YOUR_TENANT_NAME", // Replace with your tenant name
+    dataCore: "todo-app",
+    apiKey: apiKey,
+})
+    .withPathwayState(
+        createPostgresPathwayState({
+            connectionString: postgresUrl,
+        })
+    )
+    .register({
+        flowType: "todo-items",
+        eventType: "todo-item-created",
+        schema: todoSchema,
+    })
+    .register({
+        flowType: "todo-items",
+        eventType: "todo-item-updated",
+        schema: todoSchema,
+    })
+    .register({
+        flowType: "todo-items",
+        eventType: "todo-item-deleted",
+        schema: todoSchema,
+    });
+
+export const pathwaysRouter = new PathwayRouter(pathways, apiKey);
+```
+
+**What's happening in this file:**
+
+-   **PathwaysBuilder**: This is the main Flowcore configuration that connects your app to the Flowcore platform
+    -   `baseUrl`: Points to Flowcore's webhook API endpoint
+    -   `tenant`, `dataCore`, `apiKey`: Authenticate and identify your Flowcore resources
+-   **withPathwayState**: Uses PostgreSQL to track the delivery state of events from `.write()` to `.handle()`
+
+    -   This ensures reliability - if your app goes down, Flowcore knows which events were processed
+    -   Think of it as a "delivery receipt" system for your events
+
+-   **register()**: Tells Flowcore about each Event Type you want to work with
+
+    -   Links each event type to your Zod schema for validation
+    -   Must match the event types defined in your `flowcore.yaml`
+
+-   **PathwayRouter**: Handles incoming events from Flowcore
+    -   Routes events to the appropriate handlers based on event type
+    -   Validates the secret/API key for security
+
+## Step 7: Create the HTTP Server
+
+Create `src/index.ts` to set up a simple HTTP server with a POST endpoint that receives events from the Flowcore platform:
+
+```typescript
+import type { FlowcoreLegacyEvent } from "@flowcore/pathways";
+import { pathwaysRouter } from "./pathways";
+
+const server = Bun.serve({
+    port: 3000,
+    async fetch(req) {
+        const url = new URL(req.url);
+
+        // POST endpoint to receive events from Flowcore platform
+        if (
+            req.method === "POST" &&
+            (url.pathname === "/api/transformer" ||
+                url.pathname === "/api/transformer/")
+        ) {
+            try {
+                const body = await req.json();
+                const event = body as FlowcoreLegacyEvent;
+                const secret = req.headers.get("x-secret") ?? "";
+
+                await pathwaysRouter.processEvent(event, secret);
+
+                return new Response("OK", {
+                    status: 200,
+                    headers: { "Content-Type": "text/plain" },
+                });
+            } catch (error) {
+                console.error("❌ Error processing Flowcore event:", error);
+                return new Response(
+                    JSON.stringify({ error: (error as Error).message }),
+                    {
+                        status: 500,
+                        headers: { "Content-Type": "application/json" },
+                    }
+                );
+            }
+        }
+
+        return new Response("Not Found", { status: 404 });
+    },
+});
+
+console.log(`🚀 Server running on http://localhost:${server.port}`);
+console.log(
+    `📡 Transformer endpoint: http://localhost:${server.port}/api/transformer`
+);
+```
+
+## Step 8: Create a Demo Script
+
+Create `src/send-demo.ts` to send test events:
+
+```typescript
+import { pathways } from "./pathways";
+
+await pathways.write("todo-items/todo-item-created", {
+    data: {
+        id: crypto.randomUUID(),
+        title: "Buy milk",
+        description: "Buy milk for the children",
+        done: false,
+    },
+});
+
+console.log("Event sent ✔︎");
+```
+
+## Step 9: Test the Complete Flow
+
+### 1. Start the local proxy to connect Flowcore to your endpoint via WebSocket:
+
+```bash
+flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: YOUR_API_KEY'
+```
+
+### 2. In another terminal, start your server:
+
+```bash
+bun run src/index.ts
+```
+
+### 3. In a third terminal, send a test event:
+
+```bash
+bun src/send-demo.ts
+```
+
+## What Just Happened?
+
+1. **Event Written**: `pathways.write()` sends an event to Flowcore's Event Type stream
+2. **Event Stored**: Flowcore stores the event in the immutable `todo-item-created` stream
+3. **Real-time Fan-out**: Flowcore immediately sends the event to your local endpoint via WebSocket connection
+4. **Event Processed**: Your POST endpoint receives the event and the `pathwaysRouter` processes it
+5. **State Tracked**: Flowcore uses PostgreSQL to track that the event was successfully processed
+
+This demonstrates Flowcore's core value: **simple event sourcing** without the complexity of traditional approaches.
+
+## Key Differences from Traditional Event Sourcing
+
+-   ❌ **No aggregate instances** - just Event Types (streams)
+-   ❌ **No complex CQRS layers** - direct event handling
+-   ❌ **No Kafka topics to manage** - Flowcore handles the infrastructure
+-   ✅ **One stream per domain event type** - simpler mental model
+-   ✅ **Real-time WebSocket connections** - immediate fan-out to your applications
+-   ✅ **Built-in replay** - rebuild read models from any point in time
+
+## Next Steps
+
+-   Add more event types to your Flow Type
+-   Create multiple read models from the same events
+-   Explore event replay for building new projections
+-   Deploy your transformer to production using Flowcore's runtime
+
+## Configuration Notes
+
+Remember to replace the following placeholders:
+
+-   `YOUR_TENANT_NAME` - Your Flowcore tenant name
+-   `YOUR_API_KEY` - Your Flowcore API key (get this from the Flowcore dashboard)
+
+Happy event sourcing! 🎉
