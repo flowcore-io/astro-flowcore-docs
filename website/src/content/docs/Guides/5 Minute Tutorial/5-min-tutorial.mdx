@@ -5,12 +5,16 @@ sidebar:
 description: CQRS and Event Sourced system in 5 minutes
 ---
 
+_CQRS + Event Sourced To-Do app in 5 minutes_
+
 Flowcore is a simplified approach to achieve Event Sourcing and CQRS, by using paradigms that every web dev is familiar with.
 
 No Kafka. No Domain Driven Design. No current-state rehydrations to validate user actions.
 To validate user actions run SQL checks against real-time read models, get your answer in milliseconds, and emit an immutable event.
 
-Flowcore is responsible for is storing the events that you emit, in immutable event logs, and fanning them out ot subscribed services instantly.
+Flowcore is responsible for storing the events that you emit, in immutable event logs, and fanning them out ot subscribed services instantly.
+
+The feature that we like to highlight is replayability. Which is where you replay the events stored in Flowcore to create or update services.
 
 ![Flow of Flowcore](../../../../assets/guides/5-min-tutorial/flow.png)
 
