@@ -7,7 +7,7 @@ description: CQRS and Event Sourced system in 5 minutes
 
 _CQRS + Event Sourced To-Do app in 5 minutes_
 
-Flowcore is a simplified approach to achieve Event Sourcing and CQRS, by using paradigms that every web dev is familiar with.
+Flowcore is a simplified approach to achieve CQRS + Event Sourcing, by using paradigms that every web dev is familiar with.
 
 No Kafka. No Domain Driven Design. No current-state rehydrations to validate user actions.
 To validate user actions run SQL checks against real-time read models, get your answer in milliseconds, and emit an immutable event.
@@ -39,8 +39,6 @@ Install the required dependencies:
 bun add @flowcore/pathways zod postgres
 ```
 
-## Step 2: Define Your Event Architecture
-
 First, log in to Flowcore using the CLI:
 
 ```bash
@@ -49,7 +47,18 @@ flowcore login
 
 This will authenticate you with the Flowcore platform and allow you to run subsequent commands.
 
-Create a `flowcore.yaml` file to define your event architecture:
+## Step 2: Define Your Event Architecture
+
+### Understanding Flowcore Concepts
+
+-   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
+-   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related events e.g. `orders`
+-   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
+    -   In traditional event sourcing: You have streams per aggregate instance (e.g., one stream per Order with events like `OrderCreated`, `OrderUpdated`)
+    -   In Flowcore: You have **one stream per Event Type**. Instead of `Order` instances, you have `order-created`, `order-updated`, `order-archived` as separate Event Types (streams)
+    -   Each Event Type is an append-only, immutable event log
+
+Create a `flowcore.yaml` file to define your event architecture. Copy and paste this:
 
 ```yaml
 version: 1
@@ -86,15 +95,6 @@ scenario:
                 artifactUrl: "https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.1.0.zip"
 ```
 
-### Understanding Flowcore Concepts
-
--   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
--   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related events
--   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
-    -   In traditional event sourcing: You have streams per aggregate instance (e.g., one stream per Order with events like `OrderCreated`, `OrderUpdated`)
-    -   In Flowcore: You have **one stream per domain event type**. Instead of `Order` instances, you have `order-created`, `order-updated`, `order-archived` as separate Event Types (streams)
-    -   Each Event Type is an append-only, immutable event log
-
 Apply this configuration to create the Flowcore primitives:
 
 ```bash
@@ -116,10 +116,10 @@ development:
                 - todo-item-updated
                 - todo-item-deleted
             endpoints:
-                - ""
+                - "" # leave this empty. POST /api/transformer/ is the default endpoint.
 ```
 
-This configures Flowcore to fan out events to your local endpoint in real-time.
+This configures Flowcore to fan out events to your local endpoint in real-time. This is instead of using something like Ngrok.
 
 ## Step 4: Database Setup
 
