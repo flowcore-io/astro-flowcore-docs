@@ -62,6 +62,7 @@ Here we use the Flowcore Pathways library which will proxy events to your `.hand
 ```typescript
 import type { FlowcoreLegacyEvent } from "@flowcore/pathways";
 import { pathwaysRouter } from "./pathways";
+import "./handlers";
 
 const server = Bun.serve({
     port: 3000,
@@ -122,18 +123,22 @@ console.log(
 Create a `flowcore.yaml` file to define your event architecture. Copy and paste this:
 
 ```yaml
-# "flowcore data-core apply -f flowcore.yaml"
+# flowcore data-core apply -f flowcore.yaml
 version: 1
-tenant: YOUR_TENANT_NAME # <-- Replace with name of your tenant
+tenant: YOUR_TENANT_NAME # <-- replace
 dataCore:
     name: todo-app
     flowTypes:
         todo-items:
             eventTypes:
                 todo-item.created.v0:
-                    description: "A todo item was created"
-                todo-item.updated.v0:
-                    description: "A todo item was updated"
+                    description: "A todo item was created (full snapshot)"
+                todo-item.renamed.v0:
+                    description: "The title of a todo item was changed"
+                todo-item.completed.v0:
+                    description: "A todo item was marked as done"
+                todo-item.reopened.v0:
+                    description: "A completed todo item was reopened"
                 todo-item.deleted.v0:
                     description: "A todo item was deleted"
 
@@ -142,15 +147,17 @@ dataCore:
 # this needs to be included because of a quirk in the Flowcore CLI so don't remove it.
 scenario:
     name: todo-app-fan-out
-    description: "a scenario to fan out events to external services"
+    description: "fan out todo events"
     transformers:
         todo-items:
-            description: "A transformer to fan out todo-items"
+            description: "proxy to local dev endpoint"
             dataCore: todo-app
             flowType: todo-items
             events:
                 - todo-item.created.v0
-                - todo-item.updated.v0
+                - todo-item.renamed.v0
+                - todo-item.completed.v0
+                - todo-item.reopened.v0
                 - todo-item.deleted.v0
             parameters:
                 - name: PROXY_ENDPOINT
@@ -181,7 +188,9 @@ development:
             flowType: todo-items
             events:
                 - todo-item.created.v0
-                - todo-item.updated.v0
+                - todo-item.renamed.v0
+                - todo-item.completed.v0
+                - todo-item.reopened.v0
                 - todo-item.deleted.v0
             endpoints:
                 - "" # leave this empty. POST /api/transformer/ is the default endpoint.
@@ -247,12 +256,19 @@ Create `schemas.ts` to define the contract of your events. This is where you def
 ```typescript
 import { z } from "zod";
 
-export const todoSchema = z.object({
+/* full snapshot on create */
+export const todoCreated = z.object({
     id: z.string(),
     title: z.string(),
     description: z.string().optional(),
-    done: z.boolean(),
+    done: z.literal(false),
 });
+
+/* deltas thereafter */
+export const todoRenamed = z.object({ id: z.string(), newTitle: z.string() });
+export const todoCompleted = z.object({ id: z.string() });
+export const todoReopened = z.object({ id: z.string() });
+export const todoDeleted = z.object({ id: z.string() });
 ```
 
 ## Step 7: Set Up Flowcore Pathways
@@ -280,38 +296,55 @@ import {
     PathwaysBuilder,
     createPostgresPathwayState,
 } from "@flowcore/pathways";
-import { todoSchema } from "./schemas";
-import "./handlers.ts";
+import {
+    todoCreated,
+    todoRenamed,
+    todoCompleted,
+    todoReopened,
+    todoDeleted,
+} from "./schemas";
+import postgres from "postgres";
 
-const apiKey = "YOUR_API_KEY"; // Replace with your Flowcore API key
+const apiKey = "YOUR_GENERATED_API_KEY"; // <---------------------------- replace with generated api key
 export const postgresUrl =
     "postgresql://postgres:postgres@localhost:5433/pathway_db";
 
+// Initialize the database connection
+export const sql = postgres(postgresUrl);
+
 export const pathways = new PathwaysBuilder({
     baseUrl: "https://webhook.api.flowcore.io",
-    tenant: "YOUR_TENANT_NAME", // Replace with your tenant name
+    tenant: "YOUR_TENANT_NAME", // <--------------------------- replace with your tenant name
     dataCore: "todo-app",
-    apiKey: apiKey,
+    apiKey,
 })
     .withPathwayState(
-        createPostgresPathwayState({
-            connectionString: postgresUrl,
-        })
+        createPostgresPathwayState({ connectionString: postgresUrl })
     )
     .register({
         flowType: "todo-items",
         eventType: "todo-item.created.v0",
-        schema: todoSchema,
+        schema: todoCreated,
     })
     .register({
         flowType: "todo-items",
-        eventType: "todo-item.updated.v0",
-        schema: todoSchema,
+        eventType: "todo-item.renamed.v0",
+        schema: todoRenamed,
+    })
+    .register({
+        flowType: "todo-items",
+        eventType: "todo-item.completed.v0",
+        schema: todoCompleted,
+    })
+    .register({
+        flowType: "todo-items",
+        eventType: "todo-item.reopened.v0",
+        schema: todoReopened,
     })
     .register({
         flowType: "todo-items",
         eventType: "todo-item.deleted.v0",
-        schema: todoSchema,
+        schema: todoDeleted,
     });
 
 export const pathwaysRouter = new PathwayRouter(pathways, "1234");
@@ -322,38 +355,39 @@ export const pathwaysRouter = new PathwayRouter(pathways, "1234");
 Create a `handlers.ts` file where we will listen to incoming events and store them in the postgres database.
 
 ```typescript
-import postgres from "postgres";
-import { pathways, postgresUrl } from "./pathways";
+import { pathways, sql } from "./pathways";
 
-const sql = postgres(postgresUrl);
-
-pathways.handle("todo-items/todo-item.created.v0", async (event) => {
-    console.log("📥 Todo created:", event.payload.title);
+/* CREATED – snapshot insert */
+pathways.handle("todo-items/todo-item.created.v0", async ({ payload }) => {
     await sql`
-      INSERT INTO todo (id, title, description, done)
-      VALUES (${event.payload.id}, ${event.payload.title}, ${
-        event.payload.description || null
-    }, ${event.payload.done})
-    `;
-    console.log("💾 Saved to database");
+    INSERT INTO todo (id, title, description, done)
+    VALUES (${payload.id}, ${payload.title}, ${payload.description ?? null}, ${
+        payload.done
+    })
+  `;
 });
 
-pathways.handle("todo-items/todo-item.updated.v0", async (event) => {
-    console.log("📝 Todo updated:", event.payload.title);
+/* RENAMED – delta update */
+pathways.handle("todo-items/todo-item.renamed.v0", async ({ payload }) => {
     await sql`
-      UPDATE todo 
-      SET title = ${event.payload.title}, description = ${
-        event.payload.description || null
-    }, done = ${event.payload.done}
-      WHERE id = ${event.payload.id}
-    `;
-    console.log("💾 Updated in database");
+    UPDATE todo
+    SET title = ${payload.newTitle}
+    WHERE id  = ${payload.id}
+  `;
 });
 
-pathways.handle("todo-items/todo-item.deleted.v0", async (event) => {
-    console.log("🗑️ Todo deleted:", event.payload.id);
-    await sql`DELETE FROM todo WHERE id = ${event.payload.id}`;
-    console.log("💾 Deleted from database");
+/* COMPLETED / REOPENED – status toggles */
+pathways.handle("todo-items/todo-item.completed.v0", async ({ payload }) => {
+    await sql`UPDATE todo SET done = true  WHERE id = ${payload.id}`;
+});
+
+pathways.handle("todo-items/todo-item.reopened.v0", async ({ payload }) => {
+    await sql`UPDATE todo SET done = false WHERE id = ${payload.id}`;
+});
+
+/* DELETED */
+pathways.handle("todo-items/todo-item.deleted.v0", async ({ payload }) => {
+    await sql`DELETE FROM todo WHERE id = ${payload.id}`;
 });
 ```
 
@@ -364,16 +398,29 @@ Create `send-demo.ts` to send test events:
 ```typescript
 import { pathways } from "./pathways";
 
+const id = crypto.randomUUID();
+
+/* 1) create (full snapshot) */
 await pathways.write("todo-items/todo-item.created.v0", {
     data: {
-        id: crypto.randomUUID(),
+        id,
         title: "Buy milk",
-        description: "Buy milk for the children",
+        description: "2 litres, semi-skimmed",
         done: false,
     },
 });
 
-console.log("Event sent ✔︎");
+/* 2) rename (delta) */
+await pathways.write("todo-items/todo-item.renamed.v0", {
+    data: { id, newTitle: "Buy oat milk" },
+});
+
+/* 3) complete (delta) */
+await pathways.write("todo-items/todo-item.completed.v0", {
+    data: { id },
+});
+
+console.log("✅ Demo events sent");
 ```
 
 ## Step 9: Test the Complete Flow
@@ -390,20 +437,18 @@ flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http:/
 bun index.ts
 ```
 
-### 3. In a third terminal, send a test event:
+### 3. In a third terminal, send test events:
 
 ```bash
 bun send-demo.ts
 ```
 
-## What Just Happened?
+### 4. Truncate the database:
 
-1. **Event Written**: `pathways.write()` sends an event to Flowcore
-2. **Event Stored**: Flowcore stores the event
-3. **Real-time Fan-out**: Flowcore immediately sends the event to your local endpoint via WebSocket connection
-4. **Event Processed**: Your POST endpoint receives the event and the `pathwaysRouter` processes it
-5. **State Tracked**: Flowcore uses PostgreSQL to track that the event was successfully processed
+Now if you go to look in the todo postgres table, it should be populated. Try to truncate the table and then run this command:
 
-This demonstrates Flowcore's core value: **simple event sourcing** without the complexity of traditional approaches.
+```bash
+flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s first -e http://localhost:3000/api/transformer/ -H 'X-Secret: 1234'
+```
 
-Happy event sourcing! 🎉
+You should see the database being repopulated.
