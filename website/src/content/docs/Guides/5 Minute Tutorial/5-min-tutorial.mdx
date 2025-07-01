@@ -52,10 +52,10 @@ This will authenticate you with the Flowcore platform and allow you to run subse
 ### Understanding Flowcore Concepts
 
 -   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
--   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related events e.g. `orders`
+-   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related events e.g. `Order`
 -   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
-    -   In traditional event sourcing: You have streams per aggregate instance (e.g., one stream per Order with events like `OrderCreated`, `OrderUpdated`)
-    -   In Flowcore: You have **one stream per Event Type**. Instead of `Order` instances, you have `order-created`, `order-updated`, `order-archived` as separate Event Types (streams)
+    -   In traditional event sourcing: **You have one stream per aggregate instance** (e.g., one stream per Order, like Order-0001, Order-0002, etc. with event types like `OrderCreated`, `OrderUpdated`)
+    -   In Flowcore: You have **one stream per event type**. Instead of `Order` instances, you have `OrderCreated`, `OrderUpdated`, `OrderArchived` as separate streams
     -   Each Event Type is an append-only, immutable event log
 
 Create a `flowcore.yaml` file to define your event architecture. Copy and paste this:
