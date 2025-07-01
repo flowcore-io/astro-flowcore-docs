@@ -39,7 +39,7 @@ Install the required dependencies:
 bun add @flowcore/pathways zod postgres
 ```
 
-First, log in to Flowcore using the CLI:
+First, log in to Flowcore using the CLI (this uses port 3000 so make sure no service is running on that port):
 
 ```bash
 flowcore login
@@ -52,46 +52,52 @@ This will authenticate you with the Flowcore platform and allow you to run subse
 ### Understanding Flowcore Concepts
 
 -   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
--   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related events e.g. todo items
+-   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related events e.g. To-Do items
 -   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
-    -   In traditional event sourcing: You have **one stream per aggregate instance** (e.g., one stream per `TodoItem`, like `TodoItem-001`, `TodoItem-002`, etc. with event types like `TodoItemCreated`, `TodoItemUpdated`)
-    -   In Flowcore: You have **one stream per event type**. Instead of `TodoItem` instances, you have `TodoItemCreated`, `TodoItemUpdated`, `TodoItemDeleted` as separate streams
-    -   We also encourage different naming conventions for Event Types, like `todo-item.created`, `todo-item.updated`, `todo-item.deleted`
-    -   Each Event Type is an append-only, immutable event log
+    -   In traditional event sourcing: You have **one immutable event log per aggregate instance** (e.g., one stream per `TodoItem`, like `TodoItem-001`, `TodoItem-002`, etc. with event types like `TodoItemCreated`, `TodoItemUpdated`)
+    -   In Flowcore: You have **one immutable event log per event type**. Instead of `TodoItem` instances, you have `TodoItemCreated`, `TodoItemUpdated`, `TodoItemDeleted` as separate immutable event logs
+    -   We also encourage different naming conventions for Event Types, as you'll see in the example below.
 
 Create a `flowcore.yaml` file to define your event architecture. Copy and paste this:
 
 ```yaml
+# "flowcore data-core apply -f flowcore.yaml"
 version: 1
-tenant: YOUR_TENANT_NAME # Replace with your Flowcore tenant name
+tenant: ez # <-- Replace with name of your tenant
 dataCore:
     name: todo-app
     flowTypes:
         todo-items:
             eventTypes:
-                todo-item-created:
+                todo-item.created.v0:
                     description: "A todo item was created"
-                todo-item-updated:
+                todo-item.updated.v0:
                     description: "A todo item was updated"
-                todo-item-deleted:
+                todo-item.deleted.v0:
                     description: "A todo item was deleted"
 
-# if you want to deploy proxyEndpoints/transformers to production you can use this snippet.
+# if you want to deploy proxyEndpoints/transformers to production you use this snippet.
+# this needs to be included because of a quirk in the Flowcore CLI so don't remove it.
 # "flowcore scenario apply -f flowcore.yaml"
 scenario:
-    name: example-scenario
-    description: "An example scenario"
+    name: todo-app-fan-out
+    description: "a scenario to fan out events to external services"
     transformers:
-        example-transformer:
-            description: "An example transformer"
-            dataCore: example-data-core
-            flowType: example
+        todo-items:
+            description: "A transformer to fan out todo-items"
+            dataCore: todo-app
+            flowType: todo-items
             events:
-                - example.event.0
+                - todo-item.created.v0
+                - todo-item.updated.v0
+                - todo-item.deleted.v0
             parameters:
                 - name: PROXY_ENDPOINT
                   type: manual
-                  value: "https://example.com"
+                  value: "https://example.com/api/transformer"
+                - name: PROXY_HEADER_SECRET
+                  type: secret
+                  value: YOUR_GENERATED_FLOWCORE_SECRET
             blueprint:
                 artifactUrl: "https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.1.0.zip"
 ```
@@ -113,9 +119,9 @@ development:
             dataCore: todo-app
             flowType: todo-items
             events:
-                - todo-item-created
-                - todo-item-updated
-                - todo-item-deleted
+                - todo-item.created.v0
+                - todo-item.updated.v0
+                - todo-item.deleted.v0
             endpoints:
                 - "" # leave this empty. POST /api/transformer/ is the default endpoint.
 ```
@@ -168,7 +174,7 @@ docker-compose up -d
 
 ## Step 5: Define Your Event Schema
 
-Create `src/schemas.ts` to define the structure of your events:
+Create `schemas.ts` to define the structure of your events:
 
 ```typescript
 import { z } from "zod";
@@ -197,7 +203,7 @@ In the future you need to save this securely. For now we'll add it directly to t
 
 ### Configure Pathways
 
-Create `src/pathways.ts` to configure Flowcore:
+Create `pathways.ts` to configure Flowcore:
 
 ```typescript
 import {
@@ -224,17 +230,17 @@ export const pathways = new PathwaysBuilder({
     )
     .register({
         flowType: "todo-items",
-        eventType: "todo-item-created",
+        eventType: "todo-item.created.v0",
         schema: todoSchema,
     })
     .register({
         flowType: "todo-items",
-        eventType: "todo-item-updated",
+        eventType: "todo-item.updated.v0",
         schema: todoSchema,
     })
     .register({
         flowType: "todo-items",
-        eventType: "todo-item-deleted",
+        eventType: "todo-item.deleted.v0",
         schema: todoSchema,
     });
 
@@ -262,7 +268,7 @@ export const pathwaysRouter = new PathwayRouter(pathways, apiKey);
 
 ## Step 7: Create the HTTP Server
 
-Create `src/index.ts` to set up a simple HTTP server with a POST endpoint that receives events from the Flowcore platform:
+Inside `index.ts` set up a simple HTTP server with a POST endpoint that receives events from the Flowcore platform:
 
 ```typescript
 import type { FlowcoreLegacyEvent } from "@flowcore/pathways";
