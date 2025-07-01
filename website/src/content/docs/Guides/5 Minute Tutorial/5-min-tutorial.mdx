@@ -9,12 +9,14 @@ _CQRS + Event Sourced To-Do app in 5 minutes_
 
 Flowcore is a simplified approach to achieve CQRS + Event Sourcing, by using tools that every web dev is familiar with.
 
-No Kafka. No Domain Driven Design. No current-state rehydrations to validate user actions.
 You define your event architecture in a simple YAML file.
-To validate user actions run SQL checks against real-time read models, get your answer in milliseconds, and emit a JSON event.
-It's when you receive the event back from Flowcore that you store it in your database.
+Before you emit a JSON event to Flowcore you do business logic checks against real-time read models.
+When you receive the event back from Flowcore you materialize and store it in any way you want.
 
-Flowcore is responsible for storing the events that you emit, in immutable event logs, and fanning them out to subscribed services instantly.
+No Kafka. No Domain Driven Design. No current-state rebuild/rehydration to validate user actions.
+
+Flowcore is responsible for storing the events that you emit, in immutable event logs, and fanning them out to subscribed services, in high-throughput critical situations,
+in single digit milliseconds or, in lower throughput less critical situations, in single digit seconds.
 
 We act as a powerful event processing infrastructure that guarantees immutable storage,
 real-time fan-out, automatic hot and cold storage management, and effortless replay so you can focus on writing business logic instead of building event infrastructure.
