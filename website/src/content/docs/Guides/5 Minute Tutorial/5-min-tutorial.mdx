@@ -10,7 +10,7 @@ _CQRS + Event Sourced To-Do app in 5 minutes_
 Flowcore is a simplified approach to achieve CQRS + Event Sourcing, by using paradigms that every web dev is familiar with.
 
 No Kafka. No Domain Driven Design. No current-state rehydrations to validate user actions.
-To validate user actions run SQL checks against real-time read models, get your answer in milliseconds, and emit an immutable event.
+To validate user actions run SQL checks against real-time read models, get your answer in milliseconds, and emit a JSON event.
 
 Flowcore is responsible for storing the events that you emit, in immutable event logs, and fanning them out ot subscribed services instantly.
 
@@ -115,7 +115,7 @@ Create a `flowcore.yaml` file to define your event architecture. Copy and paste 
 ```yaml
 # "flowcore data-core apply -f flowcore.yaml"
 version: 1
-tenant: ez # <-- Replace with name of your tenant
+tenant: YOUR_TENANT_NAME # <-- Replace with name of your tenant
 dataCore:
     name: todo-app
     flowTypes:
@@ -251,11 +251,12 @@ flowcore auth new key --tenant YOUR_TENANT_NAME todo-app-key
 
 This will create a new API key that you'll use in your application code.
 
-In the future you need to save this securely. For now we'll add it directly to the code.
+In the future you need to save this securely. For now we'll add it directly to the code in the next step.
 
 ### Configure Pathways
 
-Create `pathways.ts` to configure Flowcore:
+Create `pathways.ts` to configure Flowcore. Here you use the Flowcore Pathways SDK which proxies events coming in from the POST /api/transformer/ endpoint
+to handlers, `.handle()`, in your code. It also is used to emit events to the Flowcore Platform by using the `.write()` method.
 
 ```typescript
 import {
@@ -299,25 +300,6 @@ export const pathways = new PathwaysBuilder({
 export const pathwaysRouter = new PathwayRouter(pathways, "1234");
 ```
 
-**What's happening in this file:**
-
--   **PathwaysBuilder**: This is the main Flowcore configuration that connects your app to the Flowcore platform
-    -   `baseUrl`: Points to Flowcore's webhook API endpoint
-    -   `tenant`, `dataCore`, `apiKey`: Authenticate and identify your Flowcore resources
--   **withPathwayState**: Uses PostgreSQL to track the delivery state of events from `.write()` to `.handle()`
-
-    -   This ensures reliability - if your app goes down, Flowcore knows which events were processed
-    -   Think of it as a "delivery receipt" system for your events
-
--   **register()**: Tells Flowcore about each Event Type you want to work with
-
-    -   Links each event type to your Zod schema for validation
-    -   Must match the event types defined in your `flowcore.yaml`
-
--   **PathwayRouter**: Handles incoming events from Flowcore
-    -   Routes events to the appropriate handlers based on event type
-    -   Validates the secret/API key for security
-
 ## Step 8: Create a Demo Script
 
 Create `send-demo.ts` to send test events:
@@ -339,16 +321,16 @@ console.log("Event sent ✔︎");
 
 ## Step 9: Test the Complete Flow
 
-### 1. Start the local proxy to connect Flowcore to your endpoint via WebSocket:
+### 1. Start the local proxy to connect Flowcore to your endpoint:
 
 ```bash
-flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: YOUR_API_KEY'
+flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer/ -H 'X-Secret: 1234'
 ```
 
 ### 2. In another terminal, start your server:
 
 ```bash
-bun run index.ts
+bun index.ts
 ```
 
 ### 3. In a third terminal, send a test event:
