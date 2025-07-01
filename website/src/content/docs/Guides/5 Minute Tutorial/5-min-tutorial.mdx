@@ -7,12 +7,17 @@ description: CQRS and Event Sourced system in 5 minutes
 
 _CQRS + Event Sourced To-Do app in 5 minutes_
 
-Flowcore is a simplified approach to achieve CQRS + Event Sourcing, by using paradigms that every web dev is familiar with.
+Flowcore is a simplified approach to achieve CQRS + Event Sourcing, by using tools that every web dev is familiar with.
 
 No Kafka. No Domain Driven Design. No current-state rehydrations to validate user actions.
+You define your event architecture in a simple YAML file.
 To validate user actions run SQL checks against real-time read models, get your answer in milliseconds, and emit a JSON event.
+It's when you receive the event back from Flowcore that you store it in your database.
 
-Flowcore is responsible for storing the events that you emit, in immutable event logs, and fanning them out ot subscribed services instantly.
+Flowcore is responsible for storing the events that you emit, in immutable event logs, and fanning them out to subscribed services instantly.
+
+We act as a powerful event processing infrastructure that guarantees immutable storage,
+real-time fan-out, automatic hot and cold storage management, and effortless replay so you can focus on writing business logic instead of building event infrastructure.
 
 ![Flow of Flowcore](../../../../assets/guides/5-min-tutorial/flow.png)
 
@@ -49,7 +54,8 @@ This will authenticate you with the Flowcore platform and allow you to run subse
 
 ## Step 2: Create an HTTP Server
 
-Inside `index.ts` set up a simple HTTP server with a /api/transformer/ POST endpoint. This endpoint will receive events from the Flowcore Platform:
+Inside `index.ts` set up a simple HTTP server with a POST /api/transformer/ endpoint. This endpoint will receive events from the Flowcore.
+Here we use the Flowcore Pathways SDK which will proxy events to your `.handle()` handlers in your code:
 
 ```typescript
 import type { FlowcoreLegacyEvent } from "@flowcore/pathways";
@@ -104,10 +110,12 @@ console.log(
 ### Understanding Flowcore Concepts
 
 -   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
--   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related events e.g. To-Do items
+-   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related immutable event logs e.g. To-Do items
 -   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
-    -   In traditional event sourcing: You have **one immutable event log per aggregate instance** (e.g., one stream per `TodoItem`, like `TodoItem-001`, `TodoItem-002`, etc. with event types like `TodoItemCreated`, `TodoItemUpdated`)
-    -   In Flowcore: You have **one immutable event log per event type**. Instead of `TodoItem` instances, you have `TodoItemCreated`, `TodoItemUpdated`, `TodoItemDeleted` as separate immutable event logs
+    -   In classic event sourcing: You have **one immutable event log per aggregate instance** (e.g., one stream per `TodoItem`, like `TodoItem-001`, `TodoItem-002`, etc).
+        where the intent of an individual event, e.g. create, update, or delete, is indicated by the event type field on the json object.
+    -   In Flowcore: You have **one immutable event log per event type**. Instead of `TodoItem` instances, you have `TodoItemCreated`, `TodoItemUpdated`, `TodoItemDeleted`
+        as separate immutable event logs. So the intent of an event, , is indicated by a field in each entry.
     -   We also encourage different naming conventions for Event Types, as you'll see in the example below.
 
 Create a `flowcore.yaml` file to define your event architecture. Copy and paste this:
@@ -129,8 +137,8 @@ dataCore:
                     description: "A todo item was deleted"
 
 # if you want to deploy proxyEndpoints/transformers to production you use this snippet.
-# this needs to be included because of a quirk in the Flowcore CLI so don't remove it.
 # "flowcore scenario apply -f flowcore.yaml"
+# this needs to be included because of a quirk in the Flowcore CLI so don't remove it.
 scenario:
     name: todo-app-fan-out
     description: "a scenario to fan out events to external services"
