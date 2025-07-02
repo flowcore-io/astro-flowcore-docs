@@ -11,12 +11,12 @@ Flowcore is a simplified approach to achieve CQRS + Event Sourcing, by using too
 
 You define your event architecture in a simple YAML file.
 Before you emit a JSON event to Flowcore you do business logic checks against real-time read models.
-When you receive the event back from Flowcore you materialize and store it in any way you want.
+When you receive the event back from Flowcore you update your read models.
 
 No Kafka. No Domain Driven Design. No current-state rebuild/rehydration to validate user actions.
 
-Flowcore is responsible for storing the events that you emit, in immutable event logs, and fanning them out to subscribed services, in high-throughput critical situations,
-in single digit milliseconds or, in lower throughput less critical situations, in single digit seconds.
+Flowcore is responsible for storing the events that you emit, in immutable event logs, and fanning them out to subscribed services either in single digit milliseconds or seconds,
+based on your needs.
 
 We act as a powerful event processing infrastructure that guarantees immutable storage,
 real-time fan-out, automatic hot and cold storage management, and effortless replay so you can focus on writing business logic instead of building event infrastructure.
@@ -200,7 +200,7 @@ You can try to run this command now to see if it starts the websocket connection
 But I'll remind you to run it again when we test the entire flow.
 
 ```bash
-flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer/ -H 'X-Secret: 1234'
+flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
 ```
 
 This configures Flowcore to fan out events to your local endpoint in real-time. This is instead of using something like Ngrok.
@@ -398,6 +398,14 @@ Create `send-demo.ts` to send test events:
 ```typescript
 import { pathways } from "./pathways";
 
+// you can add this after each write to see more slowly what's happening.
+async function dump(label: string) {
+    await sleep(300); // give Flowcore -> handler -> DB time
+    const [row] = await sql`SELECT * FROM todo WHERE id = ${id}`;
+    console.log(`\n🔎 ${label}`);
+    console.table(row);
+}
+
 const id = crypto.randomUUID();
 
 /* 1) create (full snapshot) */
@@ -428,7 +436,7 @@ console.log("✅ Demo events sent");
 ### 1. Start the local proxy to connect Flowcore to your endpoint:
 
 ```bash
-flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer/ -H 'X-Secret: 1234'
+flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
 ```
 
 ### 2. In another terminal, start your server:
@@ -448,7 +456,7 @@ bun send-demo.ts
 Now if you go to look in the todo postgres table, it should be populated. Try to truncate the table and then run this command:
 
 ```bash
-flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s first -e http://localhost:3000/api/transformer/ -H 'X-Secret: 1234'
+flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s first -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
 ```
 
 You should see the database being repopulated.
