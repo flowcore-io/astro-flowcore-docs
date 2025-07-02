@@ -25,7 +25,7 @@ real-time fan-out, automatic hot and cold storage management, and effortless rep
 
 ## Prerequisites for tutorial
 
--   [Flowcore Platform account](https://flowcore.io)
+-   [Flowcore Platform account](https://flowcore.io) to get your tenant name
 -   [Flowcore CLI](https://docs.flowcore.io/guides/flowcore-cli/install-cli/)
 -   [Bun](https://bun.sh) runtime installed
 -   [Docker](https://docker.com) for running PostgreSQL
@@ -120,7 +120,7 @@ console.log(
     -   In Flowcore: You have **one immutable event log per event type**. Instead of `TodoItem` instances, you have `TodoItemCreated`, `TodoItemUpdated`, `TodoItemDeleted`
         as separate immutable event logs. So the intent of an event, is indicated by which immutable event log it's stored in.
 
-Create a `flowcore.yaml` file to define your event architecture. Copy and paste this:
+Create a `flowcore.yaml` file to define your event architecture:
 
 ```yaml
 # cli "flowcore data-core apply -f flowcore.yaml"
@@ -141,33 +141,6 @@ dataCore:
                     description: "A completed todo item was reopened"
                 todo-item.deleted.v0:
                     description: "A todo item was deleted"
-
-# if you want to deploy proxyEndpoints/transformers to production you use this snippet.
-# cli "flowcore scenario apply -f flowcore.yaml"
-# this needs to be included because of a quirk in the Flowcore CLI so don't remove it.
-scenario:
-    name: todo-app-fan-out
-    description: "fan out todo events"
-    transformers:
-        todo-items:
-            description: "proxy to local dev endpoint"
-            dataCore: todo-app
-            flowType: todo-items
-            events:
-                - todo-item.created.v0
-                - todo-item.renamed.v0
-                - todo-item.completed.v0
-                - todo-item.reopened.v0
-                - todo-item.deleted.v0
-            parameters:
-                - name: PROXY_ENDPOINT
-                  type: manual
-                  value: "https://example.com/api/transformer"
-                - name: PROXY_HEADER_SECRET
-                  type: secret
-                  value: YOUR_GENERATED_FLOWCORE_SECRET
-            blueprint:
-                artifactUrl: "https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.1.0.zip"
 ```
 
 Apply this configuration to create the Flowcore primitives:
@@ -201,6 +174,7 @@ export const todoDeleted = z.object({ id: z.string() });
 Create this `flowcore.local.yaml` file for local development:
 
 ```yaml
+tenant: YOUR_TENANT_NAME # <-- replace
 development:
     proxyEndpoints:
         todo-app:
@@ -220,7 +194,7 @@ You can try to run this command now to see if it starts the websocket connection
 But I'll remind you to run it again when we test the entire flow.
 
 ```bash
-flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
+flowcore scenario local -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
 ```
 
 This configures Flowcore to fan out events to your local endpoint in real-time. This is instead of using something like Ngrok.
@@ -254,6 +228,12 @@ Start the database:
 
 ```bash
 docker-compose up -d
+```
+
+This is the URL that you can use to connect to the local PostgreSQL database:
+
+```
+postgresql://postgres:postgres@localhost:5433/pathway_db
 ```
 
 Create the todo table:
@@ -442,7 +422,7 @@ process.exit(0);
 ### 1. Start the local proxy to connect Flowcore to your endpoint:
 
 ```bash
-flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
+flowcore scenario local -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
 ```
 
 ### 2. In another terminal, start your server:
