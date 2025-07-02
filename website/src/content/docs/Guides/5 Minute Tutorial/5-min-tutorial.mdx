@@ -113,7 +113,7 @@ console.log(
 ### Understanding Flowcore Concepts
 
 -   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
--   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a logical grouping for related immutable event logs e.g. `TodoItem`
+-   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a title for grouping related immutable event logs e.g. `TodoItem`
 -   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
     -   In classic event sourcing: You have **one immutable event log per aggregate instance** (e.g., one stream per `TodoItem`, like `TodoItem-001`, `TodoItem-002`, etc).
         where the intent of an individual event, e.g. create, update, or delete, is indicated by the event type field on the json object.
@@ -174,6 +174,26 @@ Apply this configuration to create the Flowcore primitives:
 
 ```bash
 flowcore data-core apply -f flowcore.yaml
+```
+
+Create `schemas.ts` to define the contract of your events. This is where you define the structure of your events in your code.
+
+```typescript
+import { z } from "zod";
+
+/* full snapshot on create */
+export const todoCreated = z.object({
+    id: z.string(),
+    title: z.string(),
+    description: z.string().optional(),
+    done: z.literal(false),
+});
+
+/* deltas thereafter */
+export const todoRenamed = z.object({ id: z.string(), newTitle: z.string() });
+export const todoCompleted = z.object({ id: z.string() });
+export const todoReopened = z.object({ id: z.string() });
+export const todoDeleted = z.object({ id: z.string() });
 ```
 
 ## Step 4: Set Up Local Development
@@ -249,29 +269,7 @@ CREATE TABLE IF NOT EXISTS todo (
 );
 ```
 
-## Step 6: Define Your Event Schema
-
-Create `schemas.ts` to define the contract of your events. This is where you define the structure of your events.
-
-```typescript
-import { z } from "zod";
-
-/* full snapshot on create */
-export const todoCreated = z.object({
-    id: z.string(),
-    title: z.string(),
-    description: z.string().optional(),
-    done: z.literal(false),
-});
-
-/* deltas thereafter */
-export const todoRenamed = z.object({ id: z.string(), newTitle: z.string() });
-export const todoCompleted = z.object({ id: z.string() });
-export const todoReopened = z.object({ id: z.string() });
-export const todoDeleted = z.object({ id: z.string() });
-```
-
-## Step 7: Set Up Flowcore Pathways
+## Step 6: Set Up Flowcore Pathways
 
 ### Create an API Key
 
@@ -391,7 +389,7 @@ pathways.handle("todo-items/todo-item.deleted.v0", async ({ payload }) => {
 });
 ```
 
-## Step 8: Create a Demo Script
+## Step 7: Create a Demo Script
 
 Create `send-demo.ts` to send test events:
 
@@ -408,7 +406,6 @@ async function dump(label: string) {
 
 const id = crypto.randomUUID();
 
-/* 1) create (full snapshot) */
 await pathways.write("todo-items/todo-item.created.v0", {
     data: {
         id,
@@ -418,20 +415,29 @@ await pathways.write("todo-items/todo-item.created.v0", {
     },
 });
 
-/* 2) rename (delta) */
 await pathways.write("todo-items/todo-item.renamed.v0", {
     data: { id, newTitle: "Buy oat milk" },
 });
 
-/* 3) complete (delta) */
 await pathways.write("todo-items/todo-item.completed.v0", {
     data: { id },
 });
 
-console.log("✅ Demo events sent");
+await pathways.write("todo-items/todo-item.reopened.v0", {
+    data: { id },
+});
+
+await pathways.write("todo-items/todo-item.deleted.v0", {
+    data: { id },
+});
+
+console.log("\n✅ demo events sent");
+
+await sql.end();
+process.exit(0);
 ```
 
-## Step 9: Test the Complete Flow
+## Step 8: Test the Complete Flow
 
 ### 1. Start the local proxy to connect Flowcore to your endpoint:
 
