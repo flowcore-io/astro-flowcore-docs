@@ -123,7 +123,7 @@ console.log(
 Create a `flowcore.yaml` file to define your event architecture. Copy and paste this:
 
 ```yaml
-# flowcore data-core apply -f flowcore.yaml
+# cli "flowcore data-core apply -f flowcore.yaml"
 version: 1
 tenant: YOUR_TENANT_NAME # <-- replace
 dataCore:
@@ -143,7 +143,7 @@ dataCore:
                     description: "A todo item was deleted"
 
 # if you want to deploy proxyEndpoints/transformers to production you use this snippet.
-# "flowcore scenario apply -f flowcore.yaml"
+# cli "flowcore scenario apply -f flowcore.yaml"
 # this needs to be included because of a quirk in the Flowcore CLI so don't remove it.
 scenario:
     name: todo-app-fan-out
@@ -391,7 +391,7 @@ pathways.handle("todo-items/todo-item.deleted.v0", async ({ payload }) => {
 
 ## Step 7: Create a Demo Script
 
-Create `send-demo.ts` to send test events:
+Create `write-demo.ts` to send test events:
 
 ```typescript
 import { pathways } from "./pathways";
@@ -454,7 +454,7 @@ bun index.ts
 ### 3. In a third terminal, send test events:
 
 ```bash
-bun send-demo.ts
+bun write-demo.ts
 ```
 
 ### 4. Truncate the database:
@@ -465,4 +465,4 @@ Now if you go to look in the todo postgres table, it should be populated. Try to
 flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s first -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
 ```
 
-You should see the database being repopulated.
+The events get replayed from the beginning in the correct order and the database is repopulated.
