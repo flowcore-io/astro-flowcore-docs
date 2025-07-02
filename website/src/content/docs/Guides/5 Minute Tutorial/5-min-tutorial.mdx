@@ -374,7 +374,8 @@ pathways.handle("todo-items/todo-item.deleted.v0", async ({ payload }) => {
 Create `write-demo.ts` to send test events:
 
 ```typescript
-import { pathways } from "./pathways";
+import { sleep } from "bun";
+import { pathways, sql } from "./pathways";
 
 // you can add this after each write to see more slowly what's happening.
 async function dump(label: string) {
