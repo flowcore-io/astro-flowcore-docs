@@ -337,6 +337,7 @@ import { pathways, sql } from "./pathways";
 
 /* CREATED – snapshot insert */
 pathways.handle("todo-items/todo-item.created.v0", async ({ payload }) => {
+    console.log("Todo Item Created", payload);
     await sql`
     INSERT INTO todo (id, title, description, done)
     VALUES (${payload.id}, ${payload.title}, ${payload.description ?? null}, ${
@@ -347,6 +348,7 @@ pathways.handle("todo-items/todo-item.created.v0", async ({ payload }) => {
 
 /* RENAMED – delta update */
 pathways.handle("todo-items/todo-item.renamed.v0", async ({ payload }) => {
+    console.log("Todo Item Renamed", payload);
     await sql`
     UPDATE todo
     SET title = ${payload.newTitle}
@@ -356,15 +358,18 @@ pathways.handle("todo-items/todo-item.renamed.v0", async ({ payload }) => {
 
 /* COMPLETED / REOPENED – status toggles */
 pathways.handle("todo-items/todo-item.completed.v0", async ({ payload }) => {
+    console.log("Todo Item Completed", payload);
     await sql`UPDATE todo SET done = true  WHERE id = ${payload.id}`;
 });
 
 pathways.handle("todo-items/todo-item.reopened.v0", async ({ payload }) => {
+    console.log("Todo Item Reopened", payload);
     await sql`UPDATE todo SET done = false WHERE id = ${payload.id}`;
 });
 
 /* DELETED */
 pathways.handle("todo-items/todo-item.deleted.v0", async ({ payload }) => {
+    console.log("Todo Item Deleted", payload);
     await sql`DELETE FROM todo WHERE id = ${payload.id}`;
 });
 ```
@@ -405,10 +410,6 @@ await pathways.write("todo-items/todo-item.completed.v0", {
 });
 
 await pathways.write("todo-items/todo-item.reopened.v0", {
-    data: { id },
-});
-
-await pathways.write("todo-items/todo-item.deleted.v0", {
     data: { id },
 });
 
