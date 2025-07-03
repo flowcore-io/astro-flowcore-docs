@@ -335,6 +335,7 @@ export const pathwaysRouter = new PathwayRouter(pathways, "1234");
 ### Create handlers
 
 Create a `handlers.ts` file where we will listen to incoming events and store them in the postgres database.
+These can be placed anywhere in your codebase.
 
 ```typescript
 import { pathways, sql } from "./pathways";
