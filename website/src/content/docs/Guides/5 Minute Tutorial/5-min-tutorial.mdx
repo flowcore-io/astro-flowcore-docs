@@ -52,11 +52,11 @@ First, log in to Flowcore using the CLI (this uses port 3000 so make sure no ser
 flowcore login
 ```
 
-This will authenticate you with the Flowcore platform and allow you to run subsequent commands.
+This will authenticate you with Flowcore and allow you to run subsequent commands.
 
 ## Step 2: Create an HTTP Server
 
-Inside `index.ts` set up a simple HTTP server with a POST /api/transformer/ endpoint. This endpoint will receive events from the Flowcore.
+Inside `index.ts` set up a simple HTTP server with a POST /api/transformer/ endpoint. This endpoint will receive events from Flowcore.
 Here we use the Flowcore Pathways library which will proxy events to your `.handle()` handlers in your code:
 
 ```typescript
@@ -143,7 +143,7 @@ dataCore:
                     description: "A todo item was deleted"
 ```
 
-Apply this configuration to create the Flowcore primitives:
+Apply this configuration to create Flowcore primitives:
 
 ```bash
 flowcore data-core apply -f flowcore.yaml
@@ -283,7 +283,7 @@ import {
 } from "./schemas";
 import postgres from "postgres";
 
-const apiKey = "YOUR_GENERATED_API_KEY"; // <---------------------------- replace with generated api key
+const apiKey = "YOUR_GENERATED_API_KEY"; // <--- replace with generated api key
 export const postgresUrl =
     "postgresql://postgres:postgres@localhost:5433/pathway_db";
 
@@ -292,7 +292,7 @@ export const sql = postgres(postgresUrl);
 
 export const pathways = new PathwaysBuilder({
     baseUrl: "https://webhook.api.flowcore.io",
-    tenant: "YOUR_TENANT_NAME", // <--------------------------- replace with your tenant name
+    tenant: "YOUR_TENANT_NAME", // <--------- replace with your tenant name
     dataCore: "todo-app",
     apiKey,
 })
@@ -335,9 +335,8 @@ Create a `handlers.ts` file where we will listen to incoming events and store th
 ```typescript
 import { pathways, sql } from "./pathways";
 
-/* CREATED – snapshot insert */
 pathways.handle("todo-items/todo-item.created.v0", async ({ payload }) => {
-    console.log("Todo Item Created", payload);
+    console.log("Todo Item CREATED", payload);
     await sql`
     INSERT INTO todo (id, title, description, done)
     VALUES (${payload.id}, ${payload.title}, ${payload.description ?? null}, ${
@@ -346,9 +345,8 @@ pathways.handle("todo-items/todo-item.created.v0", async ({ payload }) => {
   `;
 });
 
-/* RENAMED – delta update */
 pathways.handle("todo-items/todo-item.renamed.v0", async ({ payload }) => {
-    console.log("Todo Item Renamed", payload);
+    console.log("Todo Item RENAMED", payload);
     await sql`
     UPDATE todo
     SET title = ${payload.newTitle}
@@ -356,20 +354,18 @@ pathways.handle("todo-items/todo-item.renamed.v0", async ({ payload }) => {
   `;
 });
 
-/* COMPLETED / REOPENED – status toggles */
 pathways.handle("todo-items/todo-item.completed.v0", async ({ payload }) => {
-    console.log("Todo Item Completed", payload);
+    console.log("Todo Item COMPLETED", payload);
     await sql`UPDATE todo SET done = true  WHERE id = ${payload.id}`;
 });
 
 pathways.handle("todo-items/todo-item.reopened.v0", async ({ payload }) => {
-    console.log("Todo Item Reopened", payload);
+    console.log("Todo Item REOPENED", payload);
     await sql`UPDATE todo SET done = false WHERE id = ${payload.id}`;
 });
 
-/* DELETED */
 pathways.handle("todo-items/todo-item.deleted.v0", async ({ payload }) => {
-    console.log("Todo Item Deleted", payload);
+    console.log("Todo Item DELETED", payload);
     await sql`DELETE FROM todo WHERE id = ${payload.id}`;
 });
 ```
