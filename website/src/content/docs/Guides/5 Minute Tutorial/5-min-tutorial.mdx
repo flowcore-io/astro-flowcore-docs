@@ -284,8 +284,7 @@ import {
 import postgres from "postgres";
 
 const apiKey = "YOUR_GENERATED_API_KEY"; // <--- replace with generated api key
-export const postgresUrl =
-    "postgresql://postgres:postgres@localhost:5433/pathway_db";
+const postgresUrl = "postgresql://postgres:postgres@localhost:5433/pathway_db";
 
 // Initialize the database connection
 export const sql = postgres(postgresUrl);
@@ -417,16 +416,16 @@ process.exit(0);
 
 ## Step 8: Test the Complete Flow
 
-### 1. Start the local proxy to connect Flowcore to your endpoint:
-
-```bash
-flowcore scenario local -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
-```
-
-### 2. In another terminal, start your server:
+### 1. Start your HTTP server:
 
 ```bash
 bun index.ts
+```
+
+### 2. In another terminal, Start the local proxy to connect Flowcore to your local endpoint:
+
+```bash
+flowcore scenario local -f flowcore.local.yaml -s now -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
 ```
 
 ### 3. In a third terminal, send test events:
