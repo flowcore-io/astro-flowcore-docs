@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.70.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.69.2...v1.70.0) (2025-07-03)
+
+
+### Features
+
+* **assets:** Add aggregate instances and event types images to 5 Minute Tutorial for enhanced visual guidance ([df459b7](https://github.com/flowcore-io/astro-flowcore-docs/commit/df459b78197da6faa5e20598b486653029d43ba1))
+* **assets:** Add event types image for getting started assets ([0252e3a](https://github.com/flowcore-io/astro-flowcore-docs/commit/0252e3a2f9ac17491ce629b2ba0a719efd21a2b9))
+* **tutorial:** Add 5 Minute Tutorial guide with metadata ([6132232](https://github.com/flowcore-io/astro-flowcore-docs/commit/6132232c8bed4ee96d4813df2be51ffbdd887dc2))
+
 ## [1.69.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.69.1...v1.69.2) (2025-05-22)
 
 
