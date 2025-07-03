@@ -214,7 +214,7 @@ services:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
         ports:
-            - "5433:5432"
+            - "5432:5432"
         volumes:
             - ./init-db:/docker-entrypoint-initdb.d
 ```
@@ -233,7 +233,7 @@ docker-compose up -d
 This is the URL that you can use to connect to the local PostgreSQL database:
 
 ```
-postgresql://postgres:postgres@localhost:5433/pathway_db
+postgresql://postgres:postgres@localhost:5432/pathway_db
 ```
 
 Create the todo table:
@@ -284,7 +284,7 @@ import {
 import postgres from "postgres";
 
 const apiKey = "YOUR_GENERATED_API_KEY"; // <--- replace with generated api key
-const postgresUrl = "postgresql://postgres:postgres@localhost:5433/pathway_db";
+const postgresUrl = "postgresql://postgres:postgres@localhost:5432/pathway_db";
 
 // Initialize the database connection
 export const sql = postgres(postgresUrl);
