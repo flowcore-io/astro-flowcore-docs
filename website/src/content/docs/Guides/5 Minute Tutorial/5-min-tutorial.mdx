@@ -30,9 +30,9 @@ real-time fan-out, automatic hot and cold storage management, and effortless rep
 
 ## Prerequisites for tutorial
 
--   [Flowcore Platform account](https://flowcore.io) to get your tenant name
+-   [Flowcore Platform account](https://flowcore.io) to get your tenant's name
 -   [Flowcore CLI](https://docs.flowcore.io/guides/flowcore-cli/install-cli/)
--   [Bun](https://bun.sh) runtime installed
+-   [Bun](https://bun.sh) runtime installed. Just to create a simple HTTP server.
 -   [Docker](https://docker.com) for running PostgreSQL
 
 ## Step 1: Initialize the Project
@@ -120,7 +120,7 @@ console.log(
 -   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
 -   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a title for grouping related immutable event logs e.g. `TodoItem`
 -   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
-    -   In classic event sourcing: You have **one immutable event log per aggregate instance** (e.g., one stream per `TodoItem`, like `TodoItem-001`, `TodoItem-002`, etc).
+    -   In classic event sourcing: You have **one immutable event log per aggregate instance** (e.g., one per `TodoItem`, like `TodoItem-001`, `TodoItem-002`, etc).
         where the intent of an individual event, e.g. create, update, or delete, is indicated by the event type field on the json object.
     -   In Flowcore: You have **one immutable event log per event type**. Instead of `TodoItem` instances, you have `TodoItemCreated`, `TodoItemUpdated`, `TodoItemDeleted`
         as separate immutable event logs. So the intent of an event, is indicated by which immutable event log it's stored in.
