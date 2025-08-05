@@ -16,7 +16,7 @@ You define your event architecture in a simple YAML file.
 Before you emit a JSON event to Flowcore you do business logic checks against real-time read models.
 When you receive the event back from Flowcore you update your read models.
 
-No Kafka. No Domain Driven Design. No current-state rebuild/rehydration to validate user actions.
+No Kafka. No CDC connectors. No current-state rebuild/rehydration to validate user actions.
 
 Flowcore is responsible for storing the events that you emit, in immutable event logs, and fanning them out to subscribed services either in single digit milliseconds or seconds,
 based on your needs.
@@ -30,7 +30,7 @@ real-time fan-out, automatic hot and cold storage management, and effortless rep
 
 ## Prerequisites for tutorial
 
--   [Flowcore Platform account](https://flowcore.io) to get your tenant's name
+-   [Flowcore Platform account](https://flowcore.io) to get your Tenant name
 -   [Flowcore CLI](https://docs.flowcore.io/guides/flowcore-cli/install-cli/)
 -   [Bun](https://bun.sh) runtime installed. Just to create a simple HTTP server.
 -   [Docker](https://docker.com) for running PostgreSQL
@@ -65,7 +65,7 @@ Inside `index.ts` set up a simple HTTP server with a POST /api/transformer/ endp
 Here we use the Flowcore Pathways library which will proxy events to your `.handle()` handlers in your code:
 
 ```typescript
-import type { FlowcoreLegacyEvent } from "@flowcore/pathways";
+import type { FlowcoreEvent } from "@flowcore/pathways";
 import { pathwaysRouter } from "./pathways";
 import "./handlers";
 
@@ -82,7 +82,7 @@ const server = Bun.serve({
         ) {
             try {
                 const body = await req.json();
-                const event = body as FlowcoreLegacyEvent;
+                const event = body as FlowcoreEvent;
                 const secret = req.headers.get("x-secret") ?? "";
 
                 await pathwaysRouter.processEvent(event, secret);
@@ -118,7 +118,7 @@ console.log(
 ### Understanding Flowcore Concepts
 
 -   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
--   **Flow Type**: Similar to an aggregate in traditional event sourcing, but simpler - it's just a title for grouping related immutable event logs e.g. `TodoItem`
+-   **Flow Type**: Similar to a domain or anaggregate in traditional event sourcing, but simpler - it's just a title for grouping related immutable event logs e.g. `TodoItem`
 -   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
     -   In classic event sourcing: You have **one immutable event log per aggregate instance** (e.g., one per `TodoItem`, like `TodoItem-001`, `TodoItem-002`, etc).
         where the intent of an individual event, e.g. create, update, or delete, is indicated by the event type field on the json object.
@@ -377,7 +377,7 @@ pathways.handle("todo-items/todo-item.deleted.v0", async ({ payload }) => {
 
 ## Step 7: Create a Demo Script
 
-Create `write-demo.ts` to send test events:
+Create `write-demo.ts` to send test events. In your applications you should do business logic checks before sending these events:
 
 ```typescript
 import { sleep } from "bun";
@@ -404,6 +404,27 @@ await pathways.write("todo-items/todo-item.created.v0", {
 
 await pathways.write("todo-items/todo-item.renamed.v0", {
     data: { id, newTitle: "Buy oat milk" },
+});
+
+await pathways.write("todo-items/todo-item.completed.v0", {
+    data: { id },
+});
+
+await pathways.write("todo-items/todo-item.reopened.v0", {
+    data: { id },
+});
+
+await pathways.write("todo-items/todo-item.created.v0", {
+    data: {
+        id,
+        title: "Buy bread",
+        description: "Wholemeal",
+        done: false,
+    },
+});
+
+await pathways.write("todo-items/todo-item.renamed.v0", {
+    data: { id, newTitle: "Buy wholemeal bread" },
 });
 
 await pathways.write("todo-items/todo-item.completed.v0", {
@@ -445,7 +466,7 @@ bun write-demo.ts
 Now if you go to look in the todo postgres table, it should be populated. Try to truncate the table and then run this command:
 
 ```bash
-flowcore scenario local -f flowcore.yaml -f flowcore.local.yaml -s first -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
+flowcore scenario local -f flowcore.local.yaml -s first -e http://localhost:3000/api/transformer -H 'X-Secret: 1234'
 ```
 
 The events get replayed from the beginning in the correct order and the database is repopulated.
