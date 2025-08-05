@@ -118,7 +118,7 @@ console.log(
 ### Understanding Flowcore Concepts
 
 -   **Data Core**: Think of this as a project or Git repository - it's the top-level container for your events
--   **Flow Type**: Similar to a domain or anaggregate in traditional event sourcing, but simpler - it's just a title for grouping related immutable event logs e.g. `TodoItem`
+-   **Flow Type**: Similar to a domain or an aggregate in traditional event sourcing, but simpler - it's just a title for grouping related immutable event logs e.g. `TodoItem`
 -   **Event Type**: This is where Flowcore differs significantly from classic event sourcing:
     -   In classic event sourcing: You have **one immutable event log per aggregate instance** (e.g., one per `TodoItem`, like `TodoItem-001`, `TodoItem-002`, etc).
         where the intent of an individual event, e.g. create, update, or delete, is indicated by the event type field on the json object.
