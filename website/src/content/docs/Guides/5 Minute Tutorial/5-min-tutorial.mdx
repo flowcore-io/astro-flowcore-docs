@@ -341,37 +341,42 @@ These can be placed anywhere in your codebase.
 import { pathways, sql } from "./pathways";
 
 pathways.handle("todo-items/todo-item.created.v0", async ({ payload }) => {
-    console.log("Todo Item CREATED", payload);
-    await sql`
+    const result = await sql`
     INSERT INTO todo (id, title, description, done)
     VALUES (${payload.id}, ${payload.title}, ${payload.description ?? null}, ${
         payload.done
     })
+    ON CONFLICT (id) DO NOTHING
   `;
+    if (result.length === 0) {
+        console.log("Todo Item CREATED", payload);
+    } else {
+        console.log("Todo Item ALREADY EXISTS (skipping)", payload);
+    }
 });
 
 pathways.handle("todo-items/todo-item.renamed.v0", async ({ payload }) => {
-    console.log("Todo Item RENAMED", payload);
     await sql`
     UPDATE todo
     SET title = ${payload.newTitle}
     WHERE id  = ${payload.id}
   `;
+    console.log("Todo Item RENAMED", payload);
 });
 
 pathways.handle("todo-items/todo-item.completed.v0", async ({ payload }) => {
-    console.log("Todo Item COMPLETED", payload);
     await sql`UPDATE todo SET done = true  WHERE id = ${payload.id}`;
+    console.log("Todo Item COMPLETED", payload);
 });
 
 pathways.handle("todo-items/todo-item.reopened.v0", async ({ payload }) => {
-    console.log("Todo Item REOPENED", payload);
     await sql`UPDATE todo SET done = false WHERE id = ${payload.id}`;
+    console.log("Todo Item REOPENED", payload);
 });
 
 pathways.handle("todo-items/todo-item.deleted.v0", async ({ payload }) => {
-    console.log("Todo Item DELETED", payload);
     await sql`DELETE FROM todo WHERE id = ${payload.id}`;
+    console.log("Todo Item DELETED", payload);
 });
 ```
 
@@ -384,18 +389,18 @@ import { sleep } from "bun";
 import { pathways, sql } from "./pathways";
 
 // you can add this after each write to see more slowly what's happening.
-async function dump(label: string) {
+async function dump(label: string, id: string) {
     await sleep(300); // give Flowcore -> handler -> DB time
     const [row] = await sql`SELECT * FROM todo WHERE id = ${id}`;
     console.log(`\n🔎 ${label}`);
     console.table(row);
 }
 
-const id = crypto.randomUUID();
+const milkId = crypto.randomUUID();
 
 await pathways.write("todo-items/todo-item.created.v0", {
     data: {
-        id,
+        id: milkId,
         title: "Buy milk",
         description: "2 litres, semi-skimmed",
         done: false,
@@ -403,20 +408,22 @@ await pathways.write("todo-items/todo-item.created.v0", {
 });
 
 await pathways.write("todo-items/todo-item.renamed.v0", {
-    data: { id, newTitle: "Buy oat milk" },
+    data: { id: milkId, newTitle: "Buy oat milk" },
 });
 
 await pathways.write("todo-items/todo-item.completed.v0", {
-    data: { id },
+    data: { id: milkId },
 });
 
 await pathways.write("todo-items/todo-item.reopened.v0", {
-    data: { id },
+    data: { id: milkId },
 });
+
+const breadId = crypto.randomUUID();
 
 await pathways.write("todo-items/todo-item.created.v0", {
     data: {
-        id,
+        id: breadId,
         title: "Buy bread",
         description: "Wholemeal",
         done: false,
@@ -424,15 +431,15 @@ await pathways.write("todo-items/todo-item.created.v0", {
 });
 
 await pathways.write("todo-items/todo-item.renamed.v0", {
-    data: { id, newTitle: "Buy wholemeal bread" },
+    data: { id: breadId, newTitle: "Buy wholemeal bread" },
 });
 
 await pathways.write("todo-items/todo-item.completed.v0", {
-    data: { id },
+    data: { id: breadId },
 });
 
 await pathways.write("todo-items/todo-item.reopened.v0", {
-    data: { id },
+    data: { id: breadId },
 });
 
 console.log("\n✅ demo events sent");
