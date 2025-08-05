@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.71.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.70.0...v1.71.0) (2025-08-05)
+
+
+### Features
+
+* small fix ([fd607f4](https://github.com/flowcore-io/astro-flowcore-docs/commit/fd607f4045802162cb9d905e58383e037f4b62db))
+
+
+### Bug Fixes
+
+* **tutorial:** Correct PostgreSQL connection details in 5 Minute Tutorial to use the correct port 5432 ([be3746a](https://github.com/flowcore-io/astro-flowcore-docs/commit/be3746af69df4ba4a45f99d8d6db16c971d44b44))
+* **tutorial:** Enhance logging and improve ID handling in 5 Minute Tutorial for better debugging and clarity ([ecad550](https://github.com/flowcore-io/astro-flowcore-docs/commit/ecad550b32897adc7298d8f78be39420fdba25e7))
+
 ## [1.70.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.69.2...v1.70.0) (2025-07-03)
 
 
