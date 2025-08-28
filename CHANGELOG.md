@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.72.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.71.0...v1.72.0) (2025-08-28)
+
+
+### Features
+
+* **reset-adapter:** Enhance documentation for `--bucket` parameter with additional options and use cases ([f421a46](https://github.com/flowcore-io/astro-flowcore-docs/commit/f421a460d0d926e27af818e4b433f84362b5980a))
+
 ## [1.71.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.70.0...v1.71.0) (2025-08-05)
 
 
