@@ -30,7 +30,7 @@ If you wish to use the adapter id, you can read about how to obtain your adapter
 |:--|:--|:--|:--|
 |`--scenario`|`-s`|Yes|The scenario the adapter resides in. You can obtain all your scenarios within a tenant [here](/guides/flowcore-cli/get-resources-cli).|
 |`--tenant`|`-t`|Yes|Tenant. e.g `my-tenant`. Meaning, the name of your organization. Which you can find by visiting [flowcore.io](https://flowcore.io) | 
-|`--bucket`|`-b`|No|Time bucket (YYYYMMDDHHmmss or first). This correlates to Year (YYYY), Month (MM), Day (DD), Hour (HH), Minute (mm), Second (ss).|
+|`--bucket`|`-b`|No|Time bucket (YYYYMMDDHHmmss, first, or last). This correlates to Year (YYYY), Month (MM), Day (DD), Hour (HH), Minute (mm), Second (ss). Use `first` for earliest available data, `last` for most recent data.|
 |`--eventId`|`-e`|No|Time UUID. This is the UUID of the event you wish to reset to.|
 
 ## Examples
@@ -47,8 +47,42 @@ To reset an adapter using the first time bucket:
 flowcore reset adapter adapter-name -t tenant-name -s scenario-name -b first
 ```
 
+To reset an adapter using the last time bucket:
+
+```sh
+flowcore reset adapter adapter-name -t tenant-name -s scenario-name -b last
+```
+
 To reset an adapter using a specific event ID:
 
 ```sh
 flowcore reset adapter adapter-name -t tenant-name -s scenario-name -e 9cb35da2-ba64-4bb5-86d6-ef20ebc62ab7
 ```
+
+## Time Bucket Options
+
+The `--bucket` parameter offers three different reset strategies:
+
+### `first`
+- Resets the adapter to the **earliest available** time bucket
+- Useful when you want to replay all historical data from the beginning
+- The adapter will process all events chronologically from the start
+
+### `last` 
+- Resets the adapter to the **most recent** time bucket
+- Automatically discovers and uses the latest available time bucket across all relevant event types
+- Ideal for resuming processing from the most current data point
+- Eliminates the need to manually lookup the latest time bucket
+
+### Specific Time Bucket (YYYYMMDDHHmmss)
+- Resets to an exact point in time using the format: Year-Month-Day-Hour-Minute-Second
+- Provides precise control over the reset point
+- Example: `20240718110000` = July 18, 2024 at 11:00:00
+
+## When to Use Each Option
+
+| Option | Use Case | Example Scenario |
+|:--|:--|:--|
+| `first` | Complete data reprocessing | Fixing a bug that affected all historical data |
+| `last` | Resume from latest data | Recovering from a temporary outage or deployment |
+| Specific time | Targeted replay | Reprocessing data from when a specific issue occurred |
