@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.72.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.72.0...v1.72.1) (2026-01-05)
+
+
+### Bug Fixes
+
+* **dependencies:** update Astro to version 5.12.8 ([d2d6e0a](https://github.com/flowcore-io/astro-flowcore-docs/commit/d2d6e0a8b2e1c760becbf7230070bb4ff2d2f771))
+
 ## [1.72.0](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.71.0...v1.72.0) (2025-08-28)
 
 
