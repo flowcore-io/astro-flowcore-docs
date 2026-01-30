@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.72.2](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.72.1...v1.72.2) (2026-01-30)
+
+
+### Bug Fixes
+
+* force release ([c67188d](https://github.com/flowcore-io/astro-flowcore-docs/commit/c67188dac1626f197d1c96a5ae0f6b379acde9df))
+
 ## [1.72.1](https://github.com/flowcore-io/astro-flowcore-docs/compare/v1.72.0...v1.72.1) (2026-01-05)
 
 
