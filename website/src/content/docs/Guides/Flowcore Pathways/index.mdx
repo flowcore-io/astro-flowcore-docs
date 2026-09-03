@@ -12,13 +12,13 @@ Flowcore Pathways is a TypeScript library for building event-driven applications
 Events flow through the Flowcore platform in a pipeline:
 
 ```
-Publish ──▶ Store ──▶ Transform ──▶ Webhook ──▶ Handler
-   │           │          │             │           │
- write()   Flowcore    Scenarios    HTTP POST    handle()
-           Platform                 to your app
+Publish ──▶ Store ──▶ Data Pathway ──▶ Handler
+   │           │            │              │
+ write()   Flowcore    managed HTTP      handle()
+           Platform      delivery
 ```
 
-Pathways covers the **Publish** and **Handler** sides of this pipeline, giving you type-safe contracts for both producing and consuming events.
+Pathways gives producers and consumers the same type-safe event contracts. In production, a managed data pathway sends selected events to your application endpoint.
 
 ## Installation
 
@@ -279,9 +279,55 @@ pathways.subscribe("user/created", (event) => {
 }, "after")
 ```
 
-## Configuration Files
+## Provisioning and delivery modes
 
-When using the Flowcore CLI, data cores and scenarios are defined in YAML configuration files.
+`PathwaysBuilder` chooses safe defaults from `runtimeEnv`:
+
+| Runtime | Default mode | Shared resources | Pathway registration | Delivery |
+| --- | --- | --- | --- | --- |
+| `production` | `managed` | provisioned | opt in | Flowcore calls your endpoint |
+| `development` | `virtual` | provisioned | skipped | local in-process pump |
+| `test` | `virtual` | skipped | skipped | local in-process pump |
+
+Enable named managed-pathway registration explicitly in production:
+
+```typescript
+const pathways = new PathwaysBuilder({
+  baseUrl: "https://api.flowcore.io",
+  tenant: "your-tenant",
+  dataCore: "your-data-core",
+  apiKey: process.env.FLOWCORE_API_KEY!,
+  runtimeEnv: "production",
+  pathwayName: "user-service",
+  autoProvision: { pathway: true },
+  managedConfig: {
+    endpointUrl: "https://your-app.example/api/flowcore",
+    authHeaders: {
+      "X-Webhook-Secret": process.env.FLOWCORE_WEBHOOK_SECRET!,
+    },
+    sizeClass: "medium",
+  },
+})
+```
+
+Calling `await pathways.startPump()` provisions enabled resources. Production managed mode does not start a local pump; delivery is controlled by Flowcore. Provisioning is additive and does not remove resources that are no longer registered in code.
+
+`autoProvision` can control each stage independently:
+
+```typescript
+autoProvision: {
+  dataCore: true,
+  flowType: true,
+  eventType: true,
+  pathway: true,
+}
+```
+
+Use `autoProvision: false` when CI or another deployment process owns all resources.
+
+## CLI Data Core manifest
+
+The CLI can still manage the shared event contract resources separately:
 
 ### Data Core Definition
 
@@ -300,21 +346,3 @@ flowTypes:
       - name: "placed"
       - name: "fulfilled"
 ```
-
-### Scenario Definition
-
-```yaml
-# flowcore.scenario.yaml
-flowcore: "2"
-tenant: "your-tenant"
-scenario: "your-scenario"
-transformers:
-  - flowType: "user"
-    eventType: "created"
-    targetUrl: "https://your-app.com/webhooks/flowcore"
-    secret: "${{secrets.WEBHOOK_SECRET}}"
-```
-
-:::tip
-Use `${{secrets.SECRET_NAME}}` syntax to reference Flowcore secrets in your scenario configuration. This avoids hardcoding sensitive values.
-:::

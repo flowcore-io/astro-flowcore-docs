@@ -33,12 +33,6 @@ export default defineConfig({
           directory: "Automation",
         },
       },
-      {
-        label: "Flowcathon",
-        autogenerate: {
-          directory: "Flowcathon",
-        },
-      }
     ],
     title: 'Flowcore Docs',
     social: {

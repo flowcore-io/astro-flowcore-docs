@@ -38,25 +38,11 @@ Events are the core data units in Flowcore. They can be thought of as enhanced d
 - Immutable once recorded
 - Automatically scheduled for backup and cold storage management
 
-## Transformer
+## Data Pathway
 
-Transformers are the stream processing engines of Flowcore. They run in a transformer shell and can be developed for specific cases or created as configurable runtimes for reuse.
+A data pathway connects selected Flowcore event types to application handlers. In production, managed pathways deliver events to an authenticated HTTP endpoint. Applications define contracts and handlers with `@flowcore/pathways`.
 
-- **Supported runtimes**: NodeJS, Bun, and Python out of the box
-- **Extensibility**: Can be extended from the base transformer shell to use other languages
-
-## Strand
-
-A strand combines a stream and a transformer, acting as a data conveyor belt.
-
-- **Example**: A strand for CRUD operations on an organization, pulling events from `organization.created`, `organization.updated`, and `organization.archived`.
-- **Feature**: Each strand can be restarted individually to any point in time, allowing event replay as needed.
-
-## Scenario
-
-A scenario in Flowcore is a collection of strands or services that transform or process data.
-
-- **Example**: A scenario for the `Organization` business domain.
+- **Example**: An `orders-service` pathway delivers `order/placed.0` events to the service endpoint.
 
 ## Read Model
 
@@ -64,7 +50,7 @@ A Read Model is a database where processed data is stored for specific applicati
 
 - **Flexibility**: Different databases can be used for various business domains (e.g., ArangoDB, PostgreSQL)
 - **Multiple databases**: It's often beneficial to use multiple database types for the same data to leverage their different strengths
-- **Synchronization**: Flowcore and transformers handle keeping data in sync across different read models
+- **Synchronization**: Data Pathway handlers keep read models in sync from immutable events
 - **Current limitation**: At present, users need to deploy and manage their own read model deployments
 - **Future plans**: Flowcore is working on options to deploy various read models for users
 

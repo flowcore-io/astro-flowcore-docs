@@ -14,8 +14,8 @@ import FlowTypesAndEventTypes from "../../../../assets/guides/data-core/what-is-
 A Data Core is essentially a log book for unstructured data. Meaning that you can send data to a Data Core without having to decide the exact model for your data. Instead you send in any and all information that could be relevant, and the Data Core will store it for you.
 Notice the mention of a __log book__. This is because a Data Core is a chronological log of all the data that has been sent to it. This means that you can send in data at any time, and it will be stored in the Data Core in the order it was received.
 
-With these two strengths, asyou are able to send in any data, and then decide at an unspecified time, what you wish to use the data for, and what specific data you need. This is done by pulling data from a Data Core into an [Adapter](todo).
-> Bear in mind that __the data is never altered__, meaning that you always have a full history of the data inserted into a Data Core. When you pull the data out using an Adapter, you are still not altering the data, but rather copying it.
+These strengths let you ingest data before deciding every downstream use. A [Data Pathway](/guides/flowcore-pathways/) can later deliver selected events from the Data Core to an application.
+> Bear in mind that __the data is never altered__. You retain the full event history; consuming an event copies it to the application without changing the stored event.
 
 To send data to a Data Core, you use an [ingestion channel](todo).
 
@@ -31,7 +31,7 @@ There are two access availabilities for Data Cores:
 - `Public`
   - Anyone using flowcore can subscribe to your public Data Cores and access the data within it. __They cannot send data to your Data Core without an [API Key](todo) that you have granted them__
 - `Private`
-  - Any collaborators you [invite to your organization](/guides/2-organization/3invite-user-to-organization) can access your private Data Cores. __They cannot send data to your Data Core without an [API Key](todo) that you have granted them__
+  - Any collaborators you [invite to your organization](/guides/organization/invite-user-to-organization/) can access your private Data Cores. __They cannot send data to your Data Core without an [API Key](todo) that you have granted them__
 
 There is no limit to how many public Data Cores you can create. However, you are required to buy private Data Cores.
 
