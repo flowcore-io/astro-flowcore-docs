@@ -87,7 +87,7 @@ if you are sending a batch of events, you can override the event time or valid t
 <Card title="Information" icon="information">
   When specifying `event time`, it affects when where an event is stored, and when it is available for querying. If the event it is specified at a time older than the maximum retention period it will be available for querying after an hour, from cold storage.
 
-  Adjusting the event time also affects how the event fetched, as adding it in the past will not be sant to a transformer that has it's cursor moved past the event time. A restart of the transformer is required to pick up the event.
+  Adjusting event time also affects delivery. An event inserted behind a consumer cursor is not delivered unless that Data Pathway source is restarted from an earlier position.
 </Card>
 
 ## Multible Events

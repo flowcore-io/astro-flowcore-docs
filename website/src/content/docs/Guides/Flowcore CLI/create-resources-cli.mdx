@@ -3,178 +3,66 @@ title: Create Resources
 sidebar:
   order: 3
   badge: Updated
-description: Create resources in Flowcore using a manifest file
+description: Create Data Cores and event contracts with the Flowcore CLI.
 ---
 
-The Flowcore CLI allows you to create resources in Flowcore using a manifest file. This is useful for creating multiple
-resources at once, or for creating resources in a CI/CD pipeline.
+The Flowcore CLI creates Data Cores, Flow Types, and Event Types. Use one command for an individual resource or apply a manifest when the resources belong together.
 
-## Data Cores
+## Apply a Data Core manifest
 
-To create a Data Core, you can use the `apply` command with a manifest file. The manifest file should be in YAML format.
+Generate a starter manifest:
+
+```sh
+flowcore data-core init --tenant example-tenant
+```
+
+Edit `flowcore.yaml`:
 
 ```yaml
 tenant: example-tenant
 dataCore:
   name: example-data-core
-  description: "An example Data Core"
-  flowTypes:
-    example:
-      description: "An example Flow Type"
-      eventTypes:
-        example.event.0:
-          description: "An example event"
-```
-
-to generate a manifest file, you can use the `init` command:
-
-```sh
-flowcore data-core init -t example-tenant
-```
-
-this will generate a `flowcore.yaml` file, then run the following command to apply the manifest file
-
-```sh
-flowcore data-core apply -f flowcore.yaml
-```
-
-this will create a plan to create the Data Core, and then apply the plan to create the Data Core.
-
-:::note[Overwrite]
-    <p>
-        If a Data Core already exists in the manifest file, you will be prompted to overwrite the existing Data Core.
-        pass the `--overwrite` flag to overwrite the existing Data Core without being prompted.
-    </p>
-:::
-
-### PII Configuration
-
-Event Types can be configured with PII (Personally Identifiable Information) handling by setting the following properties in the manifest file:
-
-```yaml
-tenant: example-tenant
-dataCore:
-  name: example-data-core
-  description: "An example Data Core"
+  description: Example application events
   flowTypes:
     users:
-      description: "User data flow type"
+      description: User lifecycle
       eventTypes:
         user.created.0:
-          description: "User created event"
-          piiEnabled: true
-          piiKey: ".userId"
-          piiSchema: |
-            {
-              "firstName": {
-                "faker": "person.firstName"
-              },
-              "lastName": {
-                "faker": "person.lastName"
-              },
-              "email": {
-                "faker": "internet.email"
-              },
-              "address": {
-                "faker": "location.streetAddress"
-              },
-              "phoneNumber": {
-                "type": "string",
-                "pattern": "[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              },
-              "ssn": {
-                "type": "string",
-                "redact": {
-                  "char": "*",
-                  "length": 9
-                }
-              }
-            }
+          description: A user was created
 ```
 
-The PII configuration consists of three main properties:
-
-- `piiEnabled`: Set to `true` to enable PII handling for the event type
-- `piiKey`: The JSON path to the field that identifies the entity (e.g., `.userId`)
-- `piiSchema`: The masking schema that defines how PII fields should be scrambled
-
-The PII schema supports various formats and options for generating masked data, including:
-
-- Using `faker` methods to create realistic-looking fake data
-- Defining patterns for structured data like phone numbers
-- Setting redaction rules for complete masking
-- Configuring detailed options for numbers, strings, arrays, and objects
-
-For more information on PII handling, including detailed schema options and examples, see the [PII Concept documentation](/guides/pii/concept).
-
-## Scenarios
-
-To create a scenario, you can use the `apply` command with a manifest file. The manifest file should be in YAML format.
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  description: "An example scenario"
-  transformers:
-    example-transformer:
-      description: "An example transformer"
-      dataCore: example-data-core
-      flowType: example
-      events:
-        - example.event.0
-      parameters:
-        - name: PROXY_ENDPOINT
-          type: manual
-          value: "https://example.com"
-      blueprint:
-        artifactUrl: "https://flowcore-public-runtimes.s3.eu-west-1.amazonaws.com/transformer-proxy-1.1.0.zip"
-```
-
-to generate a manifest file, you can use the `init` command:
+Preview and apply the manifest:
 
 ```sh
-flowcore scenario init -t example-tenant
+flowcore data-core apply --file flowcore.yaml
 ```
 
-this will generate a `flowcore.yaml` file, then run the following command to apply the manifest file
+Use the root command when a file contains several supported resources:
 
 ```sh
-flowcore scenario apply -f scenario.yaml
+flowcore apply --file flowcore.yaml
 ```
 
-this will create a plan to create the scenario, and then apply the plan to create the scenario.
-
-:::tip[Parameters]
-    <p>
-        Parameters can be configured with a type of `manual`, `secret` or `variable`. The `manual` type is used for
-        parameters that are manually set by the user. The `secret` type is used for parameters that are sensitive and
-        are stored on the organization level. The `variable` type is used for parameters that are set on the organization level and
-        are shared across all scenarios in the organization.
-    </p>
-    <p>
-        If you don't have any parameters to set, you can simply write the following <br/>   `parameters: []`.
-    </p>
-:::
-
-:::tip[Prefix]
-    <p>
-        If you want to prefix the name of the transformers in the scenario, you can add the `prefix` field to the scenario.
-    </p>
-:::
-
-## Apply all resources
-
-You can also apply all resources in a manifest file at once by using the root `apply` command:
+## Create resources individually
 
 ```sh
-flowcore apply -f manifest.yaml
+flowcore data-core create example-data-core --tenant example-tenant
+
+flowcore flow-type create users \
+  --tenant example-tenant \
+  --data-core example-data-core
+
+flowcore event-type create user.created.0 \
+  --tenant example-tenant \
+  --data-core example-data-core \
+  --flow-type users
 ```
 
-## Delete Protection
+Run `flowcore <command> --help` before scripting a command to see the options supported by your installed CLI version.
 
-By default, Data Cores are created without delete protection enabled. You can enable delete protection by setting
-`deleteProtection` to `true` for each resource in the manifest file.
+## Delete protection
+
+Set `deleteProtection: true` on a Data Core when it must not be deleted accidentally. Protected nested resources cannot be deleted until protection is disabled.
 
 ```yaml
 tenant: example-tenant
@@ -182,374 +70,32 @@ dataCore:
   name: example-data-core
   deleteProtection: true
 ```
-Keep in mind that if delete protection is enabled on a resource all nested resources will also have delete
-protection enabled. To delete a resource with delete protection enabled, you must first disable delete protection.
 
-## Transformer Size
+## Sensitive Data configuration
 
-By default, transformers are created with a size of `SMALL`. You can set the size of the transformer by setting the `size` field to `SMALL`, `MEDIUM` or `LARGE` or `XLARGE` in the manifest file.
+An Event Type can opt into Sensitive Data handling in the manifest:
 
 ```yaml
 tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      size: "medium"
+dataCore:
+  name: example-data-core
+  flowTypes:
+    users:
+      eventTypes:
+        user.created.0:
+          sensitiveDataEnabled: true
+          sensitiveDataKey: ".userId"
+          sensitiveDataSchema: |
+            {
+              "email": { "faker": "internet.email" },
+              "ssn": { "redact": { "char": "*", "length": 9 } }
+            }
 ```
 
-This will set the resource requirements for the transformers. The size of the transformer will determine the amount of CPU and memory allocated to the transformer.
-
-:::note[Sizes]
-    <p>
-      In the table below you can see the resource requirements for the different sizes of transformers. The transformer unit indicates what the transformer will consume in terms of cost. A single unit costs `$10` per month. (`5` are included in the free tier)
-    </p>
-    <table>
-      <tbody>
-        <tr>
-          <th>Size</th>
-          <th>CPU (vCPU)</th>
-          <th>Memory (MB)</th>
-          <th>Transformer Units</th>
-        </tr>
-        <tr>
-          <td>SMALL</td>
-          <td>0.25</td>
-          <td>512</td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td>MEDIUM</td>
-          <td>0.5</td>
-          <td>512</td>
-          <td>2</td>
-        </tr>
-        <tr>
-          <td>LARGE</td>
-          <td>1</td>
-          <td>1024</td>
-          <td>4</td>
-        </tr>
-        <tr>
-          <td>XLARGE</td>
-          <td>2</td>
-          <td>2048</td>
-          <td>8</td>
-        </tr>
-      </tbody>
-    </table>
-:::
-
-## Page Size
-
-By default, transformers are created with a page size of `1000`. You can set the page size of the transformer by setting the `pageSize` field to a number in the manifest file.
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      pageSize: 5000
-```
-
-:::note[Available values]
-    <p>
-      The page size determines how many records the transformer will pull from the Data Core at a time the minimum value is `5`.
-    </p>
-:::
-
-## Default Start Date
-
-By default, transformers are created with a default start date of `when the transformer is started`. You can set the default start date of the transformer by setting the `defaultStartDateTime` field to a number in the manifest file.
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      defaultStartDateTime: "2024-04-09T11:01:57Z"
-```
-
-This will set the default start date of the transformer to selected ISO start time.
-
-:::note[Accuracy]
-    <p>
-      This will set the "cursor" of the transformer to the closest event to the selected start date. Do not use this field to start before specific events, this is more for setting the start date to a specific time.
-    </p>
-:::
-
-## Concurrency
-
-By default, transformers are created with a concurrency of `1`. You can set the concurrency of the transformer by setting the `concurrency` field to a number in the manifest file.
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      concurrency: 5
-```
-
-This will set the number of concurrent executions of the transformer.
-
-:::note[Available values]
-    <p>
-      The concurrency can be set to any number between, but a range of `1` and `50` is recommended. This value will determine the amount of concurrent executions of the transformer, and if the transformer is not designed to handle this, it can result in unexpected behavior.
-    </p>
-:::
-
-## Replicas
-
-By default, transformers are created with a single replica. You can set the number of replicas of the transformer by setting the `replicas` field to a number in the manifest file.
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      replicas: 3
-```
-
-This will determine the number of replicas of the transformer.
-
-:::note[Price]
-  <p>
-    The number of replicas will determine the cost of the transformer. A single replica consumes a transformer unit depending on the size of the transformer. The cost of the transformer is calculated by multiplying the number of replicas with the transformer unit cost.
-  </p>
-:::
-
-## Scenario Transformer Prefixes
-
-You can set a prefix for the transformer name by adding the `prefix` field to the scenario in the manifest file.
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  prefix: "example-"
-  transformers:
-    do-something:
-```
-
-the prefix will be added to the transformer name, so the transformer name will be `example-do-something`.
-
-## Private Github Artifacts
-
-If you want to use a private Github artifact, you can add the following to the manifest file:
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      blueprint:
-        artifactUrl: "https://github.com/flowcore-io/flowcore-public-runtimes/releases/download/v1.0.0/transformer-proxy-1.0.0.zip"
-        githubPATSecretName: "github-pat"
-```
-
-This will use the Github PAT stored as an organization secret to download the artifact.
-
-To create a Github PAT secret, you can use this link (https://github.com/settings/tokens/new) to create a new token.
-You need to have the `repo` scope to be able to download the artifact. then you can add the secret to the github repository using the following command:
-
-```sh
-flowcore auth new secret "github-pat" --from-literal=<your-pat> --tenant <tenant-name>
-```
-
-## Endpoints
-
-:::caution[Experimental]
-  <p>
-    Currently, Postgres and MySQL endpoints are supported as read model endpoints. More endpoints will be added in the future.
-    Also, only the blueprint, matchKey and onMatch fields are checked for updates. If you want to update the table name or type of the endpoint, you will have to delete the endpoint and create a new one.
-  </p>
-:::
-
-To add an endpoint to a transformer, you can add the this to the manifest file:
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      endPoint:
-        name: example-endpoint
-        type: "DATA_CORE"
-        definition:
-          dataCore: some-data-core
-          flowType: some-flow-type
-          eventType: some-event-type
-```
-
-This will set up an endpoint for the transformer that will send data returned from the transformer to the specified Data Core.
-
-To create a read model endpoint, you can add the following to the manifest file:
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      endPoint:
-        id: 559d9980-0630-4d0f-8ba0-921a944310b2 # visible in the UI, info icon next to the read model name
-        name: example-endpoint # name of the table in the database
-        type: "POSTGRES" # or "MYSQL"
-        definition:
-          blueprint:
-            "example_column":
-              type: "string" # or "text" or "integer" or "decimal" or "boolean"
-              length: 255 # optional
-          matchKey: "some-key"
-          onMatch: "skip" # or "update"
-```
-
-This will set up an endpoint for the transformer that will send data returned from the transformer to the specified database.
-
-## Advanced Configuration
-
-### Shell
-
-You can customize what shell container is used for the transformer by adding the following to the manifest file:
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      shell: "example-shell:tag"
-```
-
-This will use the specified shell container to run the transformer.
-
-:::note[Shell]
-  <p>
-    The shell container is the container that runs the transformer runtime. You can create your own shell by extending this shell on docker hub [here](https://hub.docker.com/r/flowcoreio/adapter-nodejs-transformer-shell).
-  </p>
-:::
-
-:::caution[Container Visibility]
-  <p>
-    The container image needs to be visible to the Flowcore platform publicly. If you are using a private container registry, you will need to make the container image public for now. this will be changed in the future.
-  </p>
-:::
-
-### Entrypoint
-
-You can customize what entrypoint is used for the transformer by adding the following to the manifest file:
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      blueprint:
-        entrypoint: "dist/main.js"
-```
-
-This will use the specified entrypoint to run the transformer.
-
-:::note[Entrypoint]
-  <p>
-    This has to be a local path relative to the root of the artifact you are using.
-  </p>
-:::
-
-### Runtime
-
-You can customize what runtime is used for the transformer by adding the following to the manifest file:
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      blueprint:
-        runtime: "node"
-```
-
-this will use the specified runtime to run the transformer.
-
-:::note[Runtime]
-  <p>
-    This has to be a valid runtime command that is supported by the selected shell.
-  </p>
-:::
-
-:::caution[Experimental]
-<p>
-  We have an experimental shell that allows you to use the `bun` runtime. So you can use these values for your manifest file:
-  <ul>
-    <li>shell: "flowcoreio/adapter-nodejs-transformer-shell:2.7.4-bun"</li>
-    <li>entrypoint: index.js</li>
-    <li>runtime: "bun"</li>
-  </ul>
-
-  The flowcore cli command `flowcore new transformer` will create a new transformer with the bun runtime as the default.
-</p>
-:::
-
-### Timeouts
-
-You can customize what timeouts are used for the transformer by adding the following to the manifest file:
-
-```yaml
-tenant: example-tenant
-scenario:
-  name: example-scenario
-  transformers:
-    example-transformer:
-      processingTimeout: <timeout in milliseconds>
-      blueprint:
-        processTimeout: <timeout in milliseconds>
-        startTimeTimeout: <timeout in milliseconds>
-```
-
-This will set the timeout for the transformer.
-
-:::note[Timeouts]
-  <p>
-    These timeouts are used to determine the maximum duration of the transformer's process and startup times.
-  </p>
-  <p>
-    The `processTimeout` is the maximum duration of the transformer's process. The `startTimeTimeout` is the maximum duration of the transformer's startup time.
-    The `processingTimeout` is the maximum duration of the time it takes for the data pump to send an event to the transformer, and the transformer to process the data and respond with a status code.
-  </p>
-:::
+See [Sensitive Data concepts](/guides/sensitive-data/concept/) for schema options.
 
 ## V2 Resources
 
-We are currently rolling out a new functionality of components, these components definitions are defined using the v2 schema and can be defined using individual yaml documents.
+IAM resources use their dedicated CLI commands. See the [IAM guide](/guides/iam/getting-started/) for policies, roles, and assignments.
 
-currently only the IAM resources are supported, but more resources will be added in the future.
-
-To enable the IAM resources you need to install the `@flowcore/cli-plugin-iam` plugin:
-
-```sh
-flowcore plugin install @flowcore/cli-plugin-iam
-```
-
-see the following resources for more information on what v2 resources look like:
-
-- [IAM](/guides/iam/getting-started)
-
-You can create v2 resources using the `apply` command by adding the `--v2` flag:
-
-```sh
-flowcore apply -f manifest.yaml --v2
-```
-
-and delete v2 resources using the `delete` command:
-
-```sh
-flowcore delete -f manifest.yaml
-```
+Application delivery is configured with [Flowcore Pathways](/guides/flowcore-pathways/), not resource manifests.

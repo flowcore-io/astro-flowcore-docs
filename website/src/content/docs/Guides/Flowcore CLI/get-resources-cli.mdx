@@ -1,50 +1,48 @@
 ---
 title: Get Resources
-description: Get resources in Flowcore using the Flowcore CLI
+description: List and inspect Flowcore resources with the Flowcore CLI.
 ---
 
-To get resources, you can use the `flowcore get <resource-type>` command. This command will get resources of the specified type.
+The CLI has explicit commands for each supported resource.
 
-```sh
-flowcore get <resource-type>
-```
-
-## Get Resources by ID
-
-To get a resource by ID, you can use the `flowcore get <resource-type> <resource-id> --tenant <tenant-name> [--scenario <scenario-name>]` command. This command will get the resource of the specified type and ID.
-
-```sh
-flowcore get <resource-type> <resource-id> --tenant <tenant-name> [--scenario <scenario-name>]
-```
-
-## Get Tenant Resources
-
-To get tenant resources, you can use the `flowcore get <resource-type> --tenant <tenant-name>` command. This command will get resources of the specified type for the specified tenant.
-
-```sh
-flowcore get <resource-type> --tenant <tenant-name>
-```
-
-## Get All Tenants
-
-To get all tenants you have access to, you can use the `flowcore get tenant` command. This command will get all tenants you have access to.
+## Tenants
 
 ```sh
 flowcore get tenant
+flowcore get tenant example-tenant
 ```
 
-## Get Scenarios
-
-To get scenarios, you can use the `flowcore get scenario --tenant <tenant-name>` command. This command will get all scenarios for the specified tenant.
+## Data Cores
 
 ```sh
-flowcore get scenarios --tenant <tenant-name>
+flowcore data-core list --tenant example-tenant
+flowcore data-core get example-data-core --tenant example-tenant
 ```
 
-## Get Adapters
-
-To get adapters, you can use the `flowcore get adapter --tenant <tenant-name> --scenario <scenario-name>` command. This command will get all adapters for the specified tenant and scenario.
+## Flow Types
 
 ```sh
-flowcore get adapter --tenant <tenant-name> --scenario <scenario-name>
+flowcore flow-type list \
+  --tenant example-tenant \
+  --data-core example-data-core
+
+flowcore flow-type get users \
+  --tenant example-tenant \
+  --data-core example-data-core
 ```
+
+## Event Types
+
+```sh
+flowcore event-type list \
+  --tenant example-tenant \
+  --data-core example-data-core \
+  --flow-type users
+
+flowcore event-type get user.created.0 \
+  --tenant example-tenant \
+  --data-core example-data-core \
+  --flow-type users
+```
+
+Add `--json` where supported for machine-readable output. Run `flowcore <command> --help` for the exact options in your installed CLI version.

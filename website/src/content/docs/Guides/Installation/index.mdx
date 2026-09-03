@@ -186,30 +186,6 @@ First you will need to create an API key to use for the Flowcore Tenant.
       -n flowcore
     ```
 
-### GitHub Credentials
-
-The Flowcore Platform Control Plane needs access to your GitHub repository to deploy your transformers. This is done by creating a GitHub App and adding the necessary permissions.
-
-1. Create a GitHub App [here](https://github.com/settings/apps/new).
-2. Add the following permissions:
-    - Read and Write Access to Metadata
-    - Read and Write Access to The Contents of Repositories
-3. Add the GitHub App to your repository.
-4. Create a secret containing the following:
-    - The GitHub App ID
-    - The GitHub App Installation ID
-    - The GitHub App Private Key
-    - The Github Repository URL
-
-    ```bash
-    kubectl create secret generic flowcore-github-credentials \
-      --from-literal=github-app-id=<your-github-app-id> \
-      --from-literal=github-app-installation-id=<your-github-app-installation-id> \
-      --from-literal=github-app-private-key=<your-github-app-private-key> \
-      --from-literal=github-repository-url=<your-github-repository-url> \
-      -n flowcore
-    ```
-
 ## Install the Flowcore Platform
 
 Now that you have created the necessary credentials, you can install the Flowcore Platform.
@@ -273,22 +249,7 @@ If you are experiencing issues with the Flowcore Platform, please contact suppor
 
     Make sure the ingress resource is created and is accessible, also make sure the `flowcore.ingestionUrl` is correct.
 
-3. The Flowcore Platform UI or CLI is not fetching any logs from my transformers.
-
-    ```bash
-    kubectl get ingress -n flowcore
-    kubectl get pods -n flowcore
-    ```
-
-    Make sure the pods are running and are accessible, also make sure the `flowcore.stateUrl` is correct.
-
-    ```bash
-    kubectl get pods -n org-<your tenant>-config
-    ```
-
-    Make sure your transformers are running and are accessible.
-
-4. I have ingested data but the Flowcore Platform UI does not show any data in my Data Cores.
+3. I have ingested data but the Flowcore Platform UI does not show any data in my Data Cores.
 
     ```bash
     kubectl get ingress -n flowcore

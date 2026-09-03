@@ -22,14 +22,15 @@ const allPages: { slug: string }[] = await getCollection("docs");
  * removing the worry of potential infinite link loopbacks
  * when running your automation scripts or ai scrapers */
 const thisPath = Astro.url.pathname;
-const pages = allPages.filter((doc) => `/${doc.slug}/` !== thisPath);
+const pageHref = (slug: string) => slug === "index" ? "/" : `/${slug}/`;
+const pages = allPages.filter((doc) => pageHref(doc.slug) !== thisPath);
 ---
 
 <ul>
     {
         pages.map((page) => (
             <li>
-                <a id={page.slug} href={`/${page.slug}`}>
+                <a id={page.slug} href={pageHref(page.slug)}>
                     {page.slug}
                 </a>
             </li>
@@ -40,4 +41,3 @@ const pages = allPages.filter((doc) => `/${doc.slug}/` !== thisPath);
 ```
 </details>
 <ListPages/>
-

@@ -12,13 +12,13 @@ Flowcore Pathways is a TypeScript library for building event-driven applications
 Events flow through the Flowcore platform in a pipeline:
 
 ```
-Publish ──▶ Store ──▶ Transform ──▶ Webhook ──▶ Handler
-   │           │          │             │           │
- write()   Flowcore    Scenarios    HTTP POST    handle()
-           Platform                 to your app
+Publish ──▶ Store ──▶ Data Pathway ──▶ Handler
+   │           │            │              │
+ write()   Flowcore    managed HTTP      handle()
+           Platform      delivery
 ```
 
-Pathways covers the **Publish** and **Handler** sides of this pipeline, giving you type-safe contracts for both producing and consuming events.
+Pathways gives producers and consumers the same type-safe event contracts. In production, a managed data pathway sends selected events to your application endpoint.
 
 ## Installation
 
@@ -51,7 +51,7 @@ Initialize the builder with your Flowcore connection details:
 ```typescript
 import { PathwaysBuilder } from "@flowcore/pathways"
 
-const pathways = new PathwaysBuilder({
+const pathwaysBuilder = new PathwaysBuilder({
   baseUrl: "https://api.flowcore.io",
   tenant: "your-tenant",
   dataCore: "your-data-core",
@@ -72,7 +72,7 @@ const userCreatedSchema = z.object({
   email: z.string().email(),
 })
 
-pathways.register({
+const pathways = pathwaysBuilder.register({
   flowType: "user",
   eventType: "created",
   schema: userCreatedSchema,
@@ -229,7 +229,7 @@ const router = new PathwayRouter(pathways, WEBHOOK_SECRET)
 
 async function handleWebhook(req: Request): Promise<Response> {
   const event = await req.json()
-  const secret = req.headers.get("X-Webhook-Secret")
+  const secret = req.headers.get("X-Webhook-Secret") ?? ""
 
   try {
     await router.processEvent(event, secret)
@@ -279,42 +279,82 @@ pathways.subscribe("user/created", (event) => {
 }, "after")
 ```
 
-## Configuration Files
+## Provisioning and delivery modes
 
-When using the Flowcore CLI, data cores and scenarios are defined in YAML configuration files.
+`PathwaysBuilder` chooses safe defaults from `runtimeEnv`:
+
+| Runtime | Default mode | Shared resources | Pathway registration | Delivery |
+| --- | --- | --- | --- | --- |
+| `production` | `managed` | provisioned | opt in | Flowcore calls your endpoint |
+| `development` | `virtual` | provisioned | skipped | local in-process pump |
+| `test` | `virtual` | skipped | skipped | local in-process pump |
+
+Enable named managed-pathway registration explicitly in production:
+
+```typescript
+const pathways = new PathwaysBuilder({
+  baseUrl: "https://api.flowcore.io",
+  tenant: "your-tenant",
+  dataCore: "your-data-core",
+  dataCoreDescription: "User service events",
+  apiKey: process.env.FLOWCORE_API_KEY!,
+  runtimeEnv: "production",
+  pathwayName: "user-service",
+  autoProvision: { pathway: true },
+  managedConfig: {
+    endpointUrl: "https://your-app.example/api/flowcore",
+    authHeaders: {
+      "X-Webhook-Secret": process.env.FLOWCORE_WEBHOOK_SECRET!,
+    },
+    sizeClass: "medium",
+  },
+})
+  .register({
+    flowType: "user",
+    flowTypeDescription: "User lifecycle",
+    eventType: "created",
+    description: "A user account was created",
+    schema: userCreatedSchema,
+  })
+```
+
+Calling `await pathways.provision()` provisions enabled resources and the named managed pathway. Flowcore controls delivery in production managed mode. Provisioning is additive and does not remove resources that are no longer registered in code.
+
+`autoProvision` can control each stage independently:
+
+```typescript
+autoProvision: {
+  dataCore: true,
+  flowType: true,
+  eventType: true,
+  pathway: true,
+}
+```
+
+Use `autoProvision: false` when CI or another deployment process owns all resources.
+
+## CLI Data Core manifest
+
+The CLI can still manage the shared event contract resources separately:
 
 ### Data Core Definition
 
 ```yaml
-# flowcore.data-core.yaml
-flowcore: "2"
 tenant: "your-tenant"
-dataCore: "your-data-core"
-flowTypes:
-  - name: "user"
-    eventTypes:
-      - name: "created"
-      - name: "updated"
-  - name: "order"
-    eventTypes:
-      - name: "placed"
-      - name: "fulfilled"
+dataCore:
+  name: "your-data-core"
+  description: "Application events"
+  flowTypes:
+    user:
+      eventTypes:
+        created.0:
+          description: "A user was created"
+        updated.0:
+          description: "A user was updated"
+    order:
+      eventTypes:
+        placed.0:
+          description: "An order was placed"
+        fulfilled.0:
+          description: "An order was fulfilled"
 ```
-
-### Scenario Definition
-
-```yaml
-# flowcore.scenario.yaml
-flowcore: "2"
-tenant: "your-tenant"
-scenario: "your-scenario"
-transformers:
-  - flowType: "user"
-    eventType: "created"
-    targetUrl: "https://your-app.com/webhooks/flowcore"
-    secret: "${{secrets.WEBHOOK_SECRET}}"
-```
-
-:::tip
-Use `${{secrets.SECRET_NAME}}` syntax to reference Flowcore secrets in your scenario configuration. This avoids hardcoding sensitive values.
-:::
