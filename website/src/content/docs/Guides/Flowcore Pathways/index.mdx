@@ -296,6 +296,7 @@ const pathways = new PathwaysBuilder({
   baseUrl: "https://api.flowcore.io",
   tenant: "your-tenant",
   dataCore: "your-data-core",
+  dataCoreDescription: "User service events",
   apiKey: process.env.FLOWCORE_API_KEY!,
   runtimeEnv: "production",
   pathwayName: "user-service",
@@ -308,6 +309,13 @@ const pathways = new PathwaysBuilder({
     sizeClass: "medium",
   },
 })
+  .register({
+    flowType: "user",
+    flowTypeDescription: "User lifecycle",
+    eventType: "created",
+    description: "A user account was created",
+    schema: userCreatedSchema,
+  })
 ```
 
 Calling `await pathways.provision()` provisions enabled resources and the named managed pathway. Flowcore controls delivery in production managed mode. Provisioning is additive and does not remove resources that are no longer registered in code.
