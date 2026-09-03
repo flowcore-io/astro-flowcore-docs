@@ -46,7 +46,9 @@ const pathways = new PathwaysBuilder({
 })
   .register({
     flowType: "todo",
+    flowTypeDescription: "Todo lifecycle",
     eventType: "created.0",
+    description: "A todo was created",
     schema: z.object({
       id: z.string(),
       title: z.string(),

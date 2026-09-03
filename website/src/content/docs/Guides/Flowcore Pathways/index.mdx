@@ -310,7 +310,7 @@ const pathways = new PathwaysBuilder({
 })
 ```
 
-Calling `await pathways.startPump()` provisions enabled resources. Production managed mode does not start a local pump; delivery is controlled by Flowcore. Provisioning is additive and does not remove resources that are no longer registered in code.
+Calling `await pathways.provision()` provisions enabled resources and the named managed pathway. Flowcore controls delivery in production managed mode. Provisioning is additive and does not remove resources that are no longer registered in code.
 
 `autoProvision` can control each stage independently:
 
