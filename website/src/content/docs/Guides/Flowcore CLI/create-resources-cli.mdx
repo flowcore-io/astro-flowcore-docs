@@ -71,9 +71,9 @@ dataCore:
   deleteProtection: true
 ```
 
-## PII configuration
+## Sensitive Data configuration
 
-An Event Type can opt into PII handling in the manifest:
+An Event Type can opt into Sensitive Data handling in the manifest:
 
 ```yaml
 tenant: example-tenant
@@ -83,9 +83,9 @@ dataCore:
     users:
       eventTypes:
         user.created.0:
-          piiEnabled: true
-          piiKey: ".userId"
-          piiSchema: |
+          sensitiveDataEnabled: true
+          sensitiveDataKey: ".userId"
+          sensitiveDataSchema: |
             {
               "email": { "faker": "internet.email" },
               "ssn": { "redact": { "char": "*", "length": 9 } }

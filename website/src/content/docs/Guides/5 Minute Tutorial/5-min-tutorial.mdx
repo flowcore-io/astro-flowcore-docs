@@ -20,13 +20,19 @@ bun add @flowcore/pathways zod
 ## Define the event contract
 
 ```typescript
-import { PathwaysBuilder } from "@flowcore/pathways"
+import {
+  PathwaysBuilder,
+  type PumpState,
+  type PumpStateManager,
+  type PumpStateManagerFactory,
+} from "@flowcore/pathways"
 import { z } from "zod"
 
 const pathways = new PathwaysBuilder({
   baseUrl: "https://api.flowcore.io",
   tenant: process.env.FLOWCORE_TENANT!,
   dataCore: "todo-app",
+  dataCoreDescription: "Todo application events",
   apiKey: process.env.FLOWCORE_API_KEY!,
   runtimeEnv: process.env.NODE_ENV === "production" ? "production" : "development",
   pathwayName: "todo-service",
@@ -38,8 +44,6 @@ const pathways = new PathwaysBuilder({
     },
   },
 })
-
-pathways
   .register({
     flowType: "todo",
     eventType: "created.0",
@@ -55,6 +59,43 @@ pathways
 
 In development, Pathways uses a local virtual pump. In production, it defaults to managed delivery. Shared Data Core, Flow Type, and Event Type resources auto-provision; `autoProvision.pathway: true` also registers the named managed pathway.
 
+## Start delivery
+
+The local pump needs a cursor state manager. This in-memory implementation is suitable for the tutorial; use durable state for a long-running virtual pathway.
+
+```typescript
+class MemoryPumpState implements PumpStateManager {
+  private state: PumpState | null = null
+
+  getState() {
+    return this.state
+  }
+
+  setState(state: PumpState) {
+    this.state = state
+  }
+
+  clearState() {
+    this.state = null
+  }
+}
+
+const states = new Map<string, MemoryPumpState>()
+const stateManagerFactory: PumpStateManagerFactory = (flowType, pumpGroup) => {
+  const key = `${flowType}::${pumpGroup}`
+  const existing = states.get(key)
+  if (existing) return existing
+
+  const state = new MemoryPumpState()
+  states.set(key, state)
+  return state
+}
+
+await pathways.startPump({ stateManagerFactory })
+```
+
+Start the pump before making a blocking `write()`. In production managed mode, the same call provisions enabled resources but does not start an in-process pump; Flowcore delivers to `managedConfig.endpointUrl`.
+
 ## Publish an event
 
 ```typescript
@@ -67,15 +108,5 @@ await pathways.write("todo/created.0", {
 ```
 
 Keep API keys and webhook secrets in environment variables. Do not commit them.
-
-## Start delivery
-
-At application startup, call:
-
-```typescript
-await pathways.startPump()
-```
-
-Development starts the local pump. Production managed mode provisions the configured resources but does not start an in-process pump; Flowcore delivers to `managedConfig.endpointUrl`.
 
 Expose that endpoint with `PathwayRouter`, as shown in the [Pathways guide](/guides/flowcore-pathways/#webhook-integration). Return a successful response only after the handler completes.

@@ -1,0 +1,48 @@
+---
+title: Generator
+sidebar:
+  order: 6
+description: Scaffold applications and CLI extensions with the Flowcore CLI.
+---
+
+The Flowcore CLI includes generators for application projects, entities, services, reusable generators, and CLI plugins.
+
+## Next.js application
+
+```sh
+flowcore new nextjs-app <app-name>
+```
+
+Run the entity generator from inside a generated Next.js application:
+
+```sh
+flowcore generate nextjs-entity <entity-name>
+```
+
+Add `@flowcore/pathways` to the application when it publishes or consumes Flowcore events. Configure production consumers as [managed Data Pathways](/guides/flowcore-pathways/#provisioning-and-delivery-modes).
+
+## Bun service
+
+```sh
+flowcore new bun-service <service-name>
+```
+
+The command creates a standalone Bun service project. Register its event contracts and handlers with `@flowcore/pathways` rather than an infrastructure manifest.
+
+## Reusable generator
+
+```sh
+flowcore new generator <generator-name>
+```
+
+This scaffolds a Yeoman generator written with Bun.
+
+## CLI plugin
+
+```sh
+flowcore new plugin <plugin-name>
+```
+
+This scaffolds an oclif plugin for extending the Flowcore CLI.
+
+Run `flowcore <command> --help` to see options supported by your installed CLI version.

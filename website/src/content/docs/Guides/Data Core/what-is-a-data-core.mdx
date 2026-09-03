@@ -17,7 +17,7 @@ Notice the mention of a __log book__. This is because a Data Core is a chronolog
 These strengths let you ingest data before deciding every downstream use. A [Data Pathway](/guides/flowcore-pathways/) can later deliver selected events from the Data Core to an application.
 > Bear in mind that __the data is never altered__. You retain the full event history; consuming an event copies it to the application without changing the stored event.
 
-To send data to a Data Core, you use an [ingestion channel](todo).
+To send data to a Data Core, use an [ingestion channel](/guides/ingestion/what-is-an-ingestion-channel/).
 
 Within the Data Core, you can organize your data further by creating groups and subgroups. This is done by creating Flow Types from within the Data Core, and Event Types within the Flow Type.
 <Image src={FlowTypesAndEventTypes} alt="Flow Types and Event Types in a Data Core" />
@@ -29,9 +29,9 @@ To simplify the concept of Flow Types, you can imagine that the aggregator is a 
 ## Access availability
 There are two access availabilities for Data Cores:
 - `Public`
-  - Anyone using flowcore can subscribe to your public Data Cores and access the data within it. __They cannot send data to your Data Core without an [API Key](todo) that you have granted them__
+  - Anyone using Flowcore can subscribe to your public Data Cores and access the data within it. __They cannot send data to your Data Core without an [API key](/guides/ingestion/create-an-api-key/) that you have granted them__
 - `Private`
-  - Any collaborators you [invite to your organization](/guides/organization/invite-user-to-organization/) can access your private Data Cores. __They cannot send data to your Data Core without an [API Key](todo) that you have granted them__
+  - Any collaborators you [invite to your organization](/guides/organization/invite-user-to-organization/) can access your private Data Cores. __They cannot send data to your Data Core without an [API key](/guides/ingestion/create-an-api-key/) that you have granted them__
 
 There is no limit to how many public Data Cores you can create. However, you are required to buy private Data Cores.
 
