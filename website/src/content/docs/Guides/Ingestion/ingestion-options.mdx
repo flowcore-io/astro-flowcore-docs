@@ -37,7 +37,7 @@ curl --request POST \
   "https://webhook.api.flowcore.io/event/YOUR_TENANT/YOUR_DATA_CORE_ID/YOUR_FLOW_TYPE/YOUR_EVENT_TYPE"
 ```
 
-An API key with the Ingestion role is required. Existing URLs that put a key in the query string should be migrated to this header form.
+Use an API key authorized for this destination. Existing URLs that put a key in the query string should be migrated to this header form.
 
 <Card title="Information" icon="information">
   The webhook URL is a POST endpoint that accepts JSON data, you can use gzip and
