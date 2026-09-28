@@ -9,7 +9,6 @@ import { Card } from "@astrojs/starlight/components";
 import { Image } from "astro:assets";
 
 import IngestionOptions from "../../../../assets/guides/ingestion/ingestion-options/ingestion-channels.png";
-import IngestionWebhook from "../../../../assets/guides/ingestion/ingestion-options/webhook-ingestion-screen.png";
 import IngestionIntegratePage from "../../../../assets/guides/ingestion/ingestion-options/webhook-integrate.png";
 
 # Ingestion Options
@@ -20,23 +19,25 @@ To ingest data into Flowcore, you can see the available options by clicking on t
 
 # Webhook
 
-The simplest and fastest way to get data into Flowcore is to use webhooks. You can use the webhook generation feature to create a url that you can use to send data to Flowcore.
+The simplest and fastest way to get data into Flowcore is to use webhooks. Send your API key in the `Authorization` header. Keep it out of the webhook URL so it does not appear in URL logs, browser history, or referrers.
 
 Clicking on the "integrate" link will take you to the webhook generation page where you can create a webhook.
 
 <Image alt={"Integrate"} src={IngestionIntegratePage} />
 
-Then select the `Data Core`, `Flow Type` and `Event Type` you want to send data to. Fill in the API key and you will be presented with two URLs. One for sending single events and the other for sending multiple events.
+Select the `Data Core`, `Flow Type`, and `Event Type`. Use the URL path shown by the generator, but remove any key parameter from a generated URL before using it. The single-event path starts with `/event/`; the batch path starts with `/events/`.
 
-<Image alt={"Webhook Ingestion"} src={IngestionWebhook} />
+For a single event, set `FLOWCORE_API_KEY` in your shell from your secret store and send it as the raw header value (without `Bearer`):
 
-You can simply post your event data as JSON to the URL and it will be ingested into Flowcore, into the selected location.
-
-```json
-{
-  // event data
-}
+```sh
+curl --request POST \
+  --header "Authorization: ${FLOWCORE_API_KEY}" \
+  --header "Content-Type: application/json" \
+  --data '{"id":"example-1"}' \
+  "https://webhook.api.flowcore.io/event/YOUR_TENANT/YOUR_DATA_CORE_ID/YOUR_FLOW_TYPE/YOUR_EVENT_TYPE"
 ```
+
+An API key with the Ingestion role is required. Existing URLs that put a key in the query string should be migrated to this header form.
 
 <Card title="Information" icon="information">
   The webhook URL is a POST endpoint that accepts JSON data, you can use gzip and
@@ -92,7 +93,7 @@ if you are sending a batch of events, you can override the event time or valid t
 
 ## Multible Events
 
-If you want to send multiple events at once, you can use the batch URL. This will allow you to send multiple events in a single request.
+To send multiple events at once, use the same `Authorization` header with the `/events/` batch path.
 
 The payload should be an array of events.
 
